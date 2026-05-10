@@ -1,0 +1,29 @@
+{
+  "phase": 2,
+  "convention": {
+    "margin": 1e-06,
+    "h_box": [
+      0.0,
+      0.06
+    ],
+    "p_box": [
+      0.35,
+      0.45
+    ],
+    "target_white": 0.379005,
+    "n_grid": 4001
+  },
+  "rigorous_LB": 0.3798791799389843,
+  "grid_min": 0.3798813328853297,
+  "binding_point": [
+    0.005129999999999999,
+    0.388625
+  ],
+  "witness": "cde_n30_iter5",
+  "L_max_grad": 0.1476909008517877,
+  "eps_grid": 2.152946345432853e-06,
+  "improvement_vs_white": 0.0008741799389843097,
+  "improvement_vs_published": 0.000335179938984298,
+  "improvement_vs_phase1": 0.0002590799389842746,
+  "n_centers": 12
+}
