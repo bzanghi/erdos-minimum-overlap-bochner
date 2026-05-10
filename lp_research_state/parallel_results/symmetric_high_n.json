@@ -1,0 +1,107 @@
+{
+  "description": "CONDITIONAL bound on the Erd\u0151s minimum overlap constant \u00b5 assuming the optimal f* is even (White \u00a76 conjecture). Halved-variable encoding (d=0, dlt=0, v=w) plus Bochner+Lasserre lifts. Path B 1-D ellipse extension on the p-axis (h=q=0).",
+  "caveats": [
+    "CONDITIONAL: \u00b5 \u2265 this only if the f-even conjecture holds.",
+    "LP solver returned optimal_inaccurate; values are within ~1e-5 of the true LP optimum.",
+    "Highest stable bochner_n under split-solve attempt was bn=20 (5s) and bn=30 (timed out at large T). For final reported numbers we use the bn=25 prior run from symmetric_conditional.json which was the highest convergent level under the standard encoding.",
+    "Path-B ellipse uses UNCONDITIONAL duals from lasserre2_path_b/row{5,6}.json (bn=20, T_max=30, T_loc=8) but conditional V_c. This is a slight approximation: the conditional duals would differ but the (concave-)quadratic shape is dominated by the (5.4) and (5.13) duals, which are robust under the assume_even reduction."
+  ],
+  "unconditional_reference_bound": 0.379828,
+  "highest_settings_attempted": {
+    "split_solve_oneshot_smoke": {
+      "N": 2000,
+      "T": 800,
+      "bochner_n": 20,
+      "lasserre_T_max": 0,
+      "time_s": 5.3,
+      "value": 0.3782347525956394
+    },
+    "oneshot_n30_T400": {
+      "N": 2000,
+      "T": 400,
+      "bochner_n": 30,
+      "lasserre_T_max": 0,
+      "time_s": 4.97,
+      "value": 0.3784803327316814
+    },
+    "oneshot_n50_T400": {
+      "N": 2000,
+      "T": 400,
+      "bochner_n": 50,
+      "lasserre_T_max": 0,
+      "time_s": 9.23,
+      "value": 0.3786420310447314
+    },
+    "note": "These values are at small T (loose tail bounds) and are LOWER than the prior bn=25 conditional run at full N=10000, T=4000. The full N,T configurations at bn>=25 timed out under the 45s sandbox cap even with split-solve; the build phase succeeded but solve did not complete in 40s for bochner_n>=30 with N>=4000, T>=1500."
+  },
+  "best_per_row_at_highest_stable": {
+    "row5": {
+      "h": 0.0,
+      "p": 0.4,
+      "q1": -0.02,
+      "q2": 0.02,
+      "value": 0.3801165976700085,
+      "bochner_n": 25,
+      "N": 10000,
+      "T": 4000,
+      "R": 10,
+      "status": "optimal_inaccurate",
+      "source": "symmetric_conditional.json"
+    },
+    "row6": {
+      "h": 0.0,
+      "p": 0.381,
+      "q1": -0.02,
+      "q2": 0.02,
+      "value": 0.3799038517431286,
+      "bochner_n": 25,
+      "N": 10000,
+      "T": 4000,
+      "R": 10,
+      "status": "optimal_inaccurate",
+      "source": "symmetric_conditional.json"
+    }
+  },
+  "mu_even_at_center": 0.3799038517431286,
+  "binding_row_at_center": "row6 (h=0, p=0.381)",
+  "diff_vs_unconditional_at_center": 7.585174312857434e-05,
+  "path_b_p_axis": {
+    "row5_interval": [
+      0.3954977912862628,
+      1.5484982947518917
+    ],
+    "row5_V_max": 0.398377655317718,
+    "row5_p_star": 0.9719980430190772,
+    "row6_interval": [
+      0.24062938928365774,
+      0.3844703423246965
+    ],
+    "row6_V_max": 0.3806334195585868,
+    "row6_p_star": 0.3125498658041771,
+    "merged_intervals": [
+      [
+        0.24062938928365774,
+        0.3844703423246965
+      ],
+      [
+        0.3954977912862628,
+        1.5484982947518917
+      ]
+    ],
+    "uncovered_in_035_045": [
+      [
+        0.3844703423246965,
+        0.3954977912862628
+      ]
+    ],
+    "envelope_min_grid": 0.3796371700517873,
+    "envelope_argmin_p": 0.39254,
+    "envelope_argmin_row": "row5"
+  },
+  "mu_even_envelope_lower_bound_in_035_045": 0.3796371700517873,
+  "diff_vs_unconditional_envelope": -0.0001908299482126785,
+  "interpretation": {
+    "magnitude": "small",
+    "comment": "The conditional bound \u00b5_even \u2248 0.379904 is ONLY ~7.6e-05 above the unconditional 0.379828. This MARGINAL improvement is consistent with the optimal LP solution being NEAR-EVEN (small d_k, v_j \u2248 w_j) even WITHOUT explicitly enforcing it. The f-even conjecture is therefore neither strongly supported nor strongly contradicted by these numerics: if true, we get only a tiny conditional improvement; if false, the unconditional bound 0.379828 is unaffected."
+  }
+}

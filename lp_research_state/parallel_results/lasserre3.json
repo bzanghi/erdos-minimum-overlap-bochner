@@ -1,0 +1,63 @@
+{
+  "_summary": {
+    "did_implement_level_3": true,
+    "did_strictly_tighten_over_L2_at_med_size": true,
+    "delta_L3_minus_L2_at_med_T_max10_T3_2_M3_3": 5.887e-07,
+    "delta_L2_minus_Bochner_for_comparison": 1.130e-05,
+    "verdict": "Level-3 trilinear/quadrilinear lift gives a tightening of order 1e-6 vs Lasserre-2 — about 20x smaller than the L2-over-Bochner gap. Implementation is mathematically valid (PSD on bordered moment-matrix lift), but the actual tightening is far smaller than worth pursuing. The Fejér-Riesz / Bochner equivalence for trig nonneg-polys means level-3 only adds NEW info via auxiliary moment lifts on (c_k, d_k), not via level-3 trig localizers. Levels above 2 face strongly diminishing returns for this problem.",
+    "tractability_at_full_problem_size": "Proportional to (M3_max * (T_loc3+1)^2) extra real PSD constraints, plus M3_max bordered lifts of size 2L_lift+1 = 2T3_lift+3. At our row-4 default (T_max=30, T_loc=8), we expect L3 cost to add roughly 30s on top of the 37s Lasserre-2 solve at N=10000, T=4000 — feasible but not exciting.",
+    "engineering_recommendation": "NOT worth pursuing as currently implemented. The Toeplitz block decomposition works (no SDP blow-up), but the marginal tightening (~1e-6) is below the solver's optimal_inaccurate noise floor at full problem size. A stronger tightening would require either (i) lifting all bilinear products of f̂(j)f̂(k) into an outer (T_max+1)^2-sized variable (intractable), or (ii) finding NEW polynomial constraints on (c_k, d_k) beyond White's (5.13) that benefit from level-3 lift."
+  },
+  "config": {
+    "N": 1000,
+    "T": 100,
+    "R": 10,
+    "L2_T_max": 10,
+    "L2_T_loc": 10,
+    "BOCH_N": 20,
+    "h": 0.004,
+    "p": 0.3875,
+    "q1": -0.02,
+    "q2": 0.02,
+    "size": "med",
+    "_note_on_size": "We attempted SIZE=full (N=2000, T=200, T_max=10) but the run did not complete in budget. The med results below establish: (a) L3 tightens L2 by ~5.9e-7, (b) solve time grew only modestly. The 'full' (production) problem at N=10000, T=4000 should remain tractable since the level-3 constraint cost is independent of N (only of T_max and T3_lift, which we keep small)."
+  },
+  "results": [
+    {
+      "label": "baseline",
+      "value": 0.3744716788529921,
+      "status": "optimal",
+      "time_s": 0.3505222797393799
+    },
+    {
+      "label": "bochner",
+      "value": 0.37647806738560846,
+      "status": "optimal",
+      "time_s": 4.207147836685181
+    },
+    {
+      "label": "bochner+L2",
+      "value": 0.3764893701455198,
+      "status": "optimal_inaccurate",
+      "time_s": 6.973088979721069
+    },
+    {
+      "label": "bochner+L2+L3(T3=1, M3=2)",
+      "value": 0.3764893700018577,
+      "status": "optimal_inaccurate",
+      "time_s": 6.8328447341918945
+    },
+    {
+      "label": "bochner+L2+L3(T3=1, M3=3)",
+      "value": 0.3764898159613948,
+      "status": "optimal_inaccurate",
+      "time_s": 7.019546031951904
+    },
+    {
+      "label": "bochner+L2+L3(T3=2, M3=3)",
+      "value": 0.3764899588804851,
+      "status": "optimal_inaccurate",
+      "time_s": 7.5869362354278564
+    }
+  ]
+}

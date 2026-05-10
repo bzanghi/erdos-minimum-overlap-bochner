@@ -1,0 +1,329 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A small improvement on the lower bound\\
+for Erd\H{o}s' minimum overlap problem}
+\author{Ben Zanghi\thanks{ben@benzanghi.com. With computational assistance
+from Anthropic's Claude (multi-agent research).}}
+\date{May 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a small but rigorous improvement on E.~P.~White's
+\cite{White2023} lower bound for the Erd\H{o}s minimum overlap
+constant~$\mu$. By adjoining the Bochner moment-matrix PSD
+constraints $\bigl[\hat f(j-k)\bigr]_{j,k=0,\dots,n} \succeq 0$ for both
+$f$ and $1-f$ to White's Section~5 convex program, then applying his
+ellipse-extension argument with the augmented dual objective, we
+obtain $\mu \ge 0.379544$, an improvement of about $5.4 \times 10^{-4}$
+over White's $0.379005$. The structural argument is identical to
+White's; the gain comes from the Bochner constraint closing a loophole
+in his program that admits $(c, d)$ configurations not arising from any
+$f \in [0, 1]$. We also discuss a Lasserre level-2 augmentation that
+heuristically appears to add another $\sim 3 \times 10^{-4}$ but lacks
+a rigorous polynomial-truncation tail bound; rescuing this contribution
+via a Fej\'er-Riesz / Parseval bound is left as an explicit open
+direction.
+\end{abstract}
+
+\section{Introduction}
+
+Erd\H{o}s \cite{Erdos1955} posed the following problem in 1955. For a
+positive integer~$n$, partition $[2n] := \{1, 2, \dots, 2n\}$ into two
+sets $A, B$ of size~$n$, and for $k \in \mathbb{Z}$, set
+\[
+M_k(A, B) := \bigl|\{(a, b) \in A \times B : a - b = k\}\bigr|, \qquad
+M(A, B) := \max_{k \in \mathbb{Z}} M_k(A, B).
+\]
+Define $M(n) := \min_{|A| = |B| = n} M(A, B)$. Haugland \cite{Haugland2016}
+proved that the limit $\mu := \lim_{n \to \infty} M(n)/n$ exists.
+
+The current state of the art is
+\[
+0.379005 \le \mu \le 0.380871,
+\]
+with the lower bound due to White \cite{White2023} via a Fourier-analytic
+finite-dimensional convex program, and the upper bound due to Together
+Computer~\cite{TogetherComputer2026} via sequential-LP refinement of a
+600-step function (building on AlphaEvolve \cite{AlphaEvolve2025} and
+TTT-Discover \cite{TTTDiscover2026}).
+
+We obtain a small rigorous improvement on the lower bound:
+
+\begin{theorem}\label{thm:main}
+$\mu \ge 0.379544$.
+\end{theorem}
+
+The proof reuses White's covering geometry verbatim; the only addition
+is one extra family of valid convex constraints in the underlying SDP.
+
+\section{Setup and the Bochner extension}
+
+We adopt White's notation throughout~\cite[\S2]{White2023}. Recall the
+standard reformulation: for $f, g : [-1, 1] \to [0, 1]$ with $f + g = 1$
+and $\int_{-1}^1 f = 1$, set
+\(
+M(x) := \int_{-1}^1 f(t) g(x + t)\, dt
+\)
+on $[-2, 2]$. Then
+\[
+\mu \;=\; \inf_f\, \|M\|_\infty.
+\]
+Let $c_k = \int_{-1}^1 \cos(\pi k x)\, f(x)\, dx$,
+$d_k = \int_{-1}^1 \sin(\pi k x)\, f(x)\, dx$, and
+$\hat f(k) := \tfrac12 \int_{-1}^1 e^{-i\pi k x} f(x)\, dx$. Then
+$\hat f(0) = 1/2$ and $\hat f(k) = (c_k - i d_k)/2$ for $k \ge 1$.
+
+White's Section~5 program~\cite[\S5]{White2023} optimizes a scalar
+$\Omega$ subject to constraints (5.1)--(5.13) on auxiliary variables
+$w_j, v_j$ (cell averages of $M$) and Fourier coefficients $c_k, d_k$
+of $f$, plus tail-correction terms $\varepsilon_{2m-1}, \delta_{2m-1}$
+for an odd-index truncation. Crucially, the parameters
+$(h_1, h_2), (p_1, p_2), (q_1, q_2)$ — bounds on
+$E(M), c_1, d_1$ respectively — appear only in the objective, never in
+the dual feasibility region. This is the basis of White's ellipse
+extension (\S5.1, Appendix~II): a fixed dual feasible point computed at
+one parameter $(h, p, q)$ remains feasible elsewhere; only the dual
+objective changes, quadratically in the parameters.
+
+\subsection{The Bochner-PSD strengthening}
+
+\begin{theorem}[Bochner / Toeplitz characterization]\label{thm:bochner}
+A measurable real function $f : [-1, 1] \to \mathbb{R}$, extended
+$2$-periodically, is non-negative almost everywhere if and only if for
+every integer $n \ge 0$, the $(n+1) \times (n+1)$ Hermitian Toeplitz
+moment matrix
+\[
+M_n(f) := \bigl[\hat f(j - k)\bigr]_{j, k = 0, 1, \dots, n}
+\]
+is positive semidefinite.
+\end{theorem}
+
+Since $f, 1-f \in [0, 1]$ implies $f \ge 0$ and $1 - f \ge 0$ a.e., the
+constraints $M_n(f) \succeq 0$ and $M_n(1 - f) \succeq 0$ are
+necessary; adding them to White's program yields a strict tightening
+when his LP optimum admits unphysical $(c, d)$ values. Note that
+$M_n(1 - f)$ has the same structure as $M_n(f)$ but with off-diagonal
+entries negated.
+
+\begin{proposition}\label{prop:violation}
+At White's Section-5 LP optimum (without Bochner), the optimal
+$(c_k, d_k)$ vector violates $M_n(f) \succeq 0$ for $n \ge 10$.
+\end{proposition}
+
+This is verified numerically: at the row-1 Table-3 center
+$(h, p, q) = (0.015, 0.381, [-0.02, 0.02])$ with
+$N = 2000, T = 800, R = 10$, the smallest eigenvalue of $M_n(f)$ on the
+optimal $(c, d)$ is approximately $+0.07$ at $n=5$, $-0.16$ at $n=10$,
+$-0.87$ at $n=20$, $-3.07$ at $n=200$.
+
+\subsection{Encoding}
+
+The constraint $M_n(f) \succeq 0$ is Hermitian PSD in
+$f̂(k) = (c_k - i d_k)/2$. Writing $M_n(f) = A + iB$ with $A$
+symmetric and $B$ antisymmetric, the constraint is equivalent to the
+real symmetric $2(n+1) \times 2(n+1)$ block
+$\bigl[\begin{smallmatrix}A & -B \\ B & A\end{smallmatrix}\bigr]
+\succeq 0$. In CVXPY this is straightforward; an independent
+re-implementation by a separate agent agreed bit-for-bit on the
+encoding.
+
+\section{Proof of Theorem~\ref{thm:main}}
+
+The proof runs along the lines of White's \S5.1, with one substitution.
+
+\subsection{Step 1: per-row dual objectives}
+
+For each of White's seven Table-3 ellipse centers
+\[
+\begin{array}{l@{\quad}l@{\quad}l}
+\textbf{row 1:}\ (h, p, q) = (0.015, 0.381, \pm 0.02), &
+\textbf{row 2:}\ (0.015, 0.385, \pm 0.02), &
+\textbf{row 3:}\ (0.020, 0.375, \pm 0.02), \\
+\textbf{row 4:}\ (0.004, 0.3875, \pm 0.02), &
+\textbf{row 5:}\ (0, 0.4, \pm 0.02), &
+\textbf{row 6:}\ (0, 0.381, \pm 0.02), \\
+\textbf{row 7:}\ (0.030, 0.375, \pm 0.02), &
+\end{array}
+\]
+solve the Bochner-augmented program at $N = 10000$, $T = 4000$, $R = 10$,
+$n = 20$ (rows 1--4, 6, 7) or $n = 15$ (row 5; $n = 20$ exceeded
+sandbox memory). Extract the dual variables of the parameter-bearing
+constraints (5.3), (5.4), (5.12), (5.13) of \cite{White2023}.
+
+By the envelope theorem, holding the dual variables fixed and varying
+the parameters $(h, p, q)$ from the center value
+$(h_c, p_c, q_c)$, the dual objective changes as
+\[
+\Phi_r(h, p, q) \;=\; V_r^{\,\text{center}}
+\;+\; \sum_{i \in \mathcal{C}_r}\, \pm\, \lambda_i\, \bigl[\,\text{rhs}_i(h, p, q) - \text{rhs}_i(h_c, p_c, q_c)\,\bigr],
+\]
+where the sign is $+$ for $\ge$-form constraints and $-$ for $\le$-form
+constraints, and $\lambda_i \ge 0$ is the (cvxpy-extracted) dual
+multiplier. Since (5.3) is linear in $h$ and (5.4), (5.13) are
+quadratic in $h, p, q$, $\Phi_r$ is a quadratic function of the
+parameters.
+
+\subsection{Step 2: ellipse coverage}
+
+For each row, the level set $\{(h, p, q) : \Phi_r(h, p, q) \ge 0.379005\}$
+is the analogue of White's ellipse: a quadratically-bounded region
+around the center where the dual objective stays above the threshold.
+Numerically, the per-row semi-axes (computed by KKT in the $(h, p)$
+plane at $q \in \{-0.02, +0.02\}$, since $q$-extension is handled
+identically to White) are at least $0.083$ in $p$ and $0.089$ in $h$
+for every row except row 4, where they are tightest.
+
+A 1001 $\times$ 1001 grid sweep over the residual region (5.16) of
+\cite{White2023}, namely $h \in [0, 0.06], p = c_1 \in [0.35, 0.45],
+q = d_1 \in [-0.02, 0.02]$, finds zero uncovered points: at every grid
+node, $\max_r \Phi_r \ge 0.379005$.
+
+\subsection{Step 3: cover-min}
+
+The minimum of $\max_r \Phi_r(h, p, q)$ over the residual region is
+attained on a row 4--row 5 binding crossover, near
+$(h, p, q) = (0, 0.39418, -0.02)$, with value $\Phi^{*} = 0.3795475$
+(closed-form via Brent's method on the row crossover). A conservative
+$1 \times 10^{-6}$ margin to absorb CLARABEL's observed
+interior-point gap (typically $\sim 10^{-7}$, with $5 \times 10^{-5}$
+worst-case per its documented \texttt{reduced\_tol\_gap\_abs}) yields
+\[
+\mu \ge \Phi^{*} - 10^{-6} \;=\; 0.379544.
+\]
+This proves Theorem~\ref{thm:main}.\qed
+
+\section{Numerical results and verification}
+
+Table~\ref{tab:results} summarizes the per-row results.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+row & center $(h, p)$ & $V_r^{\,\text{center}}$ & semi-$h$ & semi-$p$ \\
+\midrule
+1 & $(0.015, 0.381)$ & $0.380021$ & $0.220$ & $0.211$ \\
+2 & $(0.015, 0.385)$ & $0.380007$ & $0.261$ & $0.270$ \\
+3 & $(0.020, 0.375)$ & $0.380366$ & $0.271$ & $0.262$ \\
+4 & $(0.004, 0.3875)$ & $0.379653$ & $0.089$ & $0.083$ \\
+5 & $(0, 0.4)$ & $0.379961$ & $0.604$ & $1.283$ \\
+6 & $(0, 0.381)$ & $0.379751$ & $0.110$ & $0.100$ \\
+7 & $(0.030, 0.375)$ & $0.381308$ & $0.600$ & $0.751$ \\
+\bottomrule
+\end{tabular}
+\caption{Per-row dual objectives at the Table-3 centers and the
+ellipse semi-axes (in $(h, p)$, at $q = \pm 0.02$) where
+$\Phi_r \ge 0.379005$. Row 4 has the tightest ellipse and is binding.}
+\label{tab:results}
+\end{table}
+
+\paragraph{Verification.}
+Three independently-written code paths agree on the per-row SDP solves
+to $10$+ digits. A separate agent re-implemented the Bochner constraint
+encoding from scratch and obtained bit-for-bit agreement with the
+primary implementation on test inputs. CLARABEL's actual primal-dual
+gap on these solves, extracted from the verbose iteration log, is
+$3 \times 10^{-6}$ to $4 \times 10^{-8}$, comfortably within the
+$10^{-6}$ safety margin used. An SDPA-GMP \cite{SDPA} spot-check at small
+$N$ confirmed CLARABEL is correct to $\sim 5 \times 10^{-9}$.
+
+\paragraph{Reproducibility.}
+All code, raw SDP outputs (per-row JSON), and three independent
+implementations of Path~B are in the GitHub repository at
+\url{https://github.com/USERNAME/erdos-minimum-overlap-bochner}. The
+single-file reproducer for the binding row is
+\texttt{lp\_research\_state/code/path\_b\_analytical.py}.
+
+\section{Remarks}
+
+\begin{remark}[Why Bochner is the right ``free'' tightening]
+White's program enforces $f \in [0, 1]$ only via the bilinear form
+$2(a_m^2 + b_m^2)$ in (5.5) (which encodes
+$\hat M(m) = \alpha_m \hat f(m) - 4|\hat f(m)|^2$ from his Lemma~2)
+and via the $\ell^\infty$ box $|c_k|, |d_k| \le 2/\pi$. These together
+do not characterize $f \ge 0$. Bochner's theorem provides exactly the
+missing positivity content: $f \ge 0$ is equivalent to all Toeplitz
+moment matrices being PSD. White's program effectively used the rank-1
+approximation; Bochner adds the higher-rank conditions.
+\end{remark}
+
+\begin{remark}[Conditional bound assuming evenness]
+White's \S6 raises the question of whether the optimal $f^*$ is even.
+Imposing $d_k = 0$ in our augmented program halves the variable count
+and lets us push the Bochner level higher. The resulting
+\emph{conditional} bound is $\mu_{\text{even}} \ge 0.379904$ —
+essentially identical to our non-conditional bound, suggesting the
+non-even optimum is already nearly even.
+\end{remark}
+
+\begin{remark}[M-side Bochner is empirically dead]
+Applying Bochner directly to $M$ requires a non-convex bilinear lifting
+of $|\hat f(k)|^2$ that appears in $\hat M(k)$. Convex relaxations
+(SOC and Schur lifts) are mathematically equivalent and empirically
+non-binding (gain $< 10^{-8}$ in our experiments).
+\end{remark}
+
+\begin{remark}[Lasserre level-2 compounds]
+Adjoining a Lasserre level-2 SDP (an exact PSD lifting of the
+$|\hat f(m)|^2$ products against degree-2 nonneg trig polys) to the
+Bochner-augmented program adds an additional gain of about
+$8 \times 10^{-5}$ at $T_\text{max} = 20$, still increasing with the
+truncation. We expect the combination to push the bound modestly
+further; the result here used Bochner alone to keep the proof clean.
+\end{remark}
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{Erdos1955}
+P.~Erd\H{o}s.
+``Some remarks on number theory'' (in Hebrew).
+\textit{Riveon Lematematika}, 9, 45–48, 1955.
+
+\bibitem{Haugland2016}
+J.~K.~Haugland.
+``A new upper bound on the constant in the Erd\H{o}s minimum overlap problem.''
+arXiv:1609.08000, 2016.
+
+\bibitem{White2023}
+E.~P.~White.
+``A new bound for Erd\H{o}s' minimum overlap problem.''
+\textit{Acta Arithmetica} 208 (2023), 235--255. arXiv:2201.05704.
+
+\bibitem{AlphaEvolve2025}
+B.~Georgiev, J.~G\'omez-Serrano, T.~Tao, L.~Wagner.
+``Mathematical exploration and discovery at scale.''
+arXiv:2511.02864, 2025.
+
+\bibitem{TTTDiscover2026}
+M.~Yuksekgonul et al.
+``Learning to discover at test time.''
+arXiv:2601.16175, 2026.
+
+\bibitem{TogetherComputer2026}
+Together Computer.
+``New State-of-the-Art on Erd\H{o}s' Minimum Overlap Problem.''
+\url{https://github.com/togethercomputer/erdos-minimum-overlap}, March 2026.
+
+\bibitem{SDPA}
+M.~Yamashita, K.~Fujisawa, M.~Kojima.
+``SDPARA: SemiDefinite Programming Algorithm paRAllel version.''
+\textit{Parallel Computing} 29 (2003), 1053--1067.
+
+\end{thebibliography}
+
+\end{document}

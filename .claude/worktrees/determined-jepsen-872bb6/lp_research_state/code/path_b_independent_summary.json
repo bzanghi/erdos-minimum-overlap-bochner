@@ -1,0 +1,166 @@
+{
+  "methodology": "Independent re-implementation of White (2023) \u00a75.1/Appendix II ellipse-extension argument applied to Bochner-augmented program. Uses dual values from cvxpy SDP solved at 7 White Table 3 centers, then envelope-theorem reconstruction of dual objective as \u03a6_row(h,p,q).",
+  "config": {
+    "N": 10000,
+    "T": 4000,
+    "R": 10,
+    "bochner_n": 20,
+    "solver": "CLARABEL"
+  },
+  "rows": [
+    {
+      "label": "row1",
+      "V_c": 0.3800214581022122,
+      "duals": {
+        "lam_53": 0.05155003812330673,
+        "lam_54": 0.2442160676570746,
+        "lam_pL": 0.23269238301654235,
+        "lam_pU": 0.14159829095287485,
+        "lam_qL": 7.398608038418615e-10,
+        "lam_qU": 1.4009038794677671e-10,
+        "lam_513": 0.2659164535568063
+      },
+      "center": {
+        "h_c": 0.015,
+        "p_c": 0.381,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    },
+    {
+      "label": "row2",
+      "V_c": 0.38000695656675454,
+      "duals": {
+        "lam_53": 0.06302735099902013,
+        "lam_54": 0.24371751175152237,
+        "lam_pL": 0.2343482070959225,
+        "lam_pU": 0.14195784835870262,
+        "lam_qL": 1.6044034612390087e-09,
+        "lam_qU": 3.280293323937622e-10,
+        "lam_513": 0.22661425294220378
+      },
+      "center": {
+        "h_c": 0.015,
+        "p_c": 0.385,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    },
+    {
+      "label": "row3",
+      "V_c": 0.3803657360241946,
+      "duals": {
+        "lam_53": 0.06528245864925138,
+        "lam_54": 0.24768747595615115,
+        "lam_pL": 0.22801560742468469,
+        "lam_pU": 0.14292758067926156,
+        "lam_qL": 1.9433907208140828e-09,
+        "lam_qU": 1.273649410195624e-10,
+        "lam_513": 0.2656671767432193
+      },
+      "center": {
+        "h_c": 0.02,
+        "p_c": 0.375,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    },
+    {
+      "label": "row4",
+      "V_c": 0.3796532234110552,
+      "duals": {
+        "lam_53": 0.00834252069050444,
+        "lam_54": 0.24043252488355768,
+        "lam_pL": 0.2382233161405935,
+        "lam_pU": 0.14073311024946433,
+        "lam_qL": 3.1955971755184025e-10,
+        "lam_qU": 2.2390816071300146e-10,
+        "lam_513": 0.2778676936196177
+      },
+      "center": {
+        "h_c": 0.004,
+        "p_c": 0.3875,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    },
+    {
+      "label": "row5",
+      "V_c": 0.3799610196389801,
+      "duals": {
+        "lam_53": 5.468167614581031e-08,
+        "lam_54": 0.2517172610544977,
+        "lam_pL": 0.23496038299830826,
+        "lam_pU": 0.14170272544753904,
+        "lam_qL": 2.694078341274409e-10,
+        "lam_qU": 2.694086438356097e-10,
+        "lam_513": 0.05585763892344971
+      },
+      "center": {
+        "h_c": 0.0,
+        "p_c": 0.4,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    },
+    {
+      "label": "row6",
+      "V_c": 0.379750646843319,
+      "duals": {
+        "lam_53": 2.253608546246386e-08,
+        "lam_54": 0.24272348157328033,
+        "lam_pL": 0.23379312409519273,
+        "lam_pU": 0.141029063490616,
+        "lam_qL": 1.0986125199451643e-10,
+        "lam_qU": 1.0986207612819131e-10,
+        "lam_513": 0.2983940555267254
+      },
+      "center": {
+        "h_c": 0.0,
+        "p_c": 0.381,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    },
+    {
+      "label": "row7",
+      "V_c": 0.38130809494486206,
+      "duals": {
+        "lam_53": 0.14483417281146654,
+        "lam_54": 0.24171890285494319,
+        "lam_pL": 0.22817673608714703,
+        "lam_pU": 0.14530175911593973,
+        "lam_qL": 0.003964497380303756,
+        "lam_qU": 1.4992756312130696e-10,
+        "lam_513": 0.15419175236489577
+      },
+      "center": {
+        "h_c": 0.03,
+        "p_c": 0.375,
+        "q1_c": -0.02,
+        "q2_c": 0.02
+      }
+    }
+  ],
+  "true_min_over_5p16": {
+    "value": 0.3795475222795493,
+    "h": 0.0,
+    "p": 0.3941824091854225,
+    "q": -0.02,
+    "binding_intersection": "row4-row5 crossover",
+    "vs_White_0p379005": 0.0005425222795493179
+  },
+  "agent_D_reported": {
+    "value": 0.3795497139184525,
+    "h": 0.0,
+    "p": 0.394,
+    "q": "-0.02",
+    "binding_row": "row4",
+    "vs_White_0p379005": 0.0005447139184525107
+  },
+  "discrepancy": {
+    "mine_minus_AgentD": -2.1916389031928496e-06,
+    "note": "Agent D evaluated \u03a6 at the discrete grid point p=0.394, not the continuous minimum. The continuous minimum is at the row4-row5 crossover p\u22480.39418. My value is ~2.19e-6 LOWER than Agent D s. Both exceed White s 0.379005 by > +5.42e-4."
+  },
+  "verdict": "AGREE on methodology and dual values; minor discrepancy of 2.19e-6 due to grid-vs-continuous min. Bochner-augmented Path B improvement of +5.45e-4 over White s 0.379005 holds (with the corrected continuous min, improvement is +5.43e-4)."
+}

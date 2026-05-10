@@ -1,0 +1,106 @@
+{
+  "summary": {
+    "installed": true,
+    "package": "sdpa-multiprecision (PyPI)",
+    "version": "0.2.2",
+    "backend": {
+      "gmp": 1
+    },
+    "linkage": "links libgmp-6683d5d4.so.10.2.0 + libgmpxx-7c3a5907.so.4.4.0",
+    "available_in_cvxpy": true,
+    "cvxpy_solver_name": "SDPA",
+    "headline_recommendation": "stick_with_clarabel_plus_dual_extraction"
+  },
+  "install_steps_that_worked": [
+    "pip install --break-system-packages sdpa-multiprecision",
+    "(NOTE: 'pip install sdpa-python' installs DOUBLE-PRECISION SDPA \u2014 needs 'sdpa-multiprecision' for the GMP build)",
+    "Verify: python -c 'from sdpap.sdpacall.sdpacall import get_backend_info; print(get_backend_info())' -> {'gmp': 1}"
+  ],
+  "install_steps_that_failed": [
+    "apt-get install sdpa libsdpa-dev: lacks sudo permissions in sandbox",
+    "pip install sdpa-gmp: not on PyPI",
+    "pip install sdpap: not on PyPI"
+  ],
+  "small_sdp_validation": {
+    "tiny_3x3_sdp": {
+      "true_value_known": false,
+      "clarabel": 2.0000000027402205,
+      "sdpa_gmp": 2.0000000047754463,
+      "scs": 1.9999800184713352,
+      "agreement": "all within 1e-7"
+    },
+    "tiny_lp_known_value_8_3": {
+      "true": 2.6666666666666665,
+      "clarabel": 2.6666666671829757,
+      "sdpa_gmp": 2.666666867312811,
+      "scs": 2.666666632083049,
+      "note": "default cvxpy SDPA opts use epsilonStar=1e-7 \u2014 agreement ~1e-7 not 1e-30"
+    }
+  },
+  "white_program_validation": {
+    "row4_N100_T50_bochner5": {
+      "PARAMS": {
+        "h1": 0.004,
+        "h2": 0.004,
+        "p1": 0.3875,
+        "p2": 0.3875,
+        "q1": -0.02,
+        "q2": 0.02,
+        "bochner_n": 5,
+        "R": 10
+      },
+      "clarabel_value": 0.3613663254368814,
+      "clarabel_status": "optimal",
+      "clarabel_time_s": 0.15,
+      "sdpa_gmp_value": 0.3613663208386452,
+      "sdpa_gmp_status": "optimal",
+      "sdpa_gmp_time_s": 25.2,
+      "sdpa_gmp_opts": {
+        "epsilonStar": 1e-15,
+        "epsilonDash": 1e-15,
+        "maxIteration": 100,
+        "mpfPrecision_bits": 128
+      },
+      "diff_sdpa_minus_clarabel": -4.5982362e-09,
+      "interpretation": "agreement to ~5e-9; SDPA-GMP and CLARABEL converge to same optimum"
+    },
+    "row4_N200_T100_bochner10": {
+      "clarabel_value": 0.3662086213426849,
+      "clarabel_status": "optimal",
+      "clarabel_time_s": 0.78,
+      "sdpa_gmp_value": null,
+      "sdpa_gmp_status": "failed: cholesky decomposition error in sdpa_linear.cpp:494",
+      "sdpa_gmp_error": "cannot move: step length is too short. Suggestion: 'try with smaller gammaStar'",
+      "interpretation": "default SDPA-GMP params not robust on this problem family; would need parameter tuning"
+    }
+  },
+  "row4_target_problem": {
+    "target_size": "N=2000, T=800, bochner_n=20",
+    "completed": false,
+    "reason": "SDPA-GMP runtime extrapolation impractical and numerical robustness fragile",
+    "evidence": [
+      "N=100, T=50, bochner_n=5: SDPA-GMP = 25s (CLARABEL = 0.15s; ~170x slower)",
+      "N=200, T=100, bochner_n=10: SDPA-GMP fails with cholesky/step-length error",
+      "N=500, T=200, bochner_n=10: SDPA-GMP did not finish within 44s (build only)",
+      "N=2000, T=800, bochner_n=20: extrapolated > many hours, not achievable in time budget"
+    ],
+    "clarabel_at_target": {
+      "value": 0.37820410640302027,
+      "status": "optimal_inaccurate",
+      "time_s": 7.2,
+      "note": "from a partial run during this investigation"
+    }
+  },
+  "recommendation": {
+    "headline": "Use CLARABEL + dual extraction for the headline result.",
+    "rationale": [
+      "SDPA-GMP installs cleanly via pip (sdpa-multiprecision) and works for tiny problems",
+      "BUT runtime is 100-1000x slower than CLARABEL; row 4 at N=2000 T=800 bochner_n=20 not feasible",
+      "AND default GMP solve fails on a ~7000-variable instance (bochner_n=10 N=200)",
+      "CLARABEL's optimal_inaccurate status with dual lower bound is the rigorous-yet-tractable path",
+      "Where SDPA-GMP COULD help: tiny verification runs to spot-check that CLARABEL's reported value at intermediate sizes (e.g. N=100) agrees with multiprecision to within 1e-9 \u2014 confirmed here (5e-9 agreement)"
+    ],
+    "spot_check_passed": true,
+    "spot_check_evidence": "row4 with N=100 T=50 bochner_n=5: CLARABEL = 0.3613663254, SDPA-GMP (1e-15 eps, 128-bit mpf) = 0.3613663208, diff = -4.6e-9"
+  }
+}

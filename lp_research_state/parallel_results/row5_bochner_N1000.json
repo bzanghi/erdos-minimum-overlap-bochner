@@ -1,0 +1,19 @@
+{
+  "row": "row5",
+  "N": 1000,
+  "T": 400,
+  "R": 10,
+  "bochner_n": 20,
+  "value": 0.3773827197193588,
+  "status": "optimal_inaccurate",
+  "time": 4.501097202301025,
+  "fallback_chain": [
+    {
+      "N": 1000,
+      "T": 400,
+      "status": "optimal_inaccurate",
+      "value": 0.3773827197193588,
+      "time": 4.501097202301025
+    }
+  ]
+}

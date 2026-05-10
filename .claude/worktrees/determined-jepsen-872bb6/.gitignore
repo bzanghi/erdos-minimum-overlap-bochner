@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Large solver outputs / temp files
+*.npz
+*.pkl
+__pycache_*
+
+# Don't track session-only logs
+lp_research_state/cron_log.txt
+
+# Don't track per-run pickle dumps that get re-generated
+lp_research_state/code/_indep_ckpt_full/
+lp_research_state/parallel_results/_run_*.tmp

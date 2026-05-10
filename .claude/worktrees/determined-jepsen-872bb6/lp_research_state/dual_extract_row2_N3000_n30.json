@@ -1,0 +1,25 @@
+{
+  "row": "row2",
+  "N": 3000,
+  "T": 1200,
+  "R": 10,
+  "h": 0.015,
+  "p": 0.385,
+  "q_range": [
+    -0.02,
+    0.02
+  ],
+  "bochner_n": 30,
+  "use_T5p": false,
+  "kind": "lp_run_bochner_dual",
+  "value": 0.3792420837785485,
+  "status": "optimal_inaccurate",
+  "rigorous_dual_LB_low_precision": 0.37924,
+  "rigorous_dual_LB": 0.3792420582785485,
+  "last_gap": 2.55e-08,
+  "dual_residual_at_LB": 3.72e-10,
+  "best_iter": 44,
+  "n_iters_total": 44,
+  "time": 15.540956497192383,
+  "ts": "2026-05-10 03:55:33"
+}

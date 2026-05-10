@@ -1,0 +1,55 @@
+{
+  "row": "row5",
+  "N": 1500,
+  "T": 600,
+  "R": 10,
+  "bochner_n": 20,
+  "value": 0.37830652887913785,
+  "status": "optimal_inaccurate",
+  "time": 4.569483757019043,
+  "fallback_chain": [
+    {
+      "N": 10000,
+      "T": 4000,
+      "status": "OOM-killed (3.8GiB workspace cap)",
+      "value": null,
+      "time": null
+    },
+    {
+      "N": 5000,
+      "T": 2000,
+      "status": "OOM-killed (3.8GiB workspace cap)",
+      "value": null,
+      "time": null
+    },
+    {
+      "N": 3000,
+      "T": 1200,
+      "status": "OOM-killed (3.8GiB workspace cap)",
+      "value": null,
+      "time": null
+    },
+    {
+      "N": 2000,
+      "T": 800,
+      "status": "OOM-killed (3.8GiB workspace cap)",
+      "value": null,
+      "time": null
+    },
+    {
+      "N": 1700,
+      "T": 680,
+      "status": "OOM-killed (3.8GiB workspace cap)",
+      "value": null,
+      "time": null
+    },
+    {
+      "N": 1500,
+      "T": 600,
+      "status": "optimal_inaccurate",
+      "value": 0.37830652887913785,
+      "time": 4.569483757019043
+    }
+  ],
+  "notes": "Workspace was capped at ~3.8 GiB RAM; N>=1700 attempts were OOM-killed by the kernel (SIGKILL outside Python's exception handler, hence not auto-recorded). Largest N that fit was N=1500, T=600. Solver: CLARABEL. Status was optimal_inaccurate; value reported is exact prob.value."
+}
