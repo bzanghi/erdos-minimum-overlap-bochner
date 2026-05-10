@@ -15,18 +15,21 @@ import numpy as np
 CODE = Path(__file__).resolve().parent
 sys.path.insert(0, str(CODE))
 from path_b_analytical import build_problem_with_dual_handles, find_ellipse_h_p
-from poly_moment import build_even_moment_nonneg_constraints
+from poly_moment import build_even_moment_nonneg_constraints, build_even_hankel_psd
 
 H_BOX = (0.0, 0.06); P_BOX = (0.35, 0.45); TARGET = 0.379005
 
 
-def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max):
+def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max, hankel_n=0):
     Omega, cons, H = build_problem_with_dual_handles(
         N, T, R, h_c, h_c, p_c, p_c, q1, q2, bochner_n=bochner_n,
     )
     if pm_k_max > 0:
         pm_cons, tb = build_even_moment_nonneg_constraints(H["c"], H["d"], T, k_max=pm_k_max)
         cons.extend(pm_cons)
+    if hankel_n > 0:
+        hk_cons, m_var, tails = build_even_hankel_psd(H["c"], H["d"], T, n_hankel=hankel_n)
+        cons.extend(hk_cons)
     prob = cp.Problem(cp.Minimize(Omega), cons)
     t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
     duals = {k: float(H[k].dual_value) if H[k].dual_value is not None else 0.0
@@ -43,6 +46,7 @@ def main():
     ap.add_argument("--R", type=int, default=10)
     ap.add_argument("--bochner_n", type=int, default=30)
     ap.add_argument("--pm_k_max", type=int, default=14)
+    ap.add_argument("--hankel_n", type=int, default=0)
     ap.add_argument("--margin", type=float, default=1e-6)
     ap.add_argument("--out", type=str, default="lp_research_state/parallel_results/cde_phase3.json")
     args = ap.parse_args()
@@ -62,14 +66,15 @@ def main():
                         "q1": -0.02, "q2": 0.02})
 
     print(f"=== Phase 3: re-solve all {len(centers)} centers at "
-          f"bochner_n={args.bochner_n} + poly_moment k_max={args.pm_k_max} ===\n")
+          f"bochner_n={args.bochner_n} + poly_moment k_max={args.pm_k_max} "
+          f"+ hankel_n={args.hankel_n} ===\n")
 
     results = []
     for i, c in enumerate(centers):
         print(f"[{i+1}/{len(centers)}] {c['label']:20s} (h={c['h_c']:.4f}, p={c['p_c']:.4f}) ...", flush=True)
         try:
             r = solve_with_pm(args.N, args.T, args.R, c['h_c'], c['p_c'], c['q1'], c['q2'],
-                              args.bochner_n, args.pm_k_max)
+                              args.bochner_n, args.pm_k_max, hankel_n=args.hankel_n)
             V_c_rig = r['value'] - args.margin
             center = {**c, "value": V_c_rig}
             ell = find_ellipse_h_p(center, r['duals'], c['q1'], c['q2'], target=TARGET)

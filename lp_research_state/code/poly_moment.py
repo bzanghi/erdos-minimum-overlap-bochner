@@ -108,39 +108,45 @@ def build_even_hankel_psd(
     c: cp.Variable, d: cp.Variable, T: int,
     n_hankel: int,
 ):
-    """Even-indices-only principal submatrix of the Hankel matrix.
+    """Even-indices-only Hankel-PSD constraint, TIGHT slack-variable encoding.
 
-    H_n^{even}[i,j] = m_{2(i+j)} for i, j = 0..n_hankel.  All entries are even
-    polynomial moments; tail bounds are finite small.  We impose:
-        H_n^{even} - tail_perturbation * I ⪰ 0
-    where tail_perturbation is sized to dominate the simultaneous truncation
-    errors of all entries (sum of tail_bound_2k over k = 0..2*n_hankel).
+    We introduce LP variables m_var[k] for each even polynomial moment k = 0..4n.
+    Link:
+        m_var[k]  =  m_truncated[k](c, d)  ±  ε_k,    where |ε_k| ≤ tail_bound(k, T)
+    Encoded as the two-sided LP inequality
+        m_truncated[k] - tail_k  ≤  m_var[k]  ≤  m_truncated[k] + tail_k.
+    Then require the (n_hankel+1)×(n_hankel+1) Hankel matrix
+        H[i,j]  :=  m_var[2(i+j)]
+    to be PSD.
 
-    Note: this is a STRICTLY WEAKER constraint than full Hankel PSD (we drop
-    the odd-moment off-diagonal blocks), but it is RIGOROUSLY truncatable.
+    Validity: the TRUE m_k satisfies |m_k - m_truncated[k]| ≤ tail_bound(k, T)
+    (under |c_j|, |d_j| ≤ 2/π). So m_var[k] can in principle equal the true
+    m_k, and the true H is PSD. The LP-relaxation may choose any m_var[k] in
+    the bound interval — that's a relaxation but still a necessary condition.
 
     Returns:
-      single cvxpy constraint (matrix PSD)
-      tail_pert size (for logging)
+      list of cvxpy constraints, list of m_var variables (for diagnostics).
     """
-    k_max = 4 * n_hankel  # need moments up to m_{4n}
-    alpha0, alpha, beta = fourier_coeffs_of_xk(k_max, T)
-    H_entries = []
-    max_tail = 0.0
+    k_max_needed = 4 * n_hankel
+    alpha0, alpha, beta = fourier_coeffs_of_xk(k_max_needed, T)
+    cons = []
+    m_var = cp.Variable(2 * n_hankel + 1)  # indexed by k_half = 0..2n meaning moment k=2*k_half
+    tails = []
+    for k_half in range(2 * n_hankel + 1):
+        k = 2 * k_half
+        m_trunc_expr = 0.5 * alpha0[k] + alpha[k, :] @ c + beta[k, :] @ d
+        tb = even_moment_tail_bound(k, T) if k > 0 else 0.0
+        tails.append(tb)
+        # m_var[k_half] within [m_trunc - tb, m_trunc + tb]
+        cons.append(m_var[k_half] >= m_trunc_expr - tb)
+        cons.append(m_var[k_half] <= m_trunc_expr + tb)
+    # Build Hankel matrix on m_var
+    H_rows = []
     for i in range(n_hankel + 1):
         row = []
         for j in range(n_hankel + 1):
-            k = 2 * (i + j)
-            m_k_expr = 0.5 * alpha0[k] + alpha[k, :] @ c + beta[k, :] @ d
-            row.append(m_k_expr)
-            tb = even_moment_tail_bound(k, T)
-            if tb > max_tail: max_tail = tb
-        H_entries.append(row)
-    # Build H as a cvxpy matrix expression via bmat (each entry is a scalar expr).
-    H_mat = cp.bmat([[cp.reshape(e, (1, 1)) for e in row] for row in H_entries])
-    # Conservative PSD perturbation: subtract max_tail * (n+1) on diagonal
-    # (Gershgorin-style: any eigenvalue shifted by entry uncertainty ≤ (n+1) max_tail)
-    pert = (n_hankel + 1) * max_tail
-    constraint = (H_mat + pert * np.eye(n_hankel + 1)) >> 0
-    # Re-state: H_true ⪰ 0 ⇒ H_truncated ⪰ -pert*I  ⇔  H_truncated + pert*I ⪰ 0
-    return constraint, pert
+            row.append(cp.reshape(m_var[i + j], (1, 1), order="C"))
+        H_rows.append(row)
+    H_mat = cp.bmat(H_rows)
+    cons.append(H_mat >> 0)
+    return cons, m_var, tails

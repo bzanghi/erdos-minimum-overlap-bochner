@@ -1,4 +1,4 @@
-# Constraint Discovery Engine — Phase 1, 2, 3 Results
+# Constraint Discovery Engine — Phases 1–5 Results
 
 **Date:** 2026-05-10
 **Status:** rigorous, reproducible, under identical rigor convention as the published
@@ -9,15 +9,27 @@
 | | µ ≥ | Δ vs White | Δ vs prior |
 |---|---|---|---|
 | White (2023) | 0.379005 | — | — |
-| Bochner-PSD + ellipse, 7 White centers (prior published) | 0.379544 | +5.39 × 10⁻⁴ | — |
-| **Phase 1**: cover refinement (n=20 + 4 CDE centers) | 0.379620 | +6.15 × 10⁻⁴ | +7.57 × 10⁻⁵ |
-| **Phase 2**: cover refinement at bochner_n=30 (7 White n=20 + 5 CDE n=30) | 0.379879 | +8.74 × 10⁻⁴ | +3.35 × 10⁻⁴ |
-| **Phase 3**: poly-moment + n=30 + 12-center cover | **0.380067** | **+1.062 × 10⁻³** | **+5.23 × 10⁻⁴** |
+| Bochner-PSD + ellipse (prior published) | 0.379544 | +5.39 × 10⁻⁴ | — |
+| Phase 1: cover refinement (n=20 + 4 CDE) | 0.379620 | +6.15 × 10⁻⁴ | +7.6 × 10⁻⁵ |
+| Phase 2: cover + bochner_n=30 (12 centers) | 0.379879 | +8.74 × 10⁻⁴ | +3.4 × 10⁻⁴ |
+| Phase 3: + poly_moment k=14 | 0.380067 | +1.062 × 10⁻³ | +1.9 × 10⁻⁴ |
+| Phase 4A: poly_moment k=20 | 0.3801147 | +1.110 × 10⁻³ | +4.7 × 10⁻⁵ |
+| Phase 4B: + Hankel-PSD n=6 | 0.3801199 | +1.115 × 10⁻³ | +5.2 × 10⁻⁶ |
+| **Phase 5: cover iter on combined** | **0.3801279** | **+1.123 × 10⁻³** | **+8.0 × 10⁻⁶** |
 
-### Open gap (post-Phase-3)
-- Lower: `µ ≥ 0.380067` (this work)
-- Upper: `µ ≤ 0.380871` (Together Computer, March 2026)
-- **Open width: ~8.0 × 10⁻⁴**, down from 1.3 × 10⁻³ at the start of this session — about 40% of the gap closed in one session.
+### Net session result
+
+- **µ ≥ 0.3801279** rigorously
+- **Δµ = +5.84 × 10⁻⁴** over the prior published headline
+- **Open gap: [0.3801279, 0.380871], width = 7.43 × 10⁻⁴**
+- **44% of the original gap closed in one session**
+
+### Saturation
+
+Phases 4–5 added only +6 × 10⁻⁵ over Phase 3 combined. This technique stack (Bochner-PSD + poly-moment + Hankel-PSD + cover refinement, all within White's framework on the standard Fourier basis) is now **saturated**. Further progress requires either:
+
+1. New mathematical levers outside this stack (alternative basis, even-f conditional, combinatorial M(n) at scale, formal verification surfacing latent gaps), or
+2. Compute scaling well past current SDP tractable regime (T > 8000, bochner_n > 40).
 
 ## Phase 1 — cover refinement (committed earlier)
 
