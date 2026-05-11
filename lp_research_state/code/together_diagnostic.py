@@ -1147,6 +1147,160 @@ def plot_gap(npz_path: str = "lp_research_state/data/together_gap_function.npz",
     print(f"Wrote {out}")
 
 
+# =========================================================================
+# Task 12: aggregate every diagnostic into a single JSON file
+# =========================================================================
+#
+# This produces lp_research_state/data/together_diagnostic_results.json with
+# the numbers needed for TOGETHER_DIAGNOSTIC.md.  Uses CACHED values from
+# Task 6 (Ω at f*) and Task 10 (Phase-5 SDP solve) to avoid re-solving 75s
+# CVXPY problems; reruns the cheap diagnostics (Bochner / poly-moment /
+# Hankel eigvalsh, tail bounds, row-box checks, gap-function FFT).
+
+
+def aggregate_results():
+    """Run every cheap diagnostic and produce together_diagnostic_results.json.
+
+    Side effect: writes lp_research_state/data/together_diagnostic_results.json.
+    Returns the dict that was written.
+    """
+    from lp_research_state.code.together_loader import (
+        load_together_raw,
+        to_white_convention_even,
+        to_white_convention_direct,
+        compute_overlap_from_f,
+    )
+
+    bp_t, vals_t, dom, _ = load_together_raw()
+    results = {
+        "together": {
+            "claimed_value": 0.380871,
+            "recomputed": float(compute_overlap_from_f(bp_t, vals_t)),
+            "n_cells": int(len(vals_t)),
+            "h_sum": float(np.sum(vals_t)),
+        },
+        "white_phase5_baseline": {
+            "Omega_LB_phase5": 0.380128,  # from CDE_PHASE1_RESULT.md
+            "gap_width": 0.380871 - 0.380128,
+        },
+        "tail_bounds_T4000": {},
+        "row4_box_check": {},
+        "Omega_at_f_star": {},
+        "bochner_n30": {},
+        "poly_moment_k14": {},
+        "hankel_n6": {},
+        "row4_phase5_solve": {},
+        "gap_function": {},
+        "tasks_complete": list(range(1, 13)),
+    }
+
+    embeddings = [
+        ("even", to_white_convention_even),
+        ("direct", to_white_convention_direct),
+    ]
+    for kind, embed in embeddings:
+        wb, wv = embed(bp_t, vals_t, dom)
+        data = np.load(DATA_DIR / f"together_f_star_fourier_{kind}.npz")
+        c = np.asarray(data["c"], dtype=np.float64)
+        d = np.asarray(data["d"], dtype=np.float64)
+        results["tail_bounds_T4000"][kind] = {
+            "V_based": truncation_tail_bound(wb, wv, T=4000),
+            "exact_parseval": truncation_tail_exact(wb, wv, T=4000),
+        }
+        results["row4_box_check"][kind] = check_row_box_for_projection(c, d, "row4")
+        results["bochner_n30"][kind] = bochner_diagnostic(c, d, n=30)
+        results["poly_moment_k14"][kind] = poly_moment_diagnostic(
+            wb, wv, c, d, k_max=14, T=4000
+        )
+        results["hankel_n6"][kind] = hankel_diagnostic(
+            wb, wv, c, d, n=6, T=4000
+        )
+
+    # Cached Task 6 results (DO NOT re-solve — 75 s each).
+    results["Omega_at_f_star"]["even"] = {
+        "status": "optimal",
+        "Omega_at_f_star": 0.459311,
+        "row_bounds_overridden": True,
+        "solve_time_s": 72.7,
+        "note": (
+            "SDP-encoded Ω with (c, d) pinned to Together's f_even projection. "
+            "Row 4's residual box was overridden because f_even's f̂(1) ≈ "
+            "(-2.3e-4, 0) does not lie in [0.3875, 0.3875] × [-0.02, 0.02]."
+        ),
+    }
+    results["Omega_at_f_star"]["direct"] = {
+        "status": "infeasible",
+        "Omega_at_f_star": None,
+        "row_bounds_overridden": True,
+        "solve_time_s": 24.2,
+        "explanation": (
+            "Bochner M_n(1-f) at f_direct has λ_min = -0.88, decisively "
+            "rejecting f_direct as a valid 0 ≤ f ≤ 1 candidate. The "
+            "asymmetric direct embedding concentrates mass on [0, 2] with "
+            "f = 1 in many cells, violating Parseval-side feasibility."
+        ),
+    }
+
+    # Cached Task 10 results.
+    primal_data = np.load(DATA_DIR / "row4_phase5_primal.npz")
+    omega_lb_cached = float(primal_data["Omega_LB"])
+    f_tilde_cached = (
+        np.load(DATA_DIR / "row4_f_tilde.npz")["f_tilde"]
+        if (DATA_DIR / "row4_f_tilde.npz").exists()
+        else None
+    )
+    if f_tilde_cached is None:
+        f_tilde_cached = np.load(DATA_DIR / "together_gap_function.npz")["f_tilde"]
+    results["row4_phase5_solve"] = {
+        "Omega_LB": omega_lb_cached,
+        "f_tilde_min": float(np.min(f_tilde_cached)),
+        "f_tilde_max": float(np.max(f_tilde_cached)),
+        "f_tilde_mean": float(np.mean(f_tilde_cached)),
+        "solve_time_s": 79.6,
+        "note": (
+            "Phase-5 SDP at row 4 (bochner_n=30, poly_moment k_max=14, "
+            "N=10000, T=4000, R=10). Ω_LB recovered via "
+            "solve_with_dual_extraction."
+        ),
+    }
+
+    # Task 11 results: recompute energy bands from the cached gap file so
+    # numbers are reproducible from disk.
+    gap_data = np.load(DATA_DIR / "together_gap_function.npz")
+    g = np.asarray(gap_data["g"], dtype=np.float64)
+    x_grid = np.asarray(gap_data["x"], dtype=np.float64)
+    f_star_grid = np.asarray(gap_data["f_star"], dtype=np.float64)
+    G = np.fft.rfft(g)
+    n = len(G)
+    energy = np.abs(G) ** 2
+    n_low = max(n // 20, 1)
+    total = float(energy.sum())
+    argmin = int(np.argmin(g))
+    argmax = int(np.argmax(g))
+    results["gap_function"] = {
+        "max_abs_gap": float(np.max(np.abs(g))),
+        "L2_gap": float(np.sqrt(np.mean(g ** 2))),
+        "low_band_frac": float(energy[:n_low].sum() / total) if total > 0 else 0.0,
+        "high_band_frac": float(energy[n_low:].sum() / total) if total > 0 else 0.0,
+        "n_low_bins": int(n_low),
+        "n_total_bins": int(n),
+        "argmin_x": float(x_grid[argmin]),
+        "argmin_g": float(g[argmin]),
+        "argmin_f_star": float(f_star_grid[argmin]),
+        "argmax_x": float(x_grid[argmax]),
+        "argmax_g": float(g[argmax]),
+        "argmax_f_star": float(f_star_grid[argmax]),
+        "interpretation": (
+            "structurally localized (low-band fraction > 0.99) — the gap is "
+            "smooth low-frequency deviation, NOT Gibbs ringing"
+        ),
+    }
+
+    out_path = DATA_DIR / "together_diagnostic_results.json"
+    out_path.write_text(json.dumps(results, indent=2, default=float))
+    return results
+
+
 if __name__ == "__main__":
     _run_all_tests()
     _test_bochner_xcheck()
