@@ -304,11 +304,106 @@ def _test_total_variation():
     print("[OK] total variation calculation correct (V = 2 for [0,1] indicator)")
 
 
+def truncation_tail_exact(breakpoints, values, T):
+    """Exact L² truncation tail error for a step function on [-2, 2], using Parseval.
+
+    For f = a_0 + Σ_k [c_k cos(πkx/2) + d_k sin(πkx/2)] with the convention
+    c_k = ∫ f cos(πkx/2) dx (per _fourier_convention_notes.md), Parseval gives:
+        ||f||² = (∫f)² / 4 + Σ_k (c_k² + d_k²) / 2
+
+    Hence ||f - f_T||² = ||f||² - (∫f)²/4 - Σ_{k=1}^{T} (c_k² + d_k²)/2
+
+    This is RIGOROUS (an exact equality), strictly tighter than the V-based bound
+    in `truncation_tail_bound(...)`, suitable as the trust threshold for downstream
+    tasks comparing constraint slacks.
+
+    Returns
+    -------
+    dict with keys 'L2_sq_exact', 'L2_exact', 'L1_bound', 'T', plus
+    'f_norm_sq', 'f_integral_sq_over_4', 'truncated_energy' for sanity-checking.
+    """
+    breakpoints = np.asarray(breakpoints, dtype=np.float64)
+    values = np.asarray(values, dtype=np.float64)
+    # Closed-form ||f||² and ∫f for a step function:
+    widths = np.diff(breakpoints)
+    f_norm_sq = float(np.sum(values**2 * widths))
+    f_int = float(np.sum(values * widths))
+
+    # Use the existing project_step_function for (c, d); guard T=0 since the
+    # projection helper requires T >= 1 (no modes to integrate against).
+    if T == 0:
+        truncated_energy = 0.0
+    else:
+        c, d = project_step_function(breakpoints, values, T)
+        # c[0] is a placeholder; the real projection coefs are c[1..T], d[1..T]
+        truncated_energy = float(0.5 * np.sum(c[1:] ** 2 + d[1:] ** 2))
+    constant_energy = (f_int**2) / 4.0
+
+    L2_sq_exact = f_norm_sq - constant_energy - truncated_energy
+    # Should be nonneg up to floating-point noise; clamp to 0 if very slightly negative
+    if -1e-14 < L2_sq_exact < 0:
+        L2_sq_exact = 0.0
+    if L2_sq_exact < 0:
+        raise ValueError(
+            f"L²_sq_exact negative ({L2_sq_exact:.3e}); Parseval convention "
+            f"or projection has a bug"
+        )
+
+    L2_exact = float(np.sqrt(L2_sq_exact))
+    domain_len = float(breakpoints[-1] - breakpoints[0])
+    L1_bound = float(np.sqrt(domain_len) * L2_exact)
+    return {
+        "L2_sq_exact": L2_sq_exact,
+        "L2_exact": L2_exact,
+        "L1_bound": L1_bound,
+        "T": int(T),
+        "f_norm_sq": f_norm_sq,
+        "f_integral_sq_over_4": constant_energy,
+        "truncated_energy": truncated_energy,
+    }
+
+
+def _test_truncation_tail_exact_smooth():
+    """For f(x) = 1/4 (constant on [-2, 2]), ||f||² = 1, (∫f)²/4 = 1, so tail = 0 for any T ≥ 1."""
+    bp = np.array([-2.0, 2.0])
+    vals = np.array([0.25])
+    r = truncation_tail_exact(bp, vals, T=10)
+    assert r["L2_sq_exact"] < 1e-20, (
+        f"constant function should have zero tail, got {r['L2_sq_exact']:.3e}"
+    )
+    print(f"[OK] exact tail = 0 for constant function (got {r['L2_sq_exact']:.3e})")
+
+
+def _test_truncation_tail_exact_one_mode():
+    """For f representing a single Fourier mode (approximately), truncating at T=0 should leave that mode's energy.
+
+    Use f(x) = 0.25 + 0.5 cos(πx/2) on [-2, 2] (approximated as a step function with many cells).
+    Then c[1] ≈ 1 (coefficient of cos(πx/2) is 0.5, the integral ∫ f cos(πx/2) dx = 0.5 · 2 = 1).
+    Truncating at T=0 should leave tail² ≈ (1² + 0²)/2 = 0.5.
+
+    ||f||² closed form: ∫(0.25 + 0.5 cos(πx/2))² dx
+                  = ∫(0.0625 + 0.25 cos(πx/2) + 0.25 cos²(πx/2)) dx
+                  = 0.25 + 0 + 0.5 = 0.75   (using ∫_{-2}^{2} cos²(πx/2) dx = 2)
+    ∫f = 0.25·4 + 0.5·0 = 1, so (∫f)²/4 = 0.25
+    expected L²_sq tail = 0.75 - 0.25 = 0.5
+    """
+    n = 10000
+    x = np.linspace(-2, 2, n + 1)
+    f_vals = 0.25 + 0.5 * np.cos(np.pi * (x[:-1] + x[1:]) / 4)  # midpoint sample
+    r = truncation_tail_exact(x, f_vals, T=0)
+    assert abs(r["L2_sq_exact"] - 0.5) < 1e-3, (
+        f"expected L²_sq ≈ 0.5, got {r['L2_sq_exact']:.6f}"
+    )
+    print(f"[OK] T=0 tail ≈ 0.5: got {r['L2_sq_exact']:.6f}")
+
+
 def _run_all_tests():
     _test_projection_constant()
     _test_projection_single_cell()
     _test_projection_even_symmetry()
     _test_total_variation()
+    _test_truncation_tail_exact_smooth()
+    _test_truncation_tail_exact_one_mode()
     print("[ALL] projection tests passed")
 
 
