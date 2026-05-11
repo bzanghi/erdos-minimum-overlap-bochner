@@ -1,0 +1,60 @@
+{
+  "test_1_M_of_f_tilde": {
+    "n_grid": 10000,
+    "dx_cell_width": 0.0004,
+    "f_tilde_min": -0.9714049245074916,
+    "f_tilde_max": 1.5479872035082352,
+    "f_tilde_int_full": 2.000054164245107,
+    "M_together_claimed": 0.380871,
+    "M_strict_pos_slice": 0.7072029752750936,
+    "int_pos_slice": 0.9907253599629462,
+    "M_strict_even_fold": 0.6991630623879883,
+    "int_even_fold": 1.0000270821225534,
+    "M_strict_abs_pos": 0.5937543906341936,
+    "int_abs_pos": 1.1939619808086503,
+    "M_clipped_pos": 0.6158218913080509,
+    "int_clipped_pos": 1.03235843007112,
+    "M_clipped_even_fold": 0.6117089903305136,
+    "int_clipped_even_fold": 1.0418994022979784
+  },
+  "test_2_mside_bochner": {
+    "row4_runs": [
+      {
+        "config": "bochner_n=20 only (baseline)",
+        "mside_bochner_n": 0,
+        "elapsed_s": 69.46447515487671,
+        "status": "optimal_inaccurate",
+        "reported_value": 0.379653395531704,
+        "rigorous_dual_LB": 0.37965,
+        "dual_residual_at_LB": 5.51e-10
+      },
+      {
+        "config": "mside_bochner_n=8 (SOC) + bochner_n=20",
+        "mside_bochner_n": 8,
+        "elapsed_s": 64.16538596153259,
+        "status": "optimal_inaccurate",
+        "reported_value": 0.37965323362098896,
+        "rigorous_dual_LB": 0.37965,
+        "dual_residual_at_LB": 3.2e-07
+      }
+    ]
+  },
+  "test_3_prior_findings": {
+    "summary": "findings.md (2026-05-10) documents that the existing SOC-relaxed M-side Bochner (mside_bochner_n) at n_M=5 produced \u0394=+1.4e-9 vs baseline and at n_M=10 produced \u0394=+1.65e-8 \u2014 empirically dead, labelled 'CANCEL' for higher n_M. Mechanism: the SOC slack U_m \u2265 |f\u0302(m)|\u00b2 absorbs the M-side PSD content without constraining (c,d). mside_bochner_schur defines the SAME convex set (per its docstring), so we expect identical behaviour. An exact-bilinear variant via Lasserre-lifted moments (mside_via_lasserre.py) exists but requires lasserre_T_max > 0; Lasserre level-2 is itself documented as 'non-rigorous and withdrawn' in CLAUDE.md and its localizing tail bound kills the gain quantitatively (communications/lasserre_tail_bound.md).",
+    "prior_run_n5": {
+      "config": "mside_bochner_n=5 (SOC), row4 N=2000",
+      "Omega": 0.37627652427597486,
+      "delta_vs_baseline": 1.4e-09,
+      "status": "optimal"
+    },
+    "prior_run_n10": {
+      "config": "mside_bochner_n=10 (SOC), row4 N=2000",
+      "Omega": 0.3762765394,
+      "delta_vs_baseline": 1.65e-08,
+      "status": "optimal_inaccurate"
+    },
+    "phase_5_baseline": 0.380128,
+    "white_baseline": 0.379005,
+    "together_UB": 0.380871
+  }
+}
