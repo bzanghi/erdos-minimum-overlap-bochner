@@ -607,8 +607,316 @@ def evaluate_omega_at_f_star(
     }
 
 
+# =========================================================================
+# Tasks 7-9: per-constraint-family slacks at Together's f*
+# =========================================================================
+#
+# Convention reminder (CRITICAL — verified against bochner.py and
+# poly_moment.py):
+#   - This module's projection returns c, d as length T+1 arrays
+#     indexed by k = 0..T, where c[0]=0.5 (placeholder for f̂(0))
+#     and c[k] = ∫_{-2}^{2} f cos(πkx/2) dx for k = 1..T.
+#   - The SDP's c[k] (k = 0..T-1) corresponds to proj_c[k+1].
+#   - White's Fourier coeffs: f̂(0) = 1/2, f̂(k) = (proj_c[k] - i proj_d[k]) / 2
+#     for k = 1..T (this module's projection indexing directly).
+#   - poly_moment.py's m_k_SDP formula equals (1/2^k) · ∫_{-2}^{2} x^k f(x) dx
+#     because it's written on the [-1, 1] basis with c, d as ∫_{-2}^{2}
+#     f cos(πkx/2) dx (i.e. SDP's c, d):
+#         m_k_SDP = ∫_{-1}^{1} x^k · [1/2 + Σ_j (c_j cos(πjx) + d_j sin(πjx))] dx
+#         Plugging c_j = 2·(g's [-1,1] cos coef) where g(y)=f(2y) gives
+#         m_k_SDP = 2 · ∫_{-1}^{1} y^k g(y) dy = (1/2^k) · ∫_{-2}^{2} x^k f(x) dx
+#     (derivation in the task plan notes; verified numerically below).
+
+
+# --- Task 7: Bochner-PSD slack at f* ------------------------------------
+
+
+def bochner_matrix_at_f_star(c_proj, d_proj, n):
+    """Construct M_n(f*) = [f̂(j-k)]_{j,k=0..n} (Hermitian (n+1)×(n+1)).
+
+    Uses White's convention:
+        f̂(0) = 1/2,  f̂(k) = (c_proj[k] - i d_proj[k]) / 2  for k ≥ 1.
+
+    Parameters
+    ----------
+    c_proj, d_proj : array-like of length ≥ n+1
+        Projection-indexed Fourier coefficients (c[k] is the k-th cosine
+        Fourier integral; this module's `project_step_function` output).
+    n : int
+        Bochner level. Returned matrix has shape (n+1, n+1).
+
+    Returns
+    -------
+    M : np.ndarray of shape (n+1, n+1), complex
+        Hermitian Toeplitz matrix.
+    """
+    c_proj = np.asarray(c_proj, dtype=np.float64)
+    d_proj = np.asarray(d_proj, dtype=np.float64)
+    f_hat = np.empty(n + 1, dtype=complex)
+    f_hat[0] = 0.5
+    for k in range(1, n + 1):
+        f_hat[k] = (float(c_proj[k]) - 1j * float(d_proj[k])) / 2.0
+    M = np.empty((n + 1, n + 1), dtype=complex)
+    for j in range(n + 1):
+        for k in range(n + 1):
+            diff = j - k
+            M[j, k] = f_hat[diff] if diff >= 0 else np.conj(f_hat[-diff])
+    return M
+
+
+def _bochner_xcheck(c_proj, d_proj, n=4):
+    """Cross-check bochner_matrix_at_f_star against bochner.py's encoded
+    construction by evaluating the same real-form (2n+2)×(2n+2) matrix and
+    asserting bit-equality.
+
+    bochner.py builds Re_M, Im_M (n+1)x(n+1) via:
+        Re M[j,k] = 1/2 if j==k, else sign * c_{|j-k|-1+1}/2 = sign * c_{|j-k|}/2
+                    (SDP indexing: SDP's c[m-1] is the m-th Fourier coef
+                    = proj's c_proj[m])
+        Im M[j,k] = 0 if j==k, else
+                     -sign * d_{|j-k|}/2  if j>k (ell>0),
+                     +sign * d_{|j-k|}/2  if j<k (ell<0)
+    Our M is then Re_M + i Im_M (taking sign=+1 for f≥0).
+    """
+    n_ = n
+    c_proj = np.asarray(c_proj, dtype=np.float64)
+    d_proj = np.asarray(d_proj, dtype=np.float64)
+    Re_M = np.zeros((n_ + 1, n_ + 1))
+    Im_M = np.zeros((n_ + 1, n_ + 1))
+    sign = +1
+    for j in range(n_ + 1):
+        for k in range(n_ + 1):
+            ell = j - k
+            if ell == 0:
+                Re_M[j, k] = 0.5
+                Im_M[j, k] = 0.0
+            else:
+                aell = abs(ell)
+                # bochner.py uses SDP c-indexing: SDP's c[aell-1] is the
+                # aell-th Fourier mode, which in our proj-indexing is
+                # c_proj[aell].
+                Re_M[j, k] = sign * 0.5 * c_proj[aell]
+                if ell > 0:
+                    Im_M[j, k] = -sign * 0.5 * d_proj[aell]
+                else:
+                    Im_M[j, k] = +sign * 0.5 * d_proj[aell]
+    M_from_bochner_py = Re_M + 1j * Im_M
+    M_ours = bochner_matrix_at_f_star(c_proj, d_proj, n_)
+    diff = np.max(np.abs(M_from_bochner_py - M_ours))
+    return float(diff)
+
+
+def _test_bochner_xcheck():
+    rng = np.random.default_rng(0)
+    c = np.concatenate([[0.5], rng.normal(size=20) * 0.1])
+    d = np.concatenate([[0.0], rng.normal(size=20) * 0.1])
+    for n_ in (1, 2, 4, 8):
+        diff = _bochner_xcheck(c, d, n=n_)
+        assert diff < 1e-14, f"bochner xcheck failed at n={n_}: diff={diff}"
+    print("[OK] bochner_matrix_at_f_star matches bochner.py construction to ~1e-14")
+
+
+def bochner_diagnostic(c_proj, d_proj, n=30):
+    """Compute λ_min, λ_max of M_n(f) and M_n(1-f) at the given f*.
+
+    For 1-f: (1-f)̂(0) = 1 - 1/2 = 1/2; (1-f)̂(k) = -f̂(k) for k ≥ 1.
+    Equivalently: c_{1-f, k} = -c_{f, k}, d_{1-f, k} = -d_{f, k} for k ≥ 1,
+    with c_{1-f}[0] kept at 0.5 to encode (1-f)̂(0) = 1/2.
+
+    Returns dict with eigenvalue extrema for both matrices.
+    """
+    c_proj = np.asarray(c_proj, dtype=np.float64)
+    d_proj = np.asarray(d_proj, dtype=np.float64)
+    M_f = bochner_matrix_at_f_star(c_proj, d_proj, n)
+    c_1mf = -c_proj.copy()
+    c_1mf[0] = 0.5
+    d_1mf = -d_proj.copy()
+    d_1mf[0] = 0.0
+    M_1mf = bochner_matrix_at_f_star(c_1mf, d_1mf, n)
+    eigs_f = np.linalg.eigvalsh(M_f)
+    eigs_1mf = np.linalg.eigvalsh(M_1mf)
+    return {
+        "lambda_min_M_n(f)": float(eigs_f.min()),
+        "lambda_max_M_n(f)": float(eigs_f.max()),
+        "lambda_min_M_n(1-f)": float(eigs_1mf.min()),
+        "lambda_max_M_n(1-f)": float(eigs_1mf.max()),
+        "trace_M_n(f)": float(np.real(np.trace(M_f))),
+        "trace_M_n(1-f)": float(np.real(np.trace(M_1mf))),
+        "n": int(n),
+    }
+
+
+# --- Task 8: Polynomial-moment slack at f* ------------------------------
+
+
+def poly_moments_direct(breakpoints, values, k_list):
+    """Compute the EXACT physical moments m_k^phys = ∫_{-2}^{2} x^k f(x) dx
+    for a step function f on [-2, 2].
+
+    For a single cell [a, b] with constant value v:
+        ∫_a^b x^k dx = (b^{k+1} - a^{k+1}) / (k+1)
+
+    Parameters
+    ----------
+    breakpoints : array of length n_cells + 1
+    values      : array of length n_cells
+    k_list      : iterable of int (moments to compute)
+
+    Returns
+    -------
+    dict {k: m_k^phys}
+    """
+    bp = np.asarray(breakpoints, dtype=np.float64)
+    vv = np.asarray(values, dtype=np.float64)
+    out = {}
+    for k in k_list:
+        # antiderivative at each breakpoint, then diff per cell
+        anti = bp ** (k + 1) / (k + 1)
+        m = float(np.sum(vv * (anti[1:] - anti[:-1])))
+        out[int(k)] = m
+    return out
+
+
+def poly_moment_diagnostic(breakpoints, values, c_proj, d_proj, k_max=14, T=4000):
+    """For each even k in {2, 4, ..., k_max}, compute:
+      - m_k^phys = ∫_{-2}^{2} x^k f(x) dx  (closed-form, exact)
+      - m_k^SDP_via_cd = poly_moment.py's expression evaluated at SDP's c, d
+        (which equals the projection's c_proj[1:T+1], d_proj[1:T+1]).
+      - tail_bound from poly_moment.even_moment_tail_bound(k, T).
+      - relation check: m_k^SDP_via_cd should equal m_k^phys / 2^k
+        (derivation in module banner).
+      - slack from the SDP constraint  m_k^SDP_via_cd ≥ -tail_bound
+        (positive ⇒ constraint satisfied with slack; negative ⇒ violated).
+
+    Returns
+    -------
+    dict { k: {m_phys, m_SDP_via_cd, m_SDP_expected_from_phys, tail_bound,
+               slack, slack_per_tail} }
+    """
+    # Lazy import to keep this module light if poly_moment unavailable.
+    try:
+        from lp_research_state.code.poly_moment import (
+            fourier_coeffs_of_xk,
+            even_moment_tail_bound,
+        )
+    except ImportError:  # pragma: no cover
+        sys.path.insert(0, str(Path(__file__).parent))
+        from poly_moment import (  # type: ignore
+            fourier_coeffs_of_xk,
+            even_moment_tail_bound,
+        )
+
+    if k_max % 2 != 0:
+        k_max -= 1
+
+    c_proj = np.asarray(c_proj, dtype=np.float64)
+    d_proj = np.asarray(d_proj, dtype=np.float64)
+    # SDP's c-indexed Fourier coeffs are proj[1..T] (length T):
+    c_sdp = c_proj[1:T + 1]
+    d_sdp = d_proj[1:T + 1]
+    assert len(c_sdp) == T and len(d_sdp) == T, (
+        f"projection length mismatch: c[1:T+1] has length {len(c_sdp)}, expected T={T}"
+    )
+
+    k_vals = list(range(2, k_max + 1, 2))
+    alpha0, alpha, beta = fourier_coeffs_of_xk(k_max, T)
+    phys = poly_moments_direct(breakpoints, values, k_list=k_vals)
+
+    out = {}
+    for k in k_vals:
+        m_SDP = 0.5 * alpha0[k] + alpha[k, :] @ c_sdp + beta[k, :] @ d_sdp
+        m_SDP = float(m_SDP)
+        m_phys = float(phys[k])
+        m_SDP_expected = m_phys / (2 ** k)
+        tail = float(even_moment_tail_bound(k, T))
+        slack = m_SDP - (-tail)  # m_SDP >= -tail; slack ≥ 0 means satisfied
+        out[int(k)] = {
+            "m_phys": m_phys,
+            "m_SDP_via_cd": m_SDP,
+            "m_SDP_expected_from_phys": m_SDP_expected,
+            "convention_residual": float(m_SDP - m_SDP_expected),
+            "tail_bound": tail,
+            "slack": slack,
+            "slack_per_tail": slack / tail if tail > 0 else float("inf"),
+        }
+    return out
+
+
+# --- Task 9: Hankel-PSD slack at f* -------------------------------------
+
+
+def hankel_diagnostic(breakpoints, values, c_proj, d_proj, n=6, T=4000):
+    """At f*: build (a) the Hankel matrix H_n[i,j] = m_{i+j}^SDP_via_cd,
+    (b) the interval-positivity matrix A_n[i,j] = m_{i+j} - m_{i+j+2},
+    using the SAME SDP formula as hankel_probe.py / poly_moment.py.
+
+    Reports eigenvalue extrema and the moments used. Also reports the
+    physically-anchored moments m_k_phys = ∫_{-2}^{2} x^k f(x) dx so the
+    reader can see both (the SDP's m_k corresponds to (1/2^k) · m_k_phys
+    when conventions are coherent).
+
+    Parameters
+    ----------
+    breakpoints : step function breakpoints (length n_cells + 1)
+    values      : step function values     (length n_cells)
+    c_proj, d_proj : projection arrays of length ≥ T + 1
+    n           : Hankel level (matrix size n+1)
+    T           : LP truncation level (default 4000, the SDP's level)
+
+    Returns dict with lambda_min/max of H_n and A_n, plus the moments.
+    """
+    try:
+        from lp_research_state.code.hankel_probe import (
+            moments_from_cd, build_hankel, build_interval_pos,
+            estimate_tail_bound,
+        )
+    except ImportError:  # pragma: no cover
+        sys.path.insert(0, str(Path(__file__).parent))
+        from hankel_probe import (  # type: ignore
+            moments_from_cd, build_hankel, build_interval_pos,
+            estimate_tail_bound,
+        )
+
+    c_proj = np.asarray(c_proj, dtype=np.float64)
+    d_proj = np.asarray(d_proj, dtype=np.float64)
+    c_sdp = c_proj[1:T + 1]
+    d_sdp = d_proj[1:T + 1]
+    assert len(c_sdp) == T, f"projection length mismatch: got {len(c_sdp)}, expected T={T}"
+
+    k_max = 2 * n + 2  # need up to m_{2n+2} for A_n
+    m_trunc = moments_from_cd(c_sdp, d_sdp, k_max=k_max)
+    m_trunc = np.asarray(m_trunc, dtype=np.float64)
+    H = build_hankel(m_trunc, n)
+    A = build_interval_pos(m_trunc, n)
+    eigs_H = np.linalg.eigvalsh(H)
+    eigs_A = np.linalg.eigvalsh(A)
+
+    # Physical moments for context.
+    phys = poly_moments_direct(breakpoints, values, k_list=list(range(0, k_max + 1)))
+    moments_table = {}
+    for k in range(k_max + 1):
+        tail = float(estimate_tail_bound(k, T)) if k > 0 else 0.0
+        moments_table[int(k)] = {
+            "m_SDP_via_cd": float(m_trunc[k]),
+            "m_phys_over_2k": float(phys[k]) / (2 ** k),
+            "tail_bound": tail,
+        }
+
+    return {
+        "lambda_min_H_n": float(eigs_H.min()),
+        "lambda_max_H_n": float(eigs_H.max()),
+        "H_eigs": [float(x) for x in eigs_H],
+        "lambda_min_A_n": float(eigs_A.min()),
+        "lambda_max_A_n": float(eigs_A.max()),
+        "A_eigs": [float(x) for x in eigs_A],
+        "n": int(n),
+        "moments": moments_table,
+    }
+
+
 if __name__ == "__main__":
     _run_all_tests()
+    _test_bochner_xcheck()
     for kind in ("even", "direct"):
         c, d = project_together_f_star(T=4000, kind=kind)
         print(
