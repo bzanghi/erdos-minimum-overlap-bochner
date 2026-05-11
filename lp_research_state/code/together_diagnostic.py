@@ -223,10 +223,92 @@ def _test_projection_even_symmetry():
     print("[OK] projection on symmetric step gives d[1:] = 0")
 
 
+def truncation_tail_bound(breakpoints, values, T):
+    """Rigorous upper bound on ||f - f_T||_{L^2([-2,2])} and ||f - f_T||_{L^1([-2,2])}
+    for a step function with breakpoints in [-2, 2], where f_T is the
+    truncation of f to its first T cosine + sine Fourier modes (k = 1..T)
+    in White's convention (basis cos(πkx/2), sin(πkx/2), domain length 4).
+
+    Derivation
+    ----------
+    Let c_k = ∫_{-2}^{2} f(x) cos(πkx/2) dx, d_k = ∫_{-2}^{2} f(x) sin(πkx/2) dx.
+    For a step function with breakpoints b_0 < b_1 < ... < b_M and values
+    v_0, ..., v_{M-1} (extended by 0 outside [b_0, b_M] ⊆ [-2, 2]),
+    integration by parts gives (with ω = πk/2):
+        c_k = (1/ω) · Σ_i (v_i - v_{i-1}) · sin(ω b_i)
+    where the sum runs over ALL jumps including the boundary "jumps" from
+    0 → v_0 at b_0 and v_{M-1} → 0 at b_M (since f = 0 outside support).
+    Hence |c_k| ≤ (1/ω) · V = (2V/(π k)) where
+        V := Σ_i |v_i - v_{i-1}|    (total variation, boundary-extended)
+    and the same bound holds for |d_k|.
+
+    By Parseval — with the orthonormal basis
+        {1/√4} ∪ {cos(πkx/2)/√2, sin(πkx/2)/√2 : k ≥ 1}   on [-2, 2] —
+    the inner products are √2 · c_k / 2 and √2 · d_k / 2 ... equivalently
+        ||f||_{L^2}^2 = (∫f)^2 / 4 + Σ_{k≥1} (c_k^2 + d_k^2) / 2
+    so that
+        ||f - f_T||_{L^2}^2 = Σ_{k>T} (c_k^2 + d_k^2) / 2
+                            ≤ Σ_{k>T} (2V/(πk))^2
+                            = (4 V^2 / π^2) · Σ_{k>T} 1/k^2.
+    Using the standard tail bound Σ_{k>T} 1/k^2 ≤ ∫_T^∞ dx/x^2 = 1/T:
+        ||f - f_T||_{L^2}^2 ≤ (4 V^2)/(π^2 T)
+        ||f - f_T||_{L^2}   ≤ (2 V / π) / √T.
+    For L^1, Cauchy–Schwarz on a domain of length L = 4 gives:
+        ||f - f_T||_{L^1} ≤ √L · ||f - f_T||_{L^2} = 2 · ||f - f_T||_{L^2}.
+
+    Parameters
+    ----------
+    breakpoints : np.ndarray, shape (n_cells + 1,)
+        Cell endpoints in [-2, 2].
+    values : np.ndarray, shape (n_cells,)
+        Constant value of f on each cell.
+    T : int
+        Truncation level (keep modes k = 1..T).
+
+    Returns
+    -------
+    dict with keys:
+        'V'             : float, total variation (boundary-extended).
+        'L2_bound'      : float, rigorous bound on ||f - f_T||_{L^2}.
+        'L1_bound'      : float, rigorous bound on ||f - f_T||_{L^1}.
+        'T'             : int, the truncation level.
+        'domain_length' : float, b_M - b_0 (should be 4.0 on [-2, 2]).
+    """
+    breakpoints = np.asarray(breakpoints, dtype=np.float64)
+    values = np.asarray(values, dtype=np.float64)
+    # Boundary-extended values: prepend & append 0 to capture support-edge jumps.
+    v_extended = np.concatenate([[0.0], values, [0.0]])
+    V = float(np.sum(np.abs(np.diff(v_extended))))
+    domain_len = float(breakpoints[-1] - breakpoints[0])
+    L2_bound = (2.0 * V / np.pi) / np.sqrt(float(T))
+    L1_bound = np.sqrt(domain_len) * L2_bound
+    return {
+        "V": V,
+        "L2_bound": L2_bound,
+        "L1_bound": L1_bound,
+        "T": int(T),
+        "domain_length": domain_len,
+    }
+
+
+def _test_total_variation():
+    """For f(x) = 1 on [0, 1], 0 elsewhere on [-2, 2]:
+    Including boundary jumps (f = 0 outside the support), the total
+    variation is exactly 2 — one unit jump up at x = 0, one unit jump
+    down at x = 1.
+    """
+    bp = np.array([-2.0, 0.0, 1.0, 2.0])
+    vals = np.array([0.0, 1.0, 0.0])
+    tb = truncation_tail_bound(bp, vals, T=100)
+    assert abs(tb["V"] - 2.0) < 1e-12, f"V should be 2, got {tb['V']}"
+    print("[OK] total variation calculation correct (V = 2 for [0,1] indicator)")
+
+
 def _run_all_tests():
     _test_projection_constant()
     _test_projection_single_cell()
     _test_projection_even_symmetry()
+    _test_total_variation()
     print("[ALL] projection tests passed")
 
 
