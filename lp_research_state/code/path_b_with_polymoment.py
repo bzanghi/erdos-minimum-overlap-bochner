@@ -20,9 +20,9 @@ from poly_moment import build_even_moment_nonneg_constraints, build_even_hankel_
 H_BOX = (0.0, 0.06); P_BOX = (0.35, 0.45); TARGET = 0.379005
 
 
-def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max, hankel_n=0):
+def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max, hankel_n=0, use_T5p=False):
     Omega, cons, H = build_problem_with_dual_handles(
-        N, T, R, h_c, h_c, p_c, p_c, q1, q2, bochner_n=bochner_n,
+        N, T, R, h_c, h_c, p_c, p_c, q1, q2, bochner_n=bochner_n, use_T5p=use_T5p,
     )
     if pm_k_max > 0:
         pm_cons, tb = build_even_moment_nonneg_constraints(H["c"], H["d"], T, k_max=pm_k_max)
@@ -47,6 +47,8 @@ def main():
     ap.add_argument("--bochner_n", type=int, default=30)
     ap.add_argument("--pm_k_max", type=int, default=14)
     ap.add_argument("--hankel_n", type=int, default=0)
+    ap.add_argument("--use_T5p", action="store_true",
+                    help="Add tightening 5' (1 - cos(πx) PSD test). Adds ≈+1.6e-6 in Phase 5 composition.")
     ap.add_argument("--margin", type=float, default=1e-6)
     ap.add_argument("--out", type=str, default="lp_research_state/parallel_results/cde_phase3.json")
     args = ap.parse_args()
@@ -74,7 +76,8 @@ def main():
         print(f"[{i+1}/{len(centers)}] {c['label']:20s} (h={c['h_c']:.4f}, p={c['p_c']:.4f}) ...", flush=True)
         try:
             r = solve_with_pm(args.N, args.T, args.R, c['h_c'], c['p_c'], c['q1'], c['q2'],
-                              args.bochner_n, args.pm_k_max, hankel_n=args.hankel_n)
+                              args.bochner_n, args.pm_k_max, hankel_n=args.hankel_n,
+                              use_T5p=args.use_T5p)
             V_c_rig = r['value'] - args.margin
             center = {**c, "value": V_c_rig}
             ell = find_ellipse_h_p(center, r['duals'], c['q1'], c['q2'], target=TARGET)

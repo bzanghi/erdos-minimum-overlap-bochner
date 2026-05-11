@@ -42,7 +42,7 @@ from white_full_convex import (
 
 def build_problem_with_dual_handles(
     N, T, R, h1, h2, p1, p2, q1, q2,
-    cell_mode="exact", bochner_n=0,
+    cell_mode="exact", bochner_n=0, use_T5p=False,
 ):
     """Build the Bochner-augmented program AND return the cvxpy constraint handles
     for the (h, p, q)-dependent inequalities, so we can read dual_value later."""
@@ -113,6 +113,12 @@ def build_problem_with_dual_handles(
 
     cons += [cp.abs(c) <= 2.0 / np.pi, cp.abs(d) <= 2.0 / np.pi]
     cons.append(cp.sum_squares(c) + cp.sum_squares(d) <= 0.5)
+
+    # ---- Tightening 5' (NEW): φ(x) = 1 - cos(πx) ≥ 0 test against f² ≤ f.
+    # Q' = I − ½ diag(±1)_{off-1}, PSD. Mirror of white_full_convex.py:222-225.
+    if use_T5p:
+        Qp = np.eye(T) - 0.5 * np.eye(T, k=1) - 0.5 * np.eye(T, k=-1)
+        cons.append(cp.quad_form(c, cp.psd_wrap(Qp)) + cp.quad_form(d, cp.psd_wrap(Qp)) <= 0.5)
 
     # ---- (5.12): c[0] >= p1, c[0] <= p2; d[0] >= q1, d[0] <= q2
     con_512_pL = c[0] >= p1
