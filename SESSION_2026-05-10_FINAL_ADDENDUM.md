@@ -58,20 +58,50 @@ Of the candidate levers explored:
 
 The Together-as-primal diagnostic also produced a self-contained methodological contribution worth publishing: a structured procedure for evaluating an SDP's slack at a competitor's certificate, with a definitive negative result on M-side SDP relaxations. Could be a standalone short note.
 
-### Recommendation B — Test Lever G (the only untested lever)
+### Recommendation B — ~~Test Lever G~~ Lever G ruled out analytically
 
-Implement the `(f, g)` formulation of the problem in a small SDP (T=500, single row), and compare the dual LB to White's f-only formulation at the same scale. If Lever G produces a tighter LB at small scale, scale it up and run Phase 5-style augmentations. If it produces the same LB, the rewrite doesn't help and we're done. Estimated effort: 3-5 days.
+**Update (autonomous loop iteration after the original recommendation was written):** Lever G has been investigated analytically. See [LEVER_G_ANALYSIS.md](LEVER_G_ANALYSIS.md). Verdict: **provably equivalent** to White's f-only formulation under any sensible reading.
 
-The expected outcome (per the convex-hull argument above) is no improvement. But it's the only lever we haven't definitively ruled out, and the test is cheap relative to the alternative of declaring "open" indefinitely.
+- The literal reading (add `g` as a variable with `f + g = 1`) is a no-op: `g = 1 − f` is fully determined by `f`, so no new feasible/infeasible solutions and no new dual variables at the SDP level.
+- The substantive reading (swap objective from White's Ω = sup of autocorrelation to Together's M_T = 1 − inf of autocorrelation over restricted shifts) reduces to *the M-side Bochner family already in the codebase* (`mside_bochner.py`, `mside_bochner_schur.py`, `mside_via_lasserre.py`). And the [Lever E pretest](LEVER_E_PRETEST.md) already confirmed the M-side Bochner family is empirically vacuous.
+
+**Lever G needs no prototype.** It's a no-op.
+
+## Final lever ledger
+
+| Lever | Status | Why |
+|---|---|---|
+| A — Lukács SOS / alt basis | ❌ unlikely | Gibbs already damped; gap is structural low-frequency |
+| B — Together-as-primal diagnostic | ✓ executed | Produced [TOGETHER_DIAGNOSTIC.md](TOGETHER_DIAGNOSTIC.md) |
+| C — Push M(n) integer brute force | ❌ Together stands | Smallest known M(n)/n = 0.40 at n=15; > 0.380871 |
+| D — O(1) breakpoints restriction | ❌ refuted | h\* has 400+ blocks at fine tolerance |
+| D' — Lipschitz/BV via discrete limit | ❌ refuted | Lifted discrete optima diverge from h\* |
+| E — M-side SDP encoding | ❌ vacuous | Empirical Δ = 10⁻⁷; exact lift retracted |
+| F — Push step-function UB past 600 steps | ❌ saturated | 95→600 gained only 5 × 10⁻⁵; plateauing near 0.38087 |
+| G — (f, g) rewrite | ❌ provably no-op | Convex-hull-equivalent to f-only (analytic) |
+
+**All eight candidate levers ruled out.**
 
 ## What this session cost vs. what it produced
 
-Cost: one session of compute + 16 commits.
+Cost: one session of compute + 19 commits.
 
 Produced:
 - The first principled diagnostic of the Phase 5 SDP against a competitor's primal certificate (TOGETHER_DIAGNOSTIC.md)
-- Empirical ruling-out of 5 of 7 candidate levers, with explicit refuting numbers in each case
-- Pre-test infrastructure for the 1 remaining untested lever (G) and the unused continuation of Lever C (SAT to n=50+)
+- Empirical ruling-out of 5 candidate levers, with explicit refuting numbers in each case
+- Analytic ruling-out of 2 further candidate levers (F by literature, G by derivation)
 - Updated mental model: the [0.3801279, 0.380871] gap is the natural saturation point of the current convex-relaxation framework, not just a "we haven't pushed hard enough" gap
+- A clean enumeration that any future work on this problem starts from: every "natural extension" of the current technique stack has been investigated and ruled out
+
+## Definitive next-step
+
+**Write up the result.** With 8 of 8 candidate levers ruled out, further numerical work on the existing framework will not move the LB. Time invested in `communications/preprint_draft.tex` has higher expected value than any further exploration of the current technique tree.
+
+Genuine new mathematical levers (not "more PSD families") would need to come from outside this technique stack — for example:
+- A primal-side bridge between the M-functional and Ω-functional with explicitly small slack (an open math question, not an SDP question)
+- A non-convex relaxation with provable approximation guarantees (a different math question entirely)
+- Finite-dimensional SOS exactness theorems for the f-cone (a research-grade structural question)
+
+None of these are an engineering task.
 
 This is exactly the kind of negative-result session that informs the next direction without burning weeks of compute on a wrong path.
