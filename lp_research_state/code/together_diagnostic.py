@@ -914,6 +914,239 @@ def hankel_diagnostic(breakpoints, values, c_proj, d_proj, n=6, T=4000):
     }
 
 
+# =========================================================================
+# Tasks 10-11: solve Phase 5 SDP at row 4, recover LP-optimal f̃, compute gap
+# =========================================================================
+#
+# Task 10 mirrors path_b_with_polymoment.py's invocation: row 4 center
+# (h=0.004, p=0.3875, q1=-0.02, q2=+0.02), bochner_n=30 + poly_moment k_max=14
+# applied on top of build_problem_with_dual_handles. We use
+# `solve_with_dual_extraction` to capture CLARABEL's iteration table and
+# extract the rigorous dual LB (per CLAUDE.md's epistemic convention).
+#
+# Task 11 reconstructs f̃(x) from the SDP-side (c, d) on a dense x-grid via
+# White's inverse formula:
+#     f̃(x) = 1/2 + Σ_{m=1}^T [c_sdp[m-1] cos(πmx/2) + d_sdp[m-1] sin(πmx/2)]
+# and computes the gap g(x) = f̃(x) − f_even(x) for f_even = Together's
+# certificate density (even reflection), plus its FFT band decomposition.
+
+
+def solve_row4_phase5(
+    N: int = 10000,
+    T: int = 4000,
+    R: int = 10,
+    bochner_n: int = 30,
+    pm_k_max: int = 14,
+    hankel_n: int = 0,
+):
+    """Solve White's Phase-5 SDP at row 4 (full stack) and return primal + dual.
+
+    Mirrors `path_b_with_polymoment.solve_with_pm` for row 4's center
+    (h=0.004, p=0.3875, q1=-0.02, q2=+0.02).  Uses
+    `solve_with_dual_extraction` to extract a rigorous dual lower bound on
+    Ω from CLARABEL's iteration log (per CLAUDE.md convention).
+
+    Returns a dict with:
+      - `c_opt`, `d_opt`:  numpy arrays of length T (the SDP variable values)
+      - `Omega_LB`:        rigorous dual lower bound (preferred over `value`)
+      - `Omega_value`:     CLARABEL's reported optimal value
+      - `status`:          solver status
+      - `duals`:           dict of constraint handle dual_values
+      - `time`:            solve wall time in seconds
+    """
+    import cvxpy as cp
+
+    # Robust imports.
+    try:
+        from lp_research_state.code.path_b_analytical import (
+            build_problem_with_dual_handles,
+        )
+        from lp_research_state.code.poly_moment import (
+            build_even_moment_nonneg_constraints,
+            build_even_hankel_psd,
+        )
+        from lp_research_state.code.dual_extractor import solve_with_dual_extraction
+    except ImportError:  # pragma: no cover
+        sys.path.insert(0, str(Path(__file__).parent))
+        from path_b_analytical import build_problem_with_dual_handles  # type: ignore
+        from poly_moment import (  # type: ignore
+            build_even_moment_nonneg_constraints,
+            build_even_hankel_psd,
+        )
+        from dual_extractor import solve_with_dual_extraction  # type: ignore
+
+    # Row 4 center per CLAUDE.md and parallel_results/path_b/row4.json:
+    h_c, p_c, q1, q2 = 0.004, 0.3875, -0.02, 0.02
+
+    Omega, cons, H = build_problem_with_dual_handles(
+        N, T, R, h_c, h_c, p_c, p_c, q1, q2,
+        bochner_n=bochner_n,
+    )
+    if pm_k_max > 0:
+        pm_cons, _ = build_even_moment_nonneg_constraints(
+            H["c"], H["d"], T, k_max=pm_k_max,
+        )
+        cons.extend(pm_cons)
+    if hankel_n > 0:
+        hk_cons, _, _ = build_even_hankel_psd(
+            H["c"], H["d"], T, n_hankel=hankel_n,
+        )
+        cons.extend(hk_cons)
+
+    prob = cp.Problem(cp.Minimize(Omega), cons)
+    res = solve_with_dual_extraction(prob)
+
+    c_var = H["c"]
+    d_var = H["d"]
+    c_opt = np.asarray(c_var.value, dtype=np.float64) if c_var.value is not None else None
+    d_opt = np.asarray(d_var.value, dtype=np.float64) if d_var.value is not None else None
+
+    duals = {k: (float(H[k].dual_value) if H[k].dual_value is not None else 0.0)
+             for k in ("con_53", "con_54", "con_512_pL", "con_512_pU",
+                       "con_512_qL", "con_512_qU", "con_513")}
+
+    return {
+        "c_opt": c_opt,
+        "d_opt": d_opt,
+        "Omega_LB": float(res["rigorous_dual_LB"]) if res.get("rigorous_dual_LB") is not None else None,
+        "Omega_value": float(Omega.value) if Omega.value is not None else None,
+        "status": prob.status,
+        "duals": duals,
+        "time": res.get("time"),
+        "dual_residual_at_LB": res.get("dual_residual_at_LB"),
+        "best_iter": res.get("best_iter"),
+        "n_iters_total": res.get("n_iters_total"),
+        "config": {
+            "N": N, "T": T, "R": R,
+            "h_c": h_c, "p_c": p_c, "q1": q1, "q2": q2,
+            "bochner_n": bochner_n, "pm_k_max": pm_k_max, "hankel_n": hankel_n,
+        },
+    }
+
+
+def recover_f_tilde(c_sdp, d_sdp, x_grid):
+    """Reconstruct f̃(x) from White's SDP-side (c, d) variables on a dense grid.
+
+    White's convention (verified against white_full_convex.py:230):
+        f(x) = 1/2 + Σ_{m=1}^{T} [ c_sdp[m-1] cos(πmx/2) + d_sdp[m-1] sin(πmx/2) ]
+
+    Here c_sdp and d_sdp are the SDP variable values (length T, indexed
+    0..T-1). c_sdp[k] is the coefficient of cos(π(k+1)x/2), i.e. f̂(k+1).
+
+    Vectorized over (T, len(x)).
+
+    Parameters
+    ----------
+    c_sdp, d_sdp : np.ndarray of length T
+    x_grid       : np.ndarray of any shape
+
+    Returns
+    -------
+    f : np.ndarray with the same shape as x_grid
+    """
+    c_sdp = np.asarray(c_sdp, dtype=np.float64)
+    d_sdp = np.asarray(d_sdp, dtype=np.float64)
+    x_grid = np.asarray(x_grid, dtype=np.float64)
+    T = len(c_sdp)
+    m_arr = np.arange(1, T + 1, dtype=np.float64)  # (T,)
+    # (T, len(x)) trig matrices
+    arg = np.outer(m_arr, np.pi * x_grid / 2.0)
+    f = 0.5 + c_sdp @ np.cos(arg) + d_sdp @ np.sin(arg)
+    return f
+
+
+def sample_step_on_grid(breakpoints, values, x_grid):
+    """Evaluate a step function on a grid. Each x is mapped to the cell it lies in.
+
+    Parameters
+    ----------
+    breakpoints : np.ndarray of shape (n_cells + 1,), strictly increasing
+    values      : np.ndarray of shape (n_cells,), the constant value on each cell
+    x_grid      : np.ndarray (any shape) of evaluation points
+
+    Returns
+    -------
+    np.ndarray with the same shape as x_grid, holding values[idx] where idx is
+    the cell containing each x.
+    """
+    breakpoints = np.asarray(breakpoints, dtype=np.float64)
+    values = np.asarray(values, dtype=np.float64)
+    x_grid = np.asarray(x_grid, dtype=np.float64)
+    idx = np.clip(np.searchsorted(breakpoints, x_grid, side="right") - 1,
+                  0, len(values) - 1)
+    return values[idx]
+
+
+def gap_function(x_grid, f_tilde, f_star):
+    """Compute the SDP-LP gap g = f̃ − f_even and decompose by frequency band.
+
+    The "low band" is the first n//20 rfft bins (≈ the lowest 5% of frequencies);
+    "high band" is the remaining bins. A Gibbs-dominated gap has most energy in
+    the high band; a structurally localized gap concentrates in the low band.
+
+    Returns dict with:
+      - `max_abs_gap`, `L2_gap`            : pointwise / L² gap norms
+      - `low_band_frac`, `high_band_frac`  : energy fractions in each band
+      - `g`                                : the gap function on x_grid
+      - `g_argmin`, `g_argmax`             : indices of min/max gap
+      - `n_low_bins`, `n_total_bins`       : band sizes
+    """
+    x_grid = np.asarray(x_grid, dtype=np.float64)
+    f_tilde = np.asarray(f_tilde, dtype=np.float64)
+    f_star = np.asarray(f_star, dtype=np.float64)
+    g = f_tilde - f_star
+    G = np.fft.rfft(g)
+    n = len(G)
+    energy = np.abs(G) ** 2
+    n_low = max(n // 20, 1)
+    low_band = float(energy[:n_low].sum())
+    high_band = float(energy[n_low:].sum())
+    total = float(energy.sum())
+    return {
+        "max_abs_gap": float(np.max(np.abs(g))),
+        "L2_gap": float(np.sqrt(np.mean(g ** 2))),
+        "low_band_frac": float(low_band / total) if total > 0 else 0.0,
+        "high_band_frac": float(high_band / total) if total > 0 else 0.0,
+        "g": g,
+        "g_argmin": int(np.argmin(g)),
+        "g_argmax": int(np.argmax(g)),
+        "n_low_bins": int(n_low),
+        "n_total_bins": int(n),
+    }
+
+
+def plot_gap(npz_path: str = "lp_research_state/data/together_gap_function.npz",
+             out: str = "lp_research_state/data/together_gap_plot.png"):
+    """Three-panel plot: f̃(x), f_even(x), and their gap. Saves to PNG (Agg backend)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    d = np.load(npz_path)
+    x = d["x"]
+    fig, ax = plt.subplots(3, 1, figsize=(11, 9), sharex=True)
+    ax[0].plot(x, d["f_tilde"], lw=0.6, color="C0")
+    ax[0].axhline(0, color="k", lw=0.5, ls=":")
+    ax[0].axhline(1, color="k", lw=0.5, ls=":")
+    ax[0].set_title(
+        "f̃(x): SDP-optimal LP-recovered density (Phase 5, row 4). "
+        "Gibbs-oscillates outside [0,1]."
+    )
+    ax[0].set_ylabel("f̃(x)")
+    ax[1].plot(x, d["f_star"], lw=0.8, color="C1")
+    ax[1].set_title("f_even(x) = h(|x|)/2: Together's certificate (even reflection)")
+    ax[1].set_ylabel("f_even(x)")
+    ax[1].set_ylim(-0.05, 0.55)
+    ax[2].plot(x, d["g"], lw=0.4, color="C2")
+    ax[2].axhline(0, color="k", lw=0.5)
+    ax[2].set_title("Gap g(x) = f̃ − f_even")
+    ax[2].set_xlabel("x")
+    ax[2].set_ylabel("g(x)")
+    plt.tight_layout()
+    plt.savefig(out, dpi=120)
+    plt.close(fig)
+    print(f"Wrote {out}")
+
+
 if __name__ == "__main__":
     _run_all_tests()
     _test_bochner_xcheck()
