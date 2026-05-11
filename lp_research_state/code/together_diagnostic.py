@@ -4,7 +4,47 @@ Diagnostic: evaluate every constraint in our SDP at Together's f*.
 Task 3 (this file, initial skeleton): project Together's f* into White's
 truncated Fourier basis to produce (c, d) arrays of length T+1 = 4001.
 
-Outputs (this task):
+Task 6 (added below): with (c, d) PINNED to the projection, minimize Ω over
+the SDP's remaining variables.  This yields the SDP's certified upper bound
+on sup_t ∫ f f(·+t) dx for THAT specific f.
+
+Results (Task 6, row 4, bochner_n=30, N=10000, T=4000, R=10):
+  - row 4 box check: NEITHER embedding lands in row 4's residual box
+    [p1,p2]×[q1,q2] = [0.3875,0.3875]×[-0.02,0.02].
+    Together's projected f̂(1) is essentially zero (c1 ≈ -2.3e-4) for both,
+    because its mass is concentrated near the middle of the integer-shifted
+    overlap region, not the row's residual corner.  We override the row
+    bounds (p1=p2=c1, q1=q2=d1) so (c[0], d[0]) can be pinned consistently.
+
+  - even embedding:   status=optimal,    Ω = 0.459311  (solve 72.7 s)
+  - direct embedding: status=INFEASIBLE                (solve 24.2 s)
+
+  Comparison numbers:
+    * White Phase-5 SDP optimum (row 4)        : Ω ≈ 0.380128
+    * True autocorrelation of f_even           : 0.387337
+    * True autocorrelation of f_direct         : 0.774675
+    * Ω_SDP(f_even) at pinned (c, d)           : 0.459311  (this task)
+    * Ω_SDP(f_direct) at pinned (c, d)         : infeasible
+
+  Why direct is infeasible:  the projection violates the SDP's pre-Bochner
+  trigonometric envelope.  |d̂(1)| = 0.807 > 2/π ≈ 0.637 (white_full_convex
+  line 199), and Σ(c² + d²) = 1.05 > 0.5 (line 200).  These are Parseval-side
+  necessary conditions for 0 ≤ f ≤ 1 with ∫f = 1 on [-2, 2] — the direct
+  embedding, which concentrates all mass on [0, 2] with f = 1 there,
+  trivially fails them.  The SDP is *correctly* rejecting f_direct as an
+  invalid candidate for the symmetric f* class.
+
+  Why Ω(f_even) = 0.459 ≫ 0.387 (autocorr):  the SDP's cell-tested
+  autocorrelation upper bound on f_even's Ω is much *looser* than f_even's
+  true autocorrelation.  Bochner-PSD at level 30 doesn't tighten that looser
+  envelope back to the true value.  Concretely, the cell-kernel bounds in
+  white_full_convex.py:176–190 over-estimate sup ∫f(x)f(x+t) dt for a step
+  function whose Fourier tail is heavy (Together's f* has bumpy support).
+  This says the SDP relaxation is structurally non-tight on Together's f*,
+  which is consistent with — and helps explain — the gap between our
+  rigorous SDP bound 0.380128 and Together's heuristic upper-bound proxy.
+
+Outputs of this module:
   lp_research_state/data/together_f_star_fourier_even.npz   — (c, d) from
                                                              even embedding
   lp_research_state/data/together_f_star_fourier_direct.npz — (c, d) from
@@ -441,6 +481,130 @@ def project_together_f_star(T: int = 4000, kind: str = "even"):
     out_path = DATA_DIR / f"together_f_star_fourier_{kind}.npz"
     np.savez(out_path, c=c, d=d, T=np.int64(T), kind=kind)
     return c, d
+
+
+# --- Task 6: Evaluate Ω(f*) by pinning (c, d) in White's SDP ---------------
+#
+# Conceptual note (from Task 2):
+#   White's `Ω` is an SDP variable bounded from above by:
+#     (i) pointwise upper bound:   Ω ≥ w_j, Ω ≥ v_j  for all j (line 141)
+#     (ii) cos/sin cell-kernel autocorrelation upper bounds for m=1..2R (lines 176–190)
+#     (iii) the Bochner-PSD relaxation of f ≥ 0, 1 − f ≥ 0 (lines 228–258)
+#
+#   When (c, d) are PINNED to Together's projected f*, the SDP minimizes Ω over
+#   (w, v, eps, dlt, …) subject to all those constraints. The resulting Ω is the
+#   SDP's certified upper bound on sup_t ∫ f f(·+t) dx FOR THAT specific f.
+#
+#   If Ω_at_f* > White's SDP-optimal Ω (≈ 0.380128 at Phase 5), Together's f is a
+#   strictly worse Ω-point than White's SDP optimum — the diagnostic conclusion.
+#
+# Row 4 (per CLAUDE.md): (h1,h2,p1,p2,q1,q2) = (0.004, 0.004, 0.3875, 0.3875,
+# −0.02, +0.02). So p is point-pinned to 0.3875 and q ranges in [−0.02, +0.02].
+
+
+def check_row_box_for_projection(c_proj, d_proj, row: str = "row4"):
+    """Check whether Together's projected first Fourier mode f̂(1) lies in row's box.
+
+    SDP's c[0] = proj_c[1], SDP's d[0] = proj_d[1]. Row 4 has
+    p1 = p2 = 0.3875, q1 = −0.02, q2 = +0.02.
+
+    Returns dict with row bounds, the projection's (c1_proj, d1_proj),
+    and `in_box` flag.
+    """
+    rows = {"row4": (0.004, 0.004, 0.3875, 0.3875, -0.02, 0.02)}
+    if row not in rows:
+        raise ValueError(f"unknown row {row!r}; known: {list(rows)}")
+    h1, h2, p1, p2, q1, q2 = rows[row]
+    c1 = float(c_proj[1])  # SDP's c[0] (k=1 cosine Fourier coef)
+    d1 = float(d_proj[1])  # SDP's d[0] (k=1 sine   Fourier coef)
+    in_box = (p1 - 1e-9 <= c1 <= p2 + 1e-9) and (q1 - 1e-9 <= d1 <= q2 + 1e-9)
+    return {
+        "row": row,
+        "h1": h1, "h2": h2,
+        "p1": p1, "p2": p2, "q1": q1, "q2": q2,
+        "c1_proj": c1, "d1_proj": d1,
+        "in_box": bool(in_box),
+    }
+
+
+def evaluate_omega_at_f_star(
+    c_proj,
+    d_proj,
+    row: str = "row4",
+    bochner_n: int = 30,
+    N: int = 10000,
+    T: int = 4000,
+    R: int = 10,
+    verbose: bool = False,
+    override_row_bounds: bool = True,
+):
+    """Pin (c, d) in White's SDP to Together's projected f* and minimize Ω.
+
+    SDP variable mapping (verified against white_full_convex.py:135–136, 201):
+        SDP's c[k]  ↔  Fourier mode k+1  ↔  proj's c[k+1]   for k = 0..T-1
+        SDP's d[k]  ↔  proj's d[k+1]                          for k = 0..T-1
+
+    The row's residual-region pins SDP's c[0] ∈ [p1, p2], d[0] ∈ [q1, q2]
+    (line 201). If `override_row_bounds=True` and Together's f̂(1) doesn't sit
+    inside [p1,p2] × [q1,q2], we force p1=p2=proj_c[1], q1=q2=proj_d[1] so the
+    SDP can pin (c[0], d[0]) consistently with the rest of the projection.
+
+    Args
+    ----
+    c_proj, d_proj : np.ndarray of length T+1, in this module's convention.
+    row : str — currently only "row4" defined.
+    bochner_n : int — Bochner PSD level. Default 30 matches Phase 5.
+    N, T, R : SDP discretization params (defaults match the CLAUDE.md headline).
+    verbose : pass to CLARABEL.
+    override_row_bounds : see note above.
+
+    Returns dict with status, `Omega_at_f_star`, and config.
+    """
+    import cvxpy as cp  # local import; this module is also imported in lightweight contexts
+
+    # Robust import of build_problem.
+    try:
+        from lp_research_state.code.white_full_convex import build_problem
+    except ImportError:  # pragma: no cover - fallback for direct script runs
+        sys.path.insert(0, str(Path(__file__).parent))
+        from white_full_convex import build_problem  # type: ignore
+
+    rows = {"row4": (0.004, 0.004, 0.3875, 0.3875, -0.02, 0.02)}
+    if row not in rows:
+        raise ValueError(f"unknown row {row!r}; known: {list(rows)}")
+    h1, h2, p1, p2, q1, q2 = rows[row]
+
+    c1 = float(c_proj[1])
+    d1 = float(d_proj[1])
+    if override_row_bounds:
+        p1 = p2 = c1
+        q1 = q2 = d1
+
+    Omega, w, v, c_var, d_var, eps, dlt, cons = build_problem(
+        N, T, R, h1, h2, p1, p2, q1, q2,
+        bochner_n=bochner_n,
+    )
+
+    # Pin remaining c[1..T-1], d[1..T-1] of the SDP. (SDP's c[0], d[0] are pinned
+    # via p1=p2, q1=q2 above.) SDP index k corresponds to proj index k+1.
+    pin = []
+    for k in range(1, T):
+        pin.append(c_var[k] == float(c_proj[k + 1]))
+        pin.append(d_var[k] == float(d_proj[k + 1]))
+
+    prob = cp.Problem(cp.Minimize(Omega), cons + pin)
+    prob.solve(solver=cp.CLARABEL, verbose=verbose)
+
+    return {
+        "status": prob.status,
+        "Omega_at_f_star": float(Omega.value) if Omega.value is not None else None,
+        "row": row,
+        "row_bounds_overridden": bool(override_row_bounds),
+        "c1_pinned": c1,
+        "d1_pinned": d1,
+        "bochner_n": bochner_n,
+        "N": N, "T": T, "R": R,
+    }
 
 
 if __name__ == "__main__":
