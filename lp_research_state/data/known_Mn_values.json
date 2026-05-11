@@ -1,0 +1,43 @@
+{
+  "description": "Known exact values of M(n) for the Erdős minimum overlap problem. M(n) = min over equipartitions A ⊔ B = [2n], |A|=|B|=n, of max_k |A ∩ (B+k)|. lim_{n→∞} M(n)/n = µ ∈ [0.380128, 0.380871].",
+  "sources": {
+    "wikipedia_handwiki": "https://en.wikipedia.org/wiki/Minimum_overlap_problem — lists M(n) for n=1..15, attributed to Haugland (1996, 2016) and Guy 'Unsolved Problems in Number Theory' (2004).",
+    "our_brute_force": "lp_research_state/code/_brute_force_Mn_extended.py — branch-and-bound + reflection symmetry, agrees with published n=2..15 and extends to n=18. Data: Mn_optimizers_large.json."
+  },
+  "published_values_n_le_15": [
+    {"n": 1,  "M": 1, "ratio": 1.0,        "source": "Wikipedia / Haugland"},
+    {"n": 2,  "M": 1, "ratio": 0.5,        "source": "Wikipedia / Haugland"},
+    {"n": 3,  "M": 2, "ratio": 0.666667,   "source": "Wikipedia / Haugland"},
+    {"n": 4,  "M": 2, "ratio": 0.5,        "source": "Wikipedia / Haugland"},
+    {"n": 5,  "M": 3, "ratio": 0.6,        "source": "Wikipedia / Haugland"},
+    {"n": 6,  "M": 3, "ratio": 0.5,        "source": "Wikipedia / Haugland"},
+    {"n": 7,  "M": 3, "ratio": 0.428571,   "source": "Wikipedia / Haugland"},
+    {"n": 8,  "M": 4, "ratio": 0.5,        "source": "Wikipedia / Haugland"},
+    {"n": 9,  "M": 4, "ratio": 0.444444,   "source": "Wikipedia / Haugland"},
+    {"n": 10, "M": 5, "ratio": 0.5,        "source": "Wikipedia / Haugland"},
+    {"n": 11, "M": 5, "ratio": 0.454545,   "source": "Wikipedia / Haugland"},
+    {"n": 12, "M": 5, "ratio": 0.416667,   "source": "Wikipedia / Haugland"},
+    {"n": 13, "M": 6, "ratio": 0.461538,   "source": "Wikipedia / Haugland"},
+    {"n": 14, "M": 6, "ratio": 0.428571,   "source": "Wikipedia / Haugland"},
+    {"n": 15, "M": 6, "ratio": 0.4,        "source": "Wikipedia / Haugland"}
+  ],
+  "our_extension_n_16_to_18": [
+    {"n": 16, "M": 7, "ratio": 0.4375,    "source": "session brute force (B&B + symmetry)", "time_seconds": 53.9},
+    {"n": 17, "M": 7, "ratio": 0.411765,  "source": "session brute force (B&B + symmetry)", "time_seconds": 65.5},
+    {"n": 18, "M": 8, "ratio": 0.444444,  "source": "session brute force (B&B + symmetry)", "time_seconds": 664.1}
+  ],
+  "smallest_known_ratio": {
+    "n": 15,
+    "M": 6,
+    "M_over_n": 0.4,
+    "together_ub": 0.380871,
+    "beats_together": false,
+    "margin_above_together": 0.019129
+  },
+  "notes": [
+    "M(n)/n is monotone-non-strict only in the lim inf sense. Individual ratios fluctuate (n=15: 0.40, n=18: 0.44).",
+    "No published table extends past n=15. The literature on UB for µ uses continuous step-function constructions (Haugland 2016 51-step, AlphaEvolve 95-step, TTT-Discover/Together 600-step) — these do not produce integer M(n) values.",
+    "Together's repo (/tmp/together_repo/erdos-minimum-overlap) contains only step-function constructions, no M(n) tables.",
+    "Brute force timing growth: n=16 → 17 → 18 = 54s → 66s → 664s. n=18→19 projected ~5000-7000s, well beyond the 30 min budget; n=20 would be a multi-hour overnight job."
+  ]
+}
