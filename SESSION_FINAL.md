@@ -1,8 +1,8 @@
 # SESSION_FINAL — Lever I' execution session, 2026-05-16
 
-**Headline:** The OVERNIGHT_WRAPUP "framework ceiling at 0.380553" claim is **retracted** — two compounding errors (a unit error in OVERNIGHT_WRAPUP and a too-loose Case-B per-cell bound in LEVER_I_PRIME_POC.md) inflated the residual by ~30× combined. The corrected residual at Phase 5 (`N=10000`) is `9.5 × 10⁻⁴`, still vacuous against Together's UB by `2 × 10⁻⁴` — but the rigorous saturation theorem **becomes non-vacuous** at `N ≥ 12,750` for cosine alone, or `N ≈ 25,000` for the full constraint stack. **Tractable computational task, not a theoretical roadblock.**
+**Headline:** The OVERNIGHT_WRAPUP "framework ceiling at 0.380553" claim is **retracted** — two compounding errors (a unit error in OVERNIGHT_WRAPUP and a too-loose Case-B per-cell bound in LEVER_I_PRIME_POC.md) inflated the residual by ~30× combined. The corrected combined cosine+sine residual at Phase 5 (`N=10000`) is `1.22 × 10⁻³`, vacuous against Together's UB by `4.7 × 10⁻⁴` — but the rigorous saturation theorem **becomes non-vacuous** at `N ≥ 12,750` for cosine alone, `N ≥ 16,378` for cosine + sine combined, or `N ≈ 20,000` for the full constraint stack. **Tractable computational task, not a theoretical roadblock.**
 
-The strong empirical row-stability of the dual-multiplier profile (Step A) is verified rigorously and stands as the cleanest in-session contribution.
+The strong empirical row-stability of the **cosine** dual-multiplier profile (Step A) is verified rigorously. The **sine** multipliers are **NOT row-stable** (range `Σ m·σ ∈ [0, 2.14]` across 4 rows), so a uniform-over-rows sine bound must use the empirical sup — verifiable per row but not proved a priori.
 
 ---
 
@@ -16,9 +16,11 @@ The strong empirical row-stability of the dual-multiplier profile (Step A) is ve
 | **Open gap** | `7.43 × 10⁻⁴` | unchanged |
 | **OVERNIGHT_WRAPUP claimed empirical ceiling** | `0.380553` | **RETRACTED** (this session) |
 | **Corrected cosine-only ceiling at N=10000** | `0.381076` (sup over 4 rows) | proved (this session) |
-| **Corrected cosine-only ceiling at N=15000** | `0.380760` (proved) | proved-conditional on µ_LB(15000) ≥ 0.3801279 |
-| **Break-even N for non-vacuous cosine theorem** | `12,753` | proved |
-| **Conjectural full-stack break-even N** | `~25,000` | projected (other family residuals not yet derived) |
+| **Corrected cosine+sine ceiling at N=10000** | `0.381346` (sup over 4 rows) | proved (this session) |
+| **Corrected cosine+sine ceiling at N=20000** | `0.380770` | proved |
+| **Break-even N (cosine only)** | `12,753` | proved |
+| **Break-even N (cosine + sine combined)** | `16,378` | proved |
+| **Conjectural full-stack break-even N** | `~20,000` | projected (poly_moment, Hankel-PSD, Bochner residuals estimated small) |
 
 ---
 
@@ -145,33 +147,48 @@ The open gap of `7.43 × 10⁻⁴` decomposes as follows:
 
 ## Decision points
 
-### Decision 1 — Pursue `N=15000` Phase 5 run
+### Decision 1 — Pursue `N=16,000–20,000` Phase 5 run
 
-**Recommended yes.** This single experiment converts the cosine-only theorem
-to non-vacuous status and may also improve the empirical LB. Memory: `~6 GB`
-(vs current 4 GB). Wall-time: `~3 × Phase 5 current = ~6 hours per row` ⇒ one
-overnight session.
+**Recommended yes.** This experiment converts the cosine + sine combined
+theorem to non-vacuous status and may also improve the empirical LB.
+Memory: `~6.5 GB` at N=16,000, `~8 GB` at N=20,000 (vs current 4 GB).
+Wall-time: `~2-3 × Phase 5 current` ⇒ one overnight session.
 
 How: modify `lp_research_state/cron_runner.py` to enqueue a Phase-5-config
-run at `N=15000`. Re-extract Phase 5 with T5p re-iteration.
+run at `N=16000`. Re-extract Phase 5 with T5p re-iteration.
 
 ### Decision 2 — Extend residual derivation to sine + other families
 
-**Recommended yes (after Decision 1).** PoC §3 template applies verbatim:
-- Sine cell-envelope: same Case-A/Case-B analysis with sin replacing cos.
-  Bound is `Δ_m^sin ≤ πm/(2N) + O(m³/N³)` (same form). Multiplier sum:
-  empirically `Σ m·σ ≈ 1.2` (sum of |σ_m^1| + |σ_m^2| from idx 28-67) — much
-  smaller than cosine's 6.0.
+**Sine extracted (post-commit refinement).** Sine multipliers `σ_m^1, σ_m^2`
+at the 4 rows show **NOT row-stable** structure:
 
-Hence: sine residual at `N=15000` is `≈ (π/30000) · 1.2 = 1.26 × 10⁻⁴`, much
-smaller than cosine. Combined at `N=15000`: cosine + sine ≈ `7.6 × 10⁻⁴`,
-**just above** the open gap. Need `N=20,000` or so.
+| row | `Σ m·σ` (sum |σ^1|+|σ^2|) | sine residual at N=10000 |
+|---|---|---|
+| row1 | 0.689 | `1.08 × 10⁻⁴` |
+| row4 | 0.034 | `5.4 × 10⁻⁶` |
+| **row7** | **2.145** | **`3.37 × 10⁻⁴`** ← sup |
+| cde_n30_iter1 | 0.000 | `~0` |
+
+The sine family contributes up to `3.4 × 10⁻⁴` at Phase 5 (row7), much
+larger than cosine for some rows. **Combined cosine + sine at N=10000:**
+`1.22 × 10⁻³` (sup over rows).
 
 - Bochner-PSD truncation at `bochner_n=30`: Parseval tail
   `Σ_{k>30} |f̂(k)|²`. Empirically very small (Bochner duals at idx 96, 97
-  are dominated by `10⁻⁵` magnitudes).
+  in row4 are dominated by `10⁻⁵` magnitudes).
 
-- poly_moment and Hankel-PSD: residual bound derivation TBD.
+- poly_moment and Hankel-PSD: residual bound derivation TBD. Likely small
+  per the row4 dual data (these multipliers are also `10⁻⁵`–`10⁻⁴` per
+  block).
+
+**Updated break-even table:**
+
+| N | Cos residual | Sin residual | Combined | C_explicit | Margin to UB |
+|---|---|---|---|---|---|
+| 10,000 | `9.48e-4` | `3.37e-4` | `1.28e-3` | 0.381346 | `+4.74e-4` (vacuous) |
+| 16,378 | `5.78e-4` | `2.06e-4` | `7.84e-4` | 0.380871 | `0.00` (break-even cos+sin) |
+| 20,000 | `4.74e-4` | `1.69e-4` | `6.42e-4` | 0.380770 | `-1.01e-4` (room for other families) |
+| 25,000 | `3.79e-4` | `1.35e-4` | `5.14e-4` | 0.380642 | `-2.29e-4` (comfortable) |
 
 ### Decision 3 — Publication path
 

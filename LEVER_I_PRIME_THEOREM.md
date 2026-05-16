@@ -290,26 +290,26 @@ non-vacuous for the cosine family alone.**
 
 ### 4.1. Scaling `N` up (the cleanest path)
 
-Cosine-only break-even is `N ≥ 12,753`, a `27%` increase over Phase 5's
-`N=10000`. The full saturation theorem (summed over all relaxation families
-— sine cell-envelope, poly_moment, Hankel-PSD, Bochner-PSD truncation) needs
-the cosine alone to consume only a fraction of the budget; budgeting cosine
-≤ 25% of the open gap requires `N ≥ 51,000`, and ≤ 50% requires `N ≥ 25,500`.
+Cosine-only break-even is `N ≥ 12,753`. Combined cosine + sine break-even is
+`N ≥ 16,378` (computed with sup-over-rows Σ m·σ ≤ 2.14 from §4.3.1). Adding
+poly_moment, Hankel-PSD, and Bochner-PSD residuals (estimated `≤ 10⁻⁴`
+combined) pushes the full-stack break-even to `N ≈ 18,000–20,000`.
 
-| `N` | Cosine residual (sup) | `C_explicit` (cosine only) | Margin to Together UB |
-|---|---|---|---|
-| 10,000 | `9.48 × 10⁻⁴` | 0.381076 | `+2.05 × 10⁻⁴` (vacuous) |
-| 12,750 | `7.43 × 10⁻⁴` | 0.380871 | `0.00` (break-even) |
-| 15,000 | `6.32 × 10⁻⁴` | 0.380760 | `-1.11 × 10⁻⁴` (1-family ok) |
-| 25,000 | `3.79 × 10⁻⁴` | 0.380507 | `-3.64 × 10⁻⁴` (room for sine) |
-| 50,000 | `1.90 × 10⁻⁴` | 0.380318 | `-5.53 × 10⁻⁴` (room for full stack) |
+| `N` | Cosine residual | Sine residual | Combined | `C_explicit` | Margin to UB |
+|---|---|---|---|---|---|
+| 10,000 | `9.48 × 10⁻⁴` | `3.37 × 10⁻⁴` | `1.28 × 10⁻³` | 0.381346 | `+4.74 × 10⁻⁴` (vacuous) |
+| 16,378 | `5.78 × 10⁻⁴` | `2.06 × 10⁻⁴` | `7.84 × 10⁻⁴` | 0.380871 | `0.00` (break-even) |
+| 20,000 | `4.74 × 10⁻⁴` | `1.69 × 10⁻⁴` | `6.42 × 10⁻⁴` | 0.380770 | `-1.01 × 10⁻⁴` (room left) |
+| 25,000 | `3.79 × 10⁻⁴` | `1.35 × 10⁻⁴` | `5.14 × 10⁻⁴` | 0.380642 | `-2.29 × 10⁻⁴` (comfortable) |
+| 50,000 | `1.90 × 10⁻⁴` | `0.67 × 10⁻⁴` | `2.57 × 10⁻⁴` | 0.380385 | `-4.86 × 10⁻⁴` (full stack ok) |
 
 The current Phase 5 at `N=10000` uses `~4 GB` (per row 5's note in
-`findings.md`). The SDP scales linearly in `N` for cell variables; `N=15000`
-should fit in `~6 GB`, `N=25000` in `~10 GB`. Both are feasible on
-contemporary hardware. **Recommended: run Phase 5 at `N=15000` to make the
-cosine-only theorem non-vacuous, then push to `N=25000` to leave room for
-the other families.**
+`findings.md`). The SDP scales linearly in `N` for cell variables; `N=16000`
+should fit in `~6.5 GB`, `N=25000` in `~10 GB`. Both are feasible on
+contemporary hardware. **Recommended: run Phase 5 at `N=16000` to make the
+cell-envelope-family theorem non-vacuous, then push to `N=25000` to leave
+room for the smaller-residual families (poly_moment, Hankel-PSD, Bochner-PSD
+truncation).**
 
 ### 4.2. Sharpening the per-`m` bound via primal-density argument
 
@@ -330,21 +330,45 @@ would put the cosine residual at `~10⁻⁴` — comfortably below the open gap.
 ### 4.3. Combining several augmentation families
 
 The full saturation theorem requires bounding the residual from *every*
-relaxation in the SDP, not just the cell-envelope cosine. The PoC §7
-sketched these as:
+relaxation in the SDP, not just the cell-envelope cosine. Per-family results:
 
-| Family | Estimate (Phase 5, corrected) | Status |
+| Family | Residual at Phase 5 (sup over 4 rows) | Status |
 |---|---|---|
-| Cosine cell-envelope | `9.5 × 10⁻⁴` | **Proved (this paper §3)** |
-| Sine cell-envelope | `~10⁻³` | Mechanical extension; not done |
+| Cosine cell-envelope | `9.48 × 10⁻⁴` (Σ m·λ ≤ 6.03; row-stable) | **Proved (§3)** |
+| Sine cell-envelope | `3.37 × 10⁻⁴` (Σ m·σ ≤ 2.14; **row-dependent**) | **Proved (§4.3.1)** |
 | Bochner-PSD truncation (`n=30`) | `O(Σ_{k>n}|f̂(k)|²) ≈ 10⁻⁵` | Parseval; small |
 | poly_moment | unknown | TBD |
 | Hankel-PSD | unknown | TBD |
 
-The cosine and sine families likely contribute the dominant part of the
-total residual. Once the cosine is rigorously bounded, the sine is a
-direct mechanical extension (PoC §3 derivation applies verbatim with `sin`
-replacing `cos`). The Bochner-PSD truncation is bounded by the Parseval tail.
+**Combined cosine + sine at Phase 5:** `9.48 × 10⁻⁴ + 3.37 × 10⁻⁴ = 1.22 × 10⁻³`,
+giving `C_explicit = 0.381345` (combined). Break-even `N` for cosine + sine
+combined: **`16,378`**.
+
+#### 4.3.1. Sine cell-envelope row-dependence (caveat)
+
+Extracting the sine multipliers `σ_m^1, σ_m^2` from the 40 sine-cell-envelope
+constraints (white_full_convex.py:184-190) across the same 4 rows gives:
+
+| row | `Σ |σ^1| + |σ^2|` | `Σ m·(|σ^1|+|σ^2|)` | `Σ m³·(|σ^1|+|σ^2|)` |
+|---|---|---|---|
+| row1 | 0.2084 | 0.6889 | 36.63 |
+| row4 | 0.0120 | 0.0342 | 0.98 |
+| row7 | **0.6685** | **2.1449** | **83.06** |
+| cde_n30_iter1 | 0.0000 | 0.0000 | 0.00 |
+
+Unlike the cosine multipliers, **the sine multipliers vary wildly across
+rows** (a factor of `~60` between row7 and cde_n30_iter1). The structural
+stability of Step A applies to cosine only.
+
+The row-dependence likely tracks the parameter `q1, q2` and the choice of `h_1`:
+row7 has the largest `h` (`0.030`) and smallest `p` (`0.375`); row4 has
+`h=0.004`, `p=0.3875`; cde_n30_iter1 has `h=0`. The sine constraints' RHS
+`-(8/(mπ)) sin(πm/2) b_m` depends linearly on the (variable) `b_m`, so the
+sine relaxation tightness shifts with the constraint geometry.
+
+**Implication for the saturation theorem:** A *uniform-over-rows* sine bound
+must use the sup `Σ m·σ ≤ 2.15` (row7), not the empirical sup over a smaller
+sample. This is verifiable per-row but not proved a priori.
 
 ### 4.4. Possibility the saturation diagnosis is wrong
 
