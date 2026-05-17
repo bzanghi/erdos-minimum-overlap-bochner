@@ -111,14 +111,25 @@ def _summary(res):
 
 
 def main():
-    if len(sys.argv) < 3:
-        print("Usage: _lever_i_prime_lambda_m_scaled.py <N> <row_label> [more_rows...]")
+    """Usage:
+        _lever_i_prime_lambda_m_scaled.py <N> <row_label> [more_rows...] [--bn=NN]
+    """
+    args = list(sys.argv[1:])
+    bochner_n = 20  # default matches Step D/E
+    # Parse --bn=NN flag
+    kept = []
+    for a in args:
+        if a.startswith("--bn="):
+            bochner_n = int(a.split("=", 1)[1])
+        else:
+            kept.append(a)
+    if len(kept) < 2:
+        print("Usage: _lever_i_prime_lambda_m_scaled.py <N> <row_label> [more_rows...] [--bn=NN]")
         sys.exit(2)
-    N = int(sys.argv[1])
-    row_labels = sys.argv[2:]
+    N = int(kept[0])
+    row_labels = kept[1:]
     T = 1200
     R = 10
-    bochner_n = 20
 
     blob = load_existing()
     runs = blob.setdefault("runs", {})
@@ -127,7 +138,8 @@ def main():
         if label not in ROWS:
             print(f"  Unknown row label {label!r}; skipping")
             continue
-        key = f"N={N}_row={label}"
+        # Include bochner_n in the key so we don't clobber existing N=X_row=Y bn=20 entries
+        key = f"N={N}_row={label}" if bochner_n == 20 else f"N={N}_row={label}_bn={bochner_n}"
         if key in runs and runs[key].get("Omega") is not None:
             print(f"  [{key}] already done (Omega={runs[key]['Omega']:.6f}); skipping")
             continue
