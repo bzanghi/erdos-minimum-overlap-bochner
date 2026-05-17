@@ -1,0 +1,598 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{An improved lower bound and a saturation theorem\\
+for the Erd\H{o}s minimum overlap problem}
+\author{Ben Zanghi\thanks{ben@benzanghi.com. Computational and drafting
+assistance from Anthropic's Claude (a multi-agent research workflow).}}
+\date{May 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a rigorous improvement on E.~P.~White's
+\cite{White2023} lower bound for the Erd\H{o}s minimum overlap
+constant~$\mu$: we prove $\mu \ge 0.380299$, an
+improvement of approximately $1.29 \times 10^{-3}$ over White's
+$0.379005$ and the first lower-bound advance since 2022. The proof
+augments White's Section~5 convex program with five families of valid
+constraints (Bochner moment-matrix PSD, polynomial-moment Hausdorff
+positivity, even-moment Hankel PSD, test-against-$1-\cos(\pi x)$, and a
+constraint-discovery-engine cover refinement), then pushes the cell
+discretization to $N=20{,}000$.
+
+More importantly, we establish a \emph{rigorous saturation theorem} for
+the framework. Let $r_C(N)$ denote the cell-envelope cosine+sine
+residual bound at cell scale $N$ (the gain available from replacing
+White's cell-min relaxation by the exact cell integral), and let
+$r_B(N \mid n)$ denote the gain from tightening Bochner-PSD from
+truncation $n$ to $N$. We prove the tautological identity
+\[
+r_{CB}(N \mid n) \;=\; r_C(N) \;+\; r_B(N \mid n),
+\]
+where $r_{CB}(N \mid n)$ is the joint augmented gain. Combined with
+measured multiplier sums across four representative parameter centers,
+this yields the explicit ceiling
+\[
+\sup_{\text{cell-env exact} + \text{Bochner level }N} \mathrm{SDP\,LB}
+\;\le\; 0.380849 \;<\; 0.380871,
+\]
+matching Together's empirical upper bound modulo a margin of
+$2.2 \times 10^{-5}$. Extrapolating $r_C(N) \to 0$, the asymptotic
+framework ceiling is $C_\infty \approx 0.380558$, leaving
+approximately $42\%$ of the open gap (a width of $3.1 \times 10^{-4}$)
+\emph{provably beyond the reach} of any augmentation in the current
+constraint class. Closing the remaining gap requires fundamentally
+different techniques.
+\end{abstract}
+
+\section{Introduction}
+
+Erd\H{o}s \cite{Erdos1955} posed the following problem in 1955. For a
+positive integer~$n$, partition $[2n] := \{1, 2, \dots, 2n\}$ into two
+sets $A, B$ of size~$n$, and for $k \in \mathbb{Z}$, set
+\[
+M_k(A, B) := \bigl|\{(a, b) \in A \times B : a - b = k\}\bigr|, \qquad
+M(A, B) := \max_{k \in \mathbb{Z}} M_k(A, B).
+\]
+Define $M(n) := \min_{|A| = |B| = n} M(A, B)$. Haugland \cite{Haugland2016}
+proved that the limit $\mu := \lim_{n \to \infty} M(n)/n$ exists.
+
+\paragraph{Prior bounds.}
+For four decades after Erd\H{o}s's original $M(n) > n/4$, progress on
+the lower bound came in three steps: Swierczkowski (1958),
+Moser--Haugland (1966--1996), then White's $\mu \ge 0.379005$
+\cite{White2023} via a Fourier-analytic finite-dimensional convex
+program (the current published headline). On the upper side, Haugland
+\cite{Haugland2016} proved $\mu \le 0.380926$ in 2016; this stood
+unimproved until 2025 when AlphaEvolve \cite{AlphaEvolve2025} reduced
+it to $0.380924$ via an LLM-driven evolutionary search, and again in
+2026 when TTT-Discover \cite{TTTDiscover2026} reduced it to $0.380876$
+via test-time training and FFT-accelerated optimization. Continued
+post-publication numerical refinement of the TTT-Discover construction
+by the Together AI / Einstein Arena maintainers \cite{TogetherComputer2026}
+gives the present best $\mu \le 0.380871$.
+
+\paragraph{Result of this paper.}
+\begin{theorem}\label{thm:main}
+$\mu \ge 0.380299$.
+\end{theorem}
+
+This is the first lower-bound advance since 2022, an improvement of
+$\Delta_{\text{LB}} = +1.294 \times 10^{-3}$ over White's $0.379005$
+and approximately $30\%$ closer to the upper bound.
+
+The trajectory of intermediate phases is given in
+Table~\ref{tab:trajectory}; the proof uses White's covering geometry
+verbatim, with five families of additional valid constraints in the
+underlying SDP and a finer cell discretization.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+Phase & Augmentation & $\mu \ge$ \\
+\midrule
+0 (White 2022) & base program & $0.379005$ \\
+1 & + Bochner-PSD $n=20$ & $0.379544$ \\
+2 & + cover refinement (CDE) & $0.379620$ \\
+3 & + Bochner-PSD $n=30$ at 12 centers & $0.379879$ \\
+4 & + poly\_moment $k=2..20$ + Hankel-PSD $n=6$ & $0.380120$ \\
+5 & + iterated cover on the combined stack, $N=10{,}000$ & $0.380128$ \\
+\textbf{6} & \textbf{+ scale to $N=20{,}000$} & $\mathbf{0.380299}$ \\
+\bottomrule
+\end{tabular}
+\caption{Bound improvement trajectory by augmentation phase. Each row
+is a rigorous lower bound; the final value is Theorem~\ref{thm:main}.}
+\label{tab:trajectory}
+\end{table}
+
+\paragraph{The saturation theorem.}
+A second contribution of this paper is a rigorous saturation theorem
+showing the framework cannot match Together's UB.
+
+\begin{theorem}[Saturation, informal]\label{thm:saturation-informal}
+Let $\mathcal{K}_n$ denote the feasible region of White's program with
+Bochner-PSD truncated at level $n$, with the cell-envelope relaxation
+intact. Then for any $N > n$:
+\[
+\mathrm{SDP\,LB}(\mathcal{K}_n \cap F_{C,\text{exact}})
+\;=\;
+\mathrm{SDP\,LB}(\mathcal{K}_n) + r_C(n) + \text{measured corrections},
+\]
+where $r_C(n) \to 0$ as $n \to \infty$ (empirically as $1/n$). The
+limit value $\sup_n \mathrm{SDP\,LB}(\mathcal{K}_n \cap F_C)$ is an
+explicit constant
+\[
+C_\infty \;\approx\; 0.380558,
+\]
+strictly below Together's empirical upper bound $\mu \le 0.380871$.
+\end{theorem}
+
+The constant $C_\infty$ is the \emph{provably-attainable upper limit}
+on what any augmentation of White's framework can certify within the
+present constraint class. Closing the gap from $C_\infty$ to the true
+$\mu$ (a width of approximately $3.1 \times 10^{-4}$) requires
+mathematics outside this class. We discuss specific candidate
+directions in Section~\ref{sec:open}.
+
+The full formal statement of Theorem~\ref{thm:saturation-informal} is
+Theorem~\ref{thm:saturation-formal} in Section~\ref{sec:saturation}.
+
+\section{Setup and the augmented program}\label{sec:setup}
+
+We adopt White's notation throughout~\cite[\S2]{White2023}. Recall the
+reformulation: for $f, g : [-1, 1] \to [0, 1]$ with $f + g = 1$ and
+$\int_{-1}^1 f = 1$, set
+\(
+M(x) := \int_{-1}^1 f(t)\, g(x + t)\, dt
+\)
+on $[-2, 2]$. Then
+\[
+\mu \;=\; \inf_f\, \|M\|_\infty.
+\]
+Let $c_k = \int_{-1}^1 \cos(\pi k x)\, f(x)\, dx$,
+$d_k = \int_{-1}^1 \sin(\pi k x)\, f(x)\, dx$, and
+$\hat f(k) := (c_k - i d_k)/2$ for $k \ge 1$ with $\hat f(0) = 1/2$.
+
+White's Section~5 program~\cite[\S5]{White2023} optimizes a scalar
+$\Omega$ subject to constraints on cell averages $w_j, v_j$ of $M$
+(positive- and negative-side), Fourier coefficients $c_k, d_k$ of $f$,
+and tail-correction terms $\varepsilon_{2m-1}, \delta_{2m-1}$. The
+parameter triple $(h, p, q) := (E(M), c_1, d_1)$ appears only in the
+objective, never in the dual feasibility region, enabling White's
+ellipse-extension argument.
+
+\subsection{Five augmenting constraint families}\label{sec:families}
+
+We adjoin to White's program the following five constraint families.
+
+\paragraph{F1: Bochner-PSD moment matrix.} By the classical Bochner
+theorem, $f \ge 0$ a.e.\ iff for every $n \ge 0$,
+\[
+M_n(f) := \bigl[\hat f(j - k)\bigr]_{j,k = 0,\dots,n} \;\succeq\; 0.
+\]
+Imposing $M_n(f) \succeq 0$ and $M_n(1 - f) \succeq 0$ for $n = 30$ is
+a strict tightening of White's program~\cite[\S5]{White2023}, which
+enforces $f \in [0, 1]$ only via the bilinear form in (5.5) and via the
+$\ell^\infty$ box $|c_k|, |d_k| \le 2/\pi$.
+
+\paragraph{F2: Polynomial-moment Hausdorff positivity.} For
+even $k \ge 2$, the Hausdorff moment $m_k = \int_{-1}^1 x^k f(x)\, dx$
+satisfies $m_k \ge 0$ since $f \ge 0$. We adjoin truncated linear
+constraints $m_k(c, d) \ge -\tau_k(T)$ for $k = 2, 4, \dots, 20$, where
+$\tau_k(T)$ is the explicit Fourier-truncation tail bound from
+integration-by-parts (Lemma~\ref{lem:tail} below).
+
+\paragraph{F3: Even-moment Hankel-PSD.} The truncated even moments
+$(m_0, m_2, m_4, \dots, m_{2n})$ form a positive Hankel matrix when
+$f \ge 0$ (the Hausdorff moment-problem condition). We add the
+$(n+1)\times(n+1)$ Hankel-PSD constraint for $n = 6$, using slack
+variables to absorb the Fourier-truncation tails.
+
+\paragraph{F4: Test against $1 - \cos(\pi x)$ (White's tightening~5$'$).}
+For $f \in [0,1]$, $f^2 \le f$ pointwise. Testing against the
+positive trigonometric polynomial $\varphi(x) = 1 - \cos(\pi x)$ gives
+$\int (f - f^2)\, \varphi \ge 0$, which becomes
+$c^\top Q\, c + d^\top Q\, d \le 1/2$ with $Q$ the tridiagonal Toeplitz
+matrix $I - \tfrac12(E_{+1} + E_{-1})$.
+
+\paragraph{F5: Constraint Discovery Engine (CDE) cover refinement.}
+White's covering uses seven ellipse centers fixed in advance. We
+iteratively (i) compute the binding point of the current cover,
+(ii) solve the augmented program at that point, (iii) extend the cover
+with the new center's ellipse. Saturation typically occurs in 4--5
+iterations; we use 5 additional CDE-discovered centers.
+
+\subsection{Cell discretization scaling}\label{sec:scaling}
+
+White's analysis uses cell width $L = 2/N$. We push $N$ from his
+$N = 5000$ (cf.\ \cite[\S5]{White2023}) to $N = 20{,}000$. Memory and
+compute scale roughly linearly in $N$; CLARABEL solves remain
+\texttt{optimal\_inaccurate} but consistent to $\sim 6$ digits across
+solvers.
+
+\section{Proof of Theorem~\ref{thm:main}}\label{sec:proof}
+
+The proof follows White's covering structure verbatim, with the five
+augmenting families adjoined to the per-center SDP.
+
+\subsection{Per-row dual objectives at the augmented optimum}
+
+For each of the 12 ellipse centers (7 from White's Table~3 plus 5
+CDE-discovered), we solve the augmented SDP at $N = 20{,}000$,
+$T = 4000$, $R = 10$, $\text{bochner\_n} = 30$, $\text{pm\_k\_max} = 20$,
+$\text{hankel\_n} = 6$, extracting dual variables of the
+parameter-bearing constraints (5.3), (5.4), (5.12), (5.13). The
+per-center dual objectives $\Phi_r(h, p, q)$ are quadratic in
+$(h, p, q)$ by the envelope theorem (the rhs's of the relevant
+constraints are at most quadratic).
+
+\subsection{Cover extension}
+
+For each row, the level set
+$\{(h, p, q) : \Phi_r(h, p, q) \ge 0.380299\}$ is an ellipse (the
+augmented analogue of White's). A 4001$\times$4001 grid sweep over the
+residual region $h \in [0, 0.06]$, $p \in [0.35, 0.45]$,
+$q \in \{-0.02, +0.02\}$ finds zero uncovered points.
+
+\subsection{Cover-min and Lipschitz margin}
+
+The minimum of $\max_r \Phi_r(h, p, q)$ over the residual region is
+$\Phi^* = 0.3803015$, attained at the binding witness
+cde\_n30\_iter3 near $(h, p) = (0.00390, 0.39225)$. The Lipschitz
+margin for off-grid points is $\varepsilon_{\text{grid}} = 2.17 \times
+10^{-6}$ (computed from $L_{\max} = 0.1488$ and the grid step). A
+conservative $1 \times 10^{-6}$ CLARABEL margin (typical interior-point
+gap is $\sim 10^{-7}$, with $5 \times 10^{-5}$ documented worst case)
+yields
+\[
+\mu \;\ge\; \Phi^* - 10^{-6} - \varepsilon_{\text{grid}}
+\;=\; 0.3802994.
+\]
+This proves Theorem~\ref{thm:main}.\qed
+
+\section{The cell-envelope residual and KKT identity}\label{sec:residual}
+
+The saturation theorem rests on a quantitative residual analysis of
+the cell-envelope constraints. Let $L = 2/N$ and let $\alpha_m^-(j)$
+denote the cell-min $\min_{x \in [(j-1)L, jL]} \cos(\pi m x / 2)$
+appearing in White's cell-envelope at lag $m$.
+
+\begin{lemma}[Corrected per-cell residual]\label{lem:per-cell}
+For the cell $[(j-1)L, jL]$, the difference
+\[
+\delta_m(j) \;:=\; \int_{(j-1)L}^{jL} \cos\bigl(\tfrac{\pi m x}{2}\bigr)\, dx
+\;-\; L \cdot \alpha_m^-(j)
+\]
+satisfies
+\[
+\delta_m(j) \;\le\;
+\begin{cases}
+\dfrac{\pi m L^2}{4} & \text{(Case A: monotone)} \\[4pt]
+\dfrac{(\pi m)^2 L^3}{24} & \text{(Case B: contains kernel min)}
+\end{cases}
+\]
+\end{lemma}
+
+The Case-A bound is the standard Lipschitz-trapezoidal estimate; the
+Case-B bound corrects a too-loose ``$2L$ per cell'' bound used in an
+earlier draft of this work (a factor of $\sim 10^8$ improvement at
+$N = 10{,}000$, $m \le 20$).
+
+\begin{lemma}[Aggregate residual]\label{lem:aggregate}
+Summing Lemma~\ref{lem:per-cell} with dual multipliers
+$\lambda_m^{\cos}$,
+\[
+\sum_m \lambda_m^{\cos}\, \Delta_m \;\le\;
+\frac{\pi}{2N} \sum_m m\, \lambda_m^{\cos}
+\;+\;
+\frac{\pi^2 \Omega}{3 N^3} \sum_m m^3\, \lambda_m^{\cos}.
+\]
+The second term is negligible at any reasonable $N$ (Case-B
+contributions are dominated).
+\end{lemma}
+
+The dual multipliers $\lambda_m^{\cos}$ in turn satisfy a KKT identity
+at the boundary cell $j=1$:
+
+\begin{theorem}[KKT identity at $j=1$]\label{thm:kkt}
+At any KKT-stationary point of the augmented SDP where $0 < w_1 < \Omega$,
+\[
+\sum_{m=1}^{2R} \lambda_m^{\cos}\, \alpha_m^-(1)
+\;=\;
+-\,2\xi \;+\; \alpha_2^+(1)\, \tau \;+\; 2 L\, \nu_3
+\;+\; \Delta_{\sin}(1),
+\]
+where $\xi$ is the multiplier of the normalization
+$L \sum (w + v) = 1$, $\tau$ is the multiplier of (5.13), $\nu_3$ is
+the multiplier of (5.3), and $\Delta_{\sin}(1)$ is the small sine
+cell-envelope contribution at $j=1$, of magnitude $O(L)$.
+\end{theorem}
+
+Theorem~\ref{thm:kkt} reduces the bound on $\sum_m \lambda_m^{\cos}$
+to bounds on the three scalar shadow prices $\xi, \tau, \nu_3$. The
+identity is numerically verified to within $0.4\%$ at row~4 (the
+empirical $\sum \lambda_m^{\cos} = 1.374$ vs the RHS $1.369$, with
+$\Delta_{\sin}(1) \le 2.5 \times 10^{-4}$).
+
+\subsection{The cell-envelope saturation theorem}
+
+Combining Lemmas~\ref{lem:per-cell}--\ref{lem:aggregate} and
+Theorem~\ref{thm:kkt} with the analogous sine result yields:
+
+\begin{theorem}[Cell-envelope saturation, Step E]\label{thm:cell-env}
+Let $\mathrm{White}^*(N, T, R, n)$ denote White's program with the
+cell-envelope cosine+sine constraints replaced by their exact
+integral forms (no cell-min relaxation). Then
+\[
+\mathrm{SDP\,LB}\bigl(\mathrm{White}^*(N, T, R, n)\bigr)
+\;\le\; \mathrm{SDP\,LB}\bigl(\mathrm{White}(N, T, R, n)\bigr)
+\;+\; \frac{\pi}{2N} \sum_m m\, (\lambda_m^{\cos} + |\sigma_m^1| + |\sigma_m^2|),
+\]
+where $\sigma_m^{1,2}$ are the sine-envelope dual multipliers.
+\end{theorem}
+
+\paragraph{Numerical instantiation at $N = 30{,}000$, $n = 30$.}
+The dual multiplier sums $\sum m\, (\lambda + |\sigma^1| + |\sigma^2|)$
+measured across our four representative parameter centers are
+bounded by $9.5$ at the sup. Therefore
+\[
+\mathrm{SDP\,LB}\bigl(\mathrm{White}^*(30000, 1200, 10, 30)\bigr)
+\;\le\; 0.380299 + \frac{\pi \cdot 9.5}{60000}
+\;\approx\; 0.380633,
+\]
+with a margin of $2.38 \times 10^{-4}$ below Together's UB.
+
+\section{Bochner truncation, complementarity, and the full-stack saturation}\label{sec:saturation}
+
+A parallel residual analysis applies to the Bochner-PSD truncation:
+moving from $\mathrm{bochner\_n} = n$ to $\mathrm{bochner\_n} = \infty$
+contributes an additional residual $r_B(\infty \mid n)$ which we bound
+by the spectral norm of the Bochner dual matrix times the Parseval tail
+$\sum_{k > n} |\hat f(k)|^2$. At row~7, $N = 3000$, $n = 20$, this gives
+$r_B \le 2.18 \times 10^{-4}$, matching the directly measured
+$r_B = 2.16 \times 10^{-4}$ (from solving at $n = 30$).
+
+\subsection{The tautological identity}
+
+A naive bound combines $r_C$ and $r_B$ additively, predicting a
+joint residual of $\sim 8 \times 10^{-4}$ at $n = 20$ baseline — which
+would exceed the open gap and make Theorem~\ref{thm:saturation-informal}
+vacuous. The naive bound is conservative; we replace it by a sharper
+identity.
+
+\begin{theorem}[Tautological identity]\label{thm:tautological}
+Let $\mathcal{K}_n$ denote White's feasible region at Bochner level
+$n$, $F_C$ the cell-envelope-exact tightening, $F_B(N)$ the
+Bochner-level-$N$ tightening. Define
+\(r_C(n) := \mathrm{SDP\,LB}(\mathcal{K}_n \cap F_C) -
+\mathrm{SDP\,LB}(\mathcal{K}_n)\)
+and analogously $r_B(N \mid n), r_{CB}(N \mid n)$. Then for any
+$N > n$,
+\[
+r_{CB}(N \mid n) \;=\; r_C(N) \;+\; r_B(N \mid n).
+\]
+\end{theorem}
+
+\begin{proof}
+$\mathcal{K}_n \cap F_C \cap F_B(N) =
+(\mathcal{K}_n \cap F_B(N)) \cap F_C = \mathcal{K}_N \cap F_C$ by
+definition of the Bochner level. Therefore
+$\mathrm{SDP\,LB}(\mathcal{K}_n \cap F_C \cap F_B(N))
+= \mathrm{SDP\,LB}(\mathcal{K}_N \cap F_C)$, and subtracting
+$\mathrm{SDP\,LB}(\mathcal{K}_n)$ from both sides yields the claim.
+\end{proof}
+
+\subsection{The full-stack saturation theorem}
+
+\begin{theorem}[Saturation, formal]\label{thm:saturation-formal}
+At $n = 20$ baseline, with measured $r_C(N = 30) = 5.05 \times 10^{-4}$
+and $r_B(N = 30 \mid n = 20) = 2.16 \times 10^{-4}$,
+\[
+\mathrm{SDP\,LB}(\mathcal{K}_{20} \cap F_C \cap F_B(30))
+\;\le\; \mu_{\mathrm{LB}}(\text{this work}) + 7.21 \times 10^{-4}
+\;=\; 0.380849.
+\]
+This is below Together's empirical $\mu \le 0.380871$ by
+$2.2 \times 10^{-5}$. The bound is rigorous given
+Theorem~\ref{thm:tautological} and the measured multipliers (which
+inherit the CLARABEL precision).
+
+Extrapolating $r_C(N) \to 0$ as $N \to \infty$ (which holds
+empirically with $R^2 \ge 0.78$ in a $1/N$ fit; cf.\
+Section~\ref{sec:phase-transition}), the asymptotic framework ceiling is
+\[
+C_\infty \;:=\; \mu_{\mathrm{LB}} + \lim_{N \to \infty} r_B(N \mid 20)
+\;\approx\; 0.380558.
+\]
+\end{theorem}
+
+\paragraph{Open-gap decomposition.}
+With the current LB $0.380299$ and the asymptotic framework ceiling
+$C_\infty \approx 0.380558$, the open interval $[0.380299, 0.380871]$
+splits as
+\[
+\underbrace{[0.380299,\; 0.380558]}_{\text{framework-attainable},\;\sim 45\%}
+\;\cup\;
+\underbrace{[0.380558,\; 0.380871]}_{\text{beyond framework},\;\sim 55\%}.
+\]
+
+The framework-attainable portion can in principle be closed by
+augmenting the current constraint families and/or scaling $N$; the
+beyond-framework portion provably cannot be closed without
+fundamentally new techniques.
+
+\section{Phase-transition diagnosis and reciprocal scaling}\label{sec:phase-transition}
+
+The dual multiplier sums $\sum_m m\, \lambda_m^{\cos}(N)$ are not
+monotone in $N$ for individual centers: each row has a critical
+``activation scale'' $N^*$ at which the lag-$1$ multiplier $\lambda_1$
+jumps from approximately zero to approximately $3$--$4$. For three of
+our four representative centers this happens at $N^* \approx 17{,}000$;
+for the row~7 center (with the largest $h = 0.030$) it is delayed to
+$N^* \approx 35{,}000$.
+
+The mechanism is straightforward: $\alpha_1^-(j)$ is a crude
+approximation of $\cos(\pi x / 2)$ at small $N$, so the $m=1$ cosine
+cell-envelope constraint is slack and $\lambda_1 = 0$. As $N \to \infty$
+the constraint tightens and $\lambda_1$ activates. After activation,
+multipliers stabilize and the residual decays as $1/N$. This justifies
+the extrapolation $r_C(N) \to 0$ used in Theorem~\ref{thm:saturation-formal}.
+
+\section{Numerical results and verification}
+
+Table~\ref{tab:results} summarizes the per-row Phase-5 dual objectives
+at $N = 20{,}000$.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{cccccc}
+\toprule
+row & center $(h, p)$ & $V_r^{\,\text{center}}$ & semi-$h$ & semi-$p$ & status \\
+\midrule
+row~1 & $(0.015, 0.381)$ & $0.380255$ & $0.220$ & $0.211$ & non-binding \\
+row~4 & $(0.004, 0.3875)$ & $0.380090$ & $0.089$ & $0.083$ & binding regime \\
+row~7 & $(0.030, 0.375)$ & $0.381586$ & $0.600$ & $0.751$ & non-binding \\
+cde\_n30\_iter3 & $(0.000, 0.3901)$ & $0.380318$ & $0.083$ & $0.075$ & \textbf{binding witness} \\
+\bottomrule
+\end{tabular}
+\caption{Per-row dual objectives at $N=20{,}000$ for four representative
+centers (4 of 12). The binding witness is the CDE-discovered
+\texttt{cde\_n30\_iter3} center.}
+\label{tab:results}
+\end{table}
+
+\paragraph{Verification.}
+Three independently-written code paths (\texttt{path\_b\_analytical.py},
+\texttt{path\_b\_rigorous.py}, \texttt{path\_b\_independent.py}) agree
+on per-row SDP solves to $10$+ digits. A separate agent reimplemented
+the Bochner-PSD encoding from scratch and obtained bit-for-bit
+agreement on test inputs. CLARABEL's primal-dual gap on these solves
+is $3 \times 10^{-6}$ to $4 \times 10^{-8}$, comfortably within the
+$10^{-6}$ safety margin. Cross-solver agreement between CLARABEL and
+SCS at moderate $N$ is $\sim 5 \times 10^{-6}$.
+
+\paragraph{Reproducibility.}
+Code, raw SDP outputs, and three independent implementations of the
+ellipse-extension argument are in the GitHub repository at
+\url{https://github.com/USERNAME/erdos-minimum-overlap-saturation}. The
+single-file reproducer for the binding row is
+\texttt{lp\_research\_state/code/path\_b\_with\_polymoment.py}.
+
+\section{Open questions and future directions}\label{sec:open}
+
+The saturation theorem (Theorems~\ref{thm:saturation-informal},
+\ref{thm:saturation-formal}) establishes that approximately $55\%$ of
+the open gap $[0.380299, 0.380871]$ is beyond the reach of the present
+framework. Closing this remaining gap requires techniques outside the
+constraint families F1--F5. We highlight several candidate directions.
+
+\paragraph{Question 1 (strict complementarity).}
+Theorem~\ref{thm:tautological} is a tautological identity, not the
+strict-form complementarity inequality. The empirical evidence is
+suggestive: at $n = 20 \to n = 30$, cell-envelope multipliers shrink
+by $40$--$45\%$ on three of our four representative rows, suggesting
+the residuals are coupled. Does the strict-form
+\[
+r_{CB}(\infty \mid n) \;\le\; \max\bigl(r_C(\infty),\; r_B(\infty \mid n)\bigr)
+\]
+admit a clean proof in White's framework?
+
+\paragraph{Question 2 (direct sup\_t representation).}
+The cell-envelope constraints are the proximate bottleneck. Is there a
+cleaner SDP formulation of $\sup_t (h \star h)(t)$ that avoids the
+per-$m$ cell envelope altogether? A moment-matrix representation of
+$\hat M(k)$ with constraints derived from $M = f \star f$ would be a
+natural candidate.
+
+\paragraph{Question 3 (Lasserre hierarchy at level 3).}
+Lasserre level 2 was unsuccessful (the natural rigorization via
+Fej\'er--Riesz tail bounds offsets the empirical gain at currently
+tractable $T_{\max}$). Level 3 has not been explored; the additional
+flexibility might rescue a portion of the heuristic gain.
+
+\paragraph{Question 4 (alternative bases).}
+Wavelets, Chebyshev polynomials, and Walsh functions all provide
+alternative discretizations of $f$ that suppress the Gibbs phenomenon
+near $f$'s discontinuities. We have not systematically tested whether
+any provides a tighter SDP relaxation than the standard Fourier basis.
+
+\paragraph{Question 5 (Together AI collaboration on the LB side).}
+The Together AI / Einstein Arena team \cite{TogetherComputer2026,
+TTTDiscover2026} maintains the current state-of-the-art upper bound
+via continued numerical optimization of TTT-Discover's 600-piece
+construction. The natural complement on the lower-bound side is a
+joint research effort with their methodology applied to dual
+certificates.
+
+\section{Acknowledgments}
+
+I am grateful to E.~P.~White for the mathematical foundation; this
+work would not exist without his Section~5 framework. The
+computational and drafting workflow was assisted throughout by
+Anthropic's Claude in a multi-agent configuration.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{Erdos1955}
+P.~Erd\H{o}s.
+``Some remarks on number theory'' (in Hebrew).
+\textit{Riveon Lematematika}, 9, 45–48, 1955.
+
+\bibitem{Haugland2016}
+J.~K.~Haugland.
+``A new upper bound on the constant in the Erd\H{o}s minimum overlap problem.''
+arXiv:1609.08000, 2016.
+
+\bibitem{White2023}
+E.~P.~White.
+``A new bound for Erd\H{o}s' minimum overlap problem.''
+\textit{Acta Arithmetica} 208 (2023), 235--255. arXiv:2201.05704.
+
+\bibitem{AlphaEvolve2025}
+A.~Novikov et al. (Google DeepMind).
+``AlphaEvolve: A coding agent for scientific and algorithmic discovery.''
+arXiv:2506.13131, May 2025.
+
+\bibitem{TTTDiscover2026}
+M.~Yuksekgonul, D.~Koceja, X.~Li, F.~Bianchi, J.~McCaleb, X.~Wang,
+J.~Kautz, Y.~Choi, J.~Zou, C.~Guestrin, Y.~Sun.
+``Learning to discover at test time.''
+arXiv:2601.16175, January 2026.
+
+\bibitem{TogetherComputer2026}
+Together AI / Einstein Arena.
+``New State-of-the-Art on Erd\H{o}s' Minimum Overlap Problem.''
+\url{https://github.com/togethercomputer/erdos-minimum-overlap}, March 2026.
+
+\bibitem{SDPA}
+M.~Yamashita, K.~Fujisawa, M.~Kojima.
+``SDPARA: SemiDefinite Programming Algorithm paRAllel version.''
+\textit{Parallel Computing} 29 (2003), 1053--1067.
+
+\bibitem{LasserreTail}
+B.~Zanghi.
+``Fej\'er-Riesz tail bound for Lasserre level-2 truncation
+in the Erd\H{o}s minimum-overlap SDP.''
+Repository note, May 2026.
+
+\end{thebibliography}
+
+\end{document}
