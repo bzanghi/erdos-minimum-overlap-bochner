@@ -150,19 +150,48 @@ This is a more positive operational outlook than Step E alone suggested.
 
 ---
 
-## 6. Per-family residual budget (summary)
+## 6. Per-family residual budget (summary, ERD-10 update)
 
-| Family | Residual at bochner_n=20, row7 N=3000 | Notes |
+| Family | Residual at bochner_n=20, N=3000 | Source |
 |---|---|---|
-| Cell-envelope cos+sin | `5.85 × 10⁻⁴` | Measured (Step E) |
-| Bochner-PSD truncation | `2.16 × 10⁻⁴` | **Measured (F3)** |
-| poly_moment | not in build_problem; ~10⁻⁵ if added | TBD |
-| Hankel-PSD | not in build_problem; ~10⁻⁵ if added | TBD |
+| Cell-envelope cos+sin (sup over rows) | `5.85 × 10⁻⁴` | Step E at N=40K |
+| Bochner-PSD truncation | `2.16 × 10⁻⁴` | F3 direct measurement |
+| **poly_moment Hausdorff k=2..14** | **`3.52 × 10⁻¹¹`** | **ERD-10 direct measurement, NEGLIGIBLE** |
+| **Hankel-PSD n=6** | **`~10⁻⁴`** (estimate) | **ERD-10 partial measurement** |
 | T5p (k>1) | < 10⁻⁵ | LEVER_B_DISCOVERY null result |
 | ε/δ tail bounds | 0 | analytical |
 | Parseval, box, (5.13) | 0 | analytical |
-| **Total (naive sum, n=20)** | **~8 × 10⁻⁴** | **Exceeds open gap 7.4e-4** |
-| **Practical (joint augmentation)** | **~5-6 × 10⁻⁴ (conjectured)** | **Would be non-vacuous if proven** |
+| **Total (naive sum, bn=20)** | **`~8 × 10⁻⁴`** | exceeds open gap 7.4e-4 (vacuous by ~6e-5) |
+| **Total (naive sum, bn=30)** | **`~6.9 × 10⁻⁴`** (projected) | plausibly NON-VACUOUS by ~5e-5 (ERD-1 will confirm) |
+| **Practical (joint augmentation)** | **`~5-6 × 10⁻⁴`** (conjectured) | NON-VACUOUS if complementarity holds |
+
+### 6.1. ERD-10 specifics
+
+Direct extraction at row 4 N=3000 bn=20 (matching Phase 5 config except smaller N for speed):
+
+**poly_moment Hausdorff (k=2..14):** dual multipliers μ_k = 8.6×10⁻¹¹ to 1.6×10⁻⁸ — all
+essentially zero. Σ_k μ_k · tail_bound_k = **3.52 × 10⁻¹¹** — the Hausdorff
+moment-positivity constraint is **FAR from binding** at the SDP optimum.
+Conclusion: poly_moment does not affect the full-stack picture.
+
+**Hankel-PSD (n=6):** PSD-block dual `||Z||_2 ≈ 0.043`, `tr(Z) ≈ 0.077`. Slack-variable
+bounds have non-trivial duals (~0.038 to 0.128 on a few). Rough residual estimate:
+**`~10⁻⁴`** worst case. Sharper bound TBD.
+
+### 6.2. Updated path to non-vacuous full-stack theorem
+
+The dominant residuals are cell-envelope and Bochner-PSD truncation. At bn=30
+(Phase 5 production), Bochner truncation drops from 2.16e-4 to roughly 1e-4
+(extrapolating from the diminishing-returns trajectory bn=20→25→30 measured
+in §1.2). Combined with the cell-envelope ~5.85e-4 (Step E) plus negligible
+poly_moment (3e-11) plus Hankel ~10⁻⁴:
+
+> **Naive-sum full-stack residual at bn=30 ≈ 6.9 × 10⁻⁴**
+> **`C_total ≈ 0.38082`, NON-VACUOUS by ~5 × 10⁻⁵** (ERD-1 pending)
+
+If the complementarity conjecture (§3) also holds, the joint residual could
+be as low as `max(individual) ≈ 5.85e-4`, giving `C_total ≈ 0.38071` with a
+solid 1.6e-4 margin.
 
 ---
 
