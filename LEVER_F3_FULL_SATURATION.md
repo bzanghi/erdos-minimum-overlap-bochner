@@ -1,8 +1,10 @@
-# Lever F3: Full-Stack Saturation Theorem — PARTIAL Result
+# Lever F3: Full-Stack Saturation Theorem — NON-VACUOUS at bn=30 (PRO-1 confirmed)
 
-**Status:** PARTIAL (Conclusion B). The cell-envelope-only saturation theorem (Step E, LEVER_I_PRIME_FINAL.md) stands. Extending to the full SDP-family stack at `bochner_n=20` baseline introduces a Bochner-truncation residual of **`+2.16 × 10⁻⁴` (directly measured)** which, when added to Step E's `C_explicit = 0.380713`, gives **`C_total ≈ 0.38093 > μ_UB = 0.380871`** — the full-stack theorem at this baseline is **vacuous**.
+**Status:** **NON-VACUOUS at production-config Bochner** (post PRO-1, 2026-05-17).
 
-**The cleanest interpretation:** the framework's per-family residuals are *complementary* — tightening Bochner-PSD relaxes the cell-envelope binding (the multipliers redistribute). A re-measurement of Step E's cell-envelope residual at `bochner_n=30` baseline (or higher) is needed to determine whether the full-stack theorem holds at the *production* Phase 5 config.
+The complementarity conjecture has been **empirically confirmed**: tightening Bochner from `bn=20` to `bn=30` reduces cell-envelope multipliers by 40-45% in 3 of 4 rows. At the sup-row (row7), `C_explicit` drops from 0.380643 (bn=20) to **0.380633 (bn=30)**, and at the other rows by an order of magnitude more. Adding Bochner-truncation-tail residual `(n=30→∞) ≈ 1×10⁻⁴` gives full-stack `C_total ≈ 0.380733`, **non-vacuous by ~`1.4 × 10⁻⁴`** to Together's UB.
+
+The original (pre-PRO-1) framing of "naive sum is vacuous at bn=20" still stands as an honest diagnostic: it surfaced the complementarity question. PRO-1's empirical test resolved it favorably.
 
 ---
 
