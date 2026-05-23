@@ -1,0 +1,26 @@
+=== lite7_CLARABEL_N10000_bn20: 7 centers @ solver=CLARABEL, N=10000 T=4000 R=10 bn=20 pm=0 hankel=0 ===
+[1/7] row1               (h=0.0150, p=0.3810) ...
+   V_c=0.3800215265  (optimal_inaccurate, 59.9s)
+[2/7] row2               (h=0.0150, p=0.3850) ...
+   V_c=0.3800068646  (optimal_inaccurate, 55.9s)
+[3/7] row3               (h=0.0200, p=0.3750) ...
+   V_c=0.3803657806  (optimal_inaccurate, 49.6s)
+[4/7] row4               (h=0.0040, p=0.3875) ...
+   V_c=0.3796533955  (optimal_inaccurate, 54.3s)
+[5/7] row5               (h=0.0000, p=0.4000) ...
+   V_c=0.3799611793  (optimal_inaccurate, 49.1s)
+[6/7] row6               (h=0.0000, p=0.3810) ...
+   V_c=0.3797506913  (optimal_inaccurate, 48.3s)
+[7/7] row7               (h=0.0300, p=0.3750) ...
+   V_c=0.3813080411  (optimal_inaccurate, 40.6s)
+
+--- lite7_CLARABEL_N10000_bn20 cover (envelope-min over box 5.16) ---
+  grid_min      = 0.3795469155
+  eps_grid      = 2.153e-06  (L_max=0.1477)
+  margin        = 1.0e-06
+  RIGOROUS µ LB = 0.3795447625
+  binding       = [0.0, 0.394175]  witness=row4
+  vs White      : +5.3976248e-04
+  vs CLARABEL headline 0.3803027: -7.579e-04
+
+→ wrote /Users/benzanghi/Documents/Claude/Projects/Erdos/.claude/worktrees/eloquent-ellis-2c99f2/lp_research_state/parallel_results/pro12_phase5_mosek.json

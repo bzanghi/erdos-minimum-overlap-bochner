@@ -1,0 +1,193 @@
+(CVXPY) May 18 06:31:06 PM: Your problem has 28021 variables, 51618 constraints, and 0 parameters.
+(CVXPY) May 18 06:31:06 PM: It is compliant with the following grammars: DCP, DQCP
+(CVXPY) May 18 06:31:06 PM: (If you need to solve this problem multiple times, but with different data, consider using parameters.)
+(CVXPY) May 18 06:31:06 PM: CVXPY will first compile your problem; then, it will invoke a numerical solver to obtain a solution.
+(CVXPY) May 18 06:31:06 PM: Your problem is compiled with the CPP canonicalization backend.
+(CVXPY) May 18 06:31:06 PM: Compiling problem (target solver=CLARABEL).
+(CVXPY) May 18 06:31:06 PM: Reduction chain: Dcp2Cone -> CvxAttr2Constr -> ConeMatrixStuffing -> CLARABEL
+(CVXPY) May 18 06:31:06 PM: Applying reduction Dcp2Cone
+(CVXPY) May 18 06:31:06 PM: Applying reduction CvxAttr2Constr
+(CVXPY) May 18 06:31:06 PM: Applying reduction ConeMatrixStuffing
+(CVXPY) May 18 06:31:08 PM: Applying reduction CLARABEL
+(CVXPY) May 18 06:31:08 PM: Finished problem compilation (took 1.894e+00 seconds).
+(CVXPY) May 18 06:31:08 PM: Invoking solver CLARABEL  to obtain a solution.
+/Users/benzanghi/Documents/Claude/Projects/Erdos/.claude/worktrees/eloquent-ellis-2c99f2/lp_research_state/code/dual_extractor.py:71: UserWarning: Solution may be inaccurate. Try another solver, adjusting the solver settings, or solve with verbose=True for more information.
+  prob.solve(solver=solver, verbose=True)
+(CVXPY) May 18 06:32:06 PM: Problem status: optimal_inaccurate
+(CVXPY) May 18 06:32:06 PM: Optimal value: 3.797e-01
+(CVXPY) May 18 06:32:06 PM: Compilation took 1.894e+00 seconds
+(CVXPY) May 18 06:32:06 PM: Solver (including time spent in interface) took 5.799e+01 seconds
+(CVXPY) May 18 06:32:06 PM: Your problem has 28021 variables, 51618 constraints, and 0 parameters.
+(CVXPY) May 18 06:32:06 PM: It is compliant with the following grammars: DCP, DQCP
+(CVXPY) May 18 06:32:06 PM: (If you need to solve this problem multiple times, but with different data, consider using parameters.)
+(CVXPY) May 18 06:32:06 PM: CVXPY will first compile your problem; then, it will invoke a numerical solver to obtain a solution.
+(CVXPY) May 18 06:32:06 PM: Your problem is compiled with the CPP canonicalization backend.
+(CVXPY) May 18 06:32:06 PM: Compiling problem (target solver=MOSEK).
+(CVXPY) May 18 06:32:06 PM: Reduction chain: Dcp2Cone -> CvxAttr2Constr -> ConeMatrixStuffing -> MOSEK
+(CVXPY) May 18 06:32:06 PM: Applying reduction Dcp2Cone
+(CVXPY) May 18 06:32:06 PM: Applying reduction CvxAttr2Constr
+(CVXPY) May 18 06:32:06 PM: Applying reduction ConeMatrixStuffing
+(CVXPY) May 18 06:32:08 PM: Applying reduction MOSEK
+(CVXPY) May 18 06:32:09 PM: Finished problem compilation (took 2.843e+00 seconds).
+(CVXPY) May 18 06:32:09 PM: Invoking solver MOSEK  to obtain a solution.
+(CVXPY) May 18 06:32:09 PM: Problem
+(CVXPY) May 18 06:32:09 PM:   Name                   :                 
+(CVXPY) May 18 06:32:09 PM:   Objective sense        : maximize        
+(CVXPY) May 18 06:32:09 PM:   Type                   : CONIC (conic optimization problem)
+(CVXPY) May 18 06:32:09 PM:   Constraints            : 36083           
+(CVXPY) May 18 06:32:09 PM:   Affine conic cons.     : 0               
+(CVXPY) May 18 06:32:09 PM:   Disjunctive cons.      : 0               
+(CVXPY) May 18 06:32:09 PM:   Cones                  : 42              
+(CVXPY) May 18 06:32:09 PM:   Scalar variables       : 72254           
+(CVXPY) May 18 06:32:09 PM:   Matrix variables       : 2 (scalarized: 1806)
+(CVXPY) May 18 06:32:09 PM:   Integer variables      : 0               
+(CVXPY) May 18 06:32:09 PM: 
+(CVXPY) May 18 06:32:09 PM: Optimizer started.
+(CVXPY) May 18 06:32:09 PM: Presolve started.
+(CVXPY) May 18 06:32:09 PM: Linear dependency checker started.
+(CVXPY) May 18 06:32:09 PM: Linear dependency checker terminated.
+(CVXPY) May 18 06:32:09 PM: Eliminator started.
+(CVXPY) May 18 06:32:09 PM: Freed constraints in eliminator : 0
+(CVXPY) May 18 06:32:09 PM: Eliminator terminated.
+(CVXPY) May 18 06:32:09 PM: Eliminator - tries                  : 1                 time                   : 0.00            
+(CVXPY) May 18 06:32:09 PM: Lin. dep.  - tries                  : 1                 time                   : 0.01            
+(CVXPY) May 18 06:32:09 PM: Lin. dep.  - primal attempts        : 1                 successes              : 1               
+(CVXPY) May 18 06:32:09 PM: Lin. dep.  - dual attempts          : 0                 successes              : 0               
+(CVXPY) May 18 06:32:09 PM: Lin. dep.  - primal deps.           : 0                 dual deps.             : 0               
+(CVXPY) May 18 06:32:09 PM: Presolve terminated. Time: 0.09    
+(CVXPY) May 18 06:32:09 PM: Optimizer  - threads                : 16              
+(CVXPY) May 18 06:32:09 PM: Optimizer  - solved problem         : the primal      
+(CVXPY) May 18 06:32:09 PM: Optimizer  - Constraints            : 28063           
+(CVXPY) May 18 06:32:09 PM: Optimizer  - Cones                  : 43              
+(CVXPY) May 18 06:32:09 PM: Optimizer  - Scalar variables       : 64230             conic                  : 8127            
+(CVXPY) May 18 06:32:09 PM: Optimizer  - Semi-definite variables: 2                 scalarized             : 1806            
+(CVXPY) May 18 06:32:09 PM: Factor     - setup time             : 0.10            
+(CVXPY) May 18 06:32:09 PM: Factor     - dense det. time        : 0.00              GP order time          : 0.00            
+(CVXPY) May 18 06:32:09 PM: Factor     - nonzeros before factor : 1.54e+06          after factor           : 1.54e+06        
+(CVXPY) May 18 06:32:09 PM: Factor     - dense dim.             : 130               flops                  : 9.68e+07        
+(CVXPY) May 18 06:32:09 PM: ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
+(CVXPY) May 18 06:32:09 PM: 0   1.0e+00  6.8e+02  8.5e+01  0.00e+00   -8.400000000e+01  -0.000000000e+00  1.0e+00  0.26  
+(CVXPY) May 18 06:32:09 PM: 1   6.5e-01  4.4e+02  5.3e+01  -1.82e-01  -6.705008429e+01  7.083074155e-01   6.5e-01  0.28  
+(CVXPY) May 18 06:32:09 PM: 2   5.8e-01  4.0e+02  4.6e+01  7.18e-02   -6.274482417e+01  8.304711359e-01   5.8e-01  0.29  
+(CVXPY) May 18 06:32:09 PM: 3   5.8e-01  3.9e+02  4.5e+01  2.16e-01   -6.201781649e+01  8.117209962e-01   5.8e-01  0.31  
+(CVXPY) May 18 06:32:10 PM: 4   5.4e-01  3.7e+02  4.2e+01  2.14e-01   -5.928918652e+01  8.507582505e-01   5.4e-01  0.32  
+(CVXPY) May 18 06:32:10 PM: 5   3.2e-01  2.2e+02  1.9e+01  2.70e-01   -3.762258041e+01  9.918318977e-01   3.2e-01  0.34  
+(CVXPY) May 18 06:32:10 PM: 6   1.3e-01  8.6e+01  4.0e+00  9.73e-01   -1.273936504e+01  9.764220590e-01   1.3e-01  0.36  
+(CVXPY) May 18 06:32:10 PM: 7   6.5e-02  4.5e+01  1.5e+00  1.17e+00   -5.650307678e+00  9.852575511e-01   6.5e-02  0.37  
+(CVXPY) May 18 06:32:10 PM: 8   2.8e-02  1.9e+01  4.2e-01  1.11e+00   -1.700249147e+00  9.911101772e-01   2.8e-02  0.39  
+(CVXPY) May 18 06:32:10 PM: 9   2.5e-02  1.7e+01  3.5e-01  1.08e+00   -1.390553328e+00  9.918137373e-01   2.5e-02  0.40  
+(CVXPY) May 18 06:32:10 PM: 10  2.1e-02  1.4e+01  2.8e-01  1.05e+00   -1.053758879e+00  9.927027169e-01   2.1e-02  0.42  
+(CVXPY) May 18 06:32:10 PM: 11  4.2e-03  2.9e+00  2.5e-02  1.07e+00   5.958971922e-01   9.932037383e-01   4.2e-03  0.43  
+(CVXPY) May 18 06:32:10 PM: 12  1.7e-03  1.2e+00  6.5e-03  1.02e+00   8.342805454e-01   9.946417076e-01   1.7e-03  0.45  
+(CVXPY) May 18 06:32:10 PM: 13  1.4e-03  9.2e-01  4.5e-03  1.01e+00   8.696384290e-01   9.949389668e-01   1.4e-03  0.47  
+(CVXPY) May 18 06:32:10 PM: 14  1.2e-03  8.2e-01  3.8e-03  1.01e+00   8.835113606e-01   9.950443828e-01   1.2e-03  0.48  
+(CVXPY) May 18 06:32:10 PM: 15  6.8e-04  4.6e-01  1.6e-03  1.01e+00   9.327034366e-01   9.951087247e-01   6.8e-04  0.50  
+(CVXPY) May 18 06:32:10 PM: 16  2.5e-04  1.7e-01  3.5e-04  1.01e+00   9.714450743e-01   9.941088295e-01   2.5e-04  0.51  
+(CVXPY) May 18 06:32:10 PM: 17  2.0e-04  1.4e-01  2.6e-04  1.01e+00   9.731996788e-01   9.914763041e-01   2.0e-04  0.53  
+(CVXPY) May 18 06:32:10 PM: 18  1.0e-04  7.1e-02  9.6e-05  1.01e+00   9.663802593e-01   9.758010925e-01   1.0e-04  0.54  
+(CVXPY) May 18 06:32:10 PM: 19  7.2e-05  4.9e-02  5.0e-05  1.13e+00   6.820834840e-01   6.880262096e-01   7.2e-05  0.56  
+(CVXPY) May 18 06:32:10 PM: 20  4.3e-05  2.9e-02  2.3e-05  1.08e+00   6.036308516e-01   6.070641293e-01   4.3e-05  0.58  
+(CVXPY) May 18 06:32:10 PM: 21  3.9e-05  2.7e-02  2.0e-05  1.10e+00   5.858560306e-01   5.889677867e-01   3.9e-05  0.59  
+(CVXPY) May 18 06:32:10 PM: 22  2.8e-05  1.9e-02  1.2e-05  1.10e+00   5.321815377e-01   5.343828282e-01   2.8e-05  0.61  
+(CVXPY) May 18 06:32:10 PM: 23  2.5e-05  1.7e-02  9.9e-06  1.09e+00   5.166704169e-01   5.186131682e-01   2.5e-05  0.62  
+(CVXPY) May 18 06:32:10 PM: 24  1.6e-05  1.1e-02  5.1e-06  1.09e+00   4.684642706e-01   4.696919884e-01   1.6e-05  0.64  
+(CVXPY) May 18 06:32:10 PM: 25  1.5e-05  1.0e-02  4.5e-06  1.07e+00   4.620869972e-01   4.632173388e-01   1.5e-05  0.66  
+(CVXPY) May 18 06:32:10 PM: 26  9.9e-06  6.7e-03  2.4e-06  1.06e+00   4.349450966e-01   4.356800970e-01   9.9e-06  0.67  
+(CVXPY) May 18 06:32:10 PM: 27  7.8e-06  5.3e-03  1.7e-06  1.04e+00   4.245091400e-01   4.250883207e-01   7.8e-06  0.69  
+(CVXPY) May 18 06:32:10 PM: 28  5.8e-06  4.0e-03  1.1e-06  1.04e+00   4.130509167e-01   4.134780960e-01   5.8e-06  0.70  
+(CVXPY) May 18 06:32:10 PM: 29  4.4e-06  3.0e-03  7.0e-07  1.03e+00   4.059298323e-01   4.062531529e-01   4.4e-06  0.72  
+(CVXPY) May 18 06:32:10 PM: 30  2.1e-06  1.4e-03  2.3e-07  1.02e+00   3.931213900e-01   3.932758855e-01   2.1e-06  0.73  
+(CVXPY) May 18 06:32:10 PM: 31  1.3e-06  9.2e-04  1.2e-07  1.01e+00   3.884521433e-01   3.885499019e-01   1.3e-06  0.75  
+(CVXPY) May 18 06:32:10 PM: 32  8.0e-07  5.5e-04  5.4e-08  1.01e+00   3.850415061e-01   3.850998040e-01   8.0e-07  0.77  
+(CVXPY) May 18 06:32:10 PM: 33  5.1e-07  3.5e-04  2.7e-08  1.00e+00   3.830715321e-01   3.831084025e-01   5.1e-07  0.78  
+(CVXPY) May 18 06:32:10 PM: 34  4.4e-07  3.0e-04  2.2e-08  1.00e+00   3.826343941e-01   3.826662023e-01   4.4e-07  0.80  
+(CVXPY) May 18 06:32:10 PM: 35  3.5e-07  2.4e-04  1.5e-08  1.00e+00   3.820495147e-01   3.820746594e-01   3.5e-07  0.81  
+(CVXPY) May 18 06:32:10 PM: 36  3.0e-07  2.0e-04  1.2e-08  1.00e+00   3.817392730e-01   3.817609099e-01   3.0e-07  0.83  
+(CVXPY) May 18 06:32:10 PM: 37  1.9e-07  1.3e-04  6.2e-09  1.00e+00   3.810268038e-01   3.810407227e-01   1.9e-07  0.85  
+(CVXPY) May 18 06:32:10 PM: 38  1.5e-07  1.0e-04  4.5e-09  1.00e+00   3.807727745e-01   3.807838976e-01   1.5e-07  0.86  
+(CVXPY) May 18 06:32:10 PM: 39  9.8e-08  6.7e-05  2.3e-09  1.00e+00   3.803883092e-01   3.803954049e-01   9.8e-08  0.88  
+(CVXPY) May 18 06:32:10 PM: 40  6.3e-08  4.3e-05  1.2e-09  1.00e+00   3.801457003e-01   3.801503015e-01   6.3e-08  0.89  
+(CVXPY) May 18 06:32:10 PM: 41  4.1e-08  2.8e-05  6.3e-10  1.00e+00   3.799838352e-01   3.799868471e-01   4.1e-08  0.91  
+(CVXPY) May 18 06:32:10 PM: 42  3.7e-08  2.5e-05  5.3e-10  1.00e+00   3.799528795e-01   3.799555679e-01   3.7e-08  0.92  
+(CVXPY) May 18 06:32:10 PM: 43  2.0e-08  1.4e-05  2.1e-10  1.00e+00   3.798251321e-01   3.798265722e-01   2.0e-08  0.94  
+(CVXPY) May 18 06:32:10 PM: 44  1.3e-08  8.7e-06  1.1e-10  1.00e+00   3.797669797e-01   3.797679002e-01   1.3e-08  0.96  
+(CVXPY) May 18 06:32:10 PM: 45  8.1e-09  5.5e-06  5.4e-11  1.00e+00   3.797277688e-01   3.797283561e-01   8.1e-09  0.97  
+(CVXPY) May 18 06:32:10 PM: 46  4.8e-09  3.3e-06  2.4e-11  1.00e+00   3.796983835e-01   3.796987310e-01   4.8e-09  1.01  
+(CVXPY) May 18 06:32:10 PM: 47  3.5e-09  2.4e-06  1.6e-11  1.00e+00   3.796874305e-01   3.796876881e-01   3.5e-09  1.06  
+(CVXPY) May 18 06:32:10 PM: 48  2.3e-09  1.5e-06  7.9e-12  1.00e+00   3.796750768e-01   3.796752413e-01   2.3e-09  1.09  
+(CVXPY) May 18 06:32:10 PM: 49  2.2e-09  1.5e-06  7.6e-12  1.00e+00   3.796746204e-01   3.796747806e-01   2.2e-09  1.13  
+(CVXPY) May 18 06:32:10 PM: 50  1.9e-09  1.3e-06  5.9e-12  1.00e+00   3.796714717e-01   3.796716064e-01   1.9e-09  1.16  
+(CVXPY) May 18 06:32:10 PM: 51  1.6e-09  1.1e-06  4.8e-12  1.00e+00   3.796692050e-01   3.796693221e-01   1.6e-09  1.20  
+(CVXPY) May 18 06:32:10 PM: 52  6.8e-10  4.6e-07  1.3e-12  1.00e+00   3.796604909e-01   3.796605402e-01   6.8e-10  1.24  
+(CVXPY) May 18 06:32:10 PM: 53  4.7e-10  3.2e-07  7.4e-13  1.00e+00   3.796583664e-01   3.796584003e-01   4.7e-10  1.28  
+(CVXPY) May 18 06:32:10 PM: 54  3.5e-10  2.4e-07  4.7e-13  1.00e+00   3.796570706e-01   3.796570957e-01   3.5e-10  1.32  
+(CVXPY) May 18 06:32:11 PM: 55  1.9e-10  1.3e-07  1.9e-13  1.00e+00   3.796553940e-01   3.796554079e-01   1.9e-10  1.36  
+(CVXPY) May 18 06:32:11 PM: 56  1.2e-10  8.2e-08  9.6e-14  1.00e+00   3.796545799e-01   3.796545886e-01   1.2e-10  1.40  
+(CVXPY) May 18 06:32:11 PM: 57  4.5e-11  3.0e-08  2.2e-14  1.00e+00   3.796536923e-01   3.796536955e-01   4.5e-11  1.44  
+(CVXPY) May 18 06:32:11 PM: 58  2.1e-11  1.4e-08  6.9e-15  1.00e+00   3.796533937e-01   3.796533952e-01   2.1e-11  1.48  
+(CVXPY) May 18 06:32:11 PM: 59  1.9e-10  1.1e-08  4.5e-15  1.00e+00   3.796533276e-01   3.796533287e-01   1.6e-11  1.52  
+(CVXPY) May 18 06:32:11 PM: 60  8.7e-11  4.4e-09  1.2e-15  1.00e+00   3.796532083e-01   3.796532088e-01   6.4e-12  1.56  
+(CVXPY) May 18 06:32:11 PM: 61  5.0e-11  5.6e-09  4.1e-16  9.99e-01   3.796531657e-01   3.796531659e-01   3.1e-12  1.59  
+(CVXPY) May 18 06:32:11 PM: 62  2.8e-10  2.9e-08  2.7e-16  9.97e-01   3.796531553e-01   3.796531555e-01   2.4e-12  1.62  
+(CVXPY) May 18 06:32:11 PM: 63  1.1e-10  5.0e-08  6.4e-17  1.00e+00   3.796531357e-01   3.796531357e-01   9.2e-13  1.66  
+(CVXPY) May 18 06:32:11 PM: 64  4.7e-11  1.6e-06  7.4e-18  1.00e+00   3.796531262e-01   3.796531262e-01   2.2e-13  1.69  
+(CVXPY) May 18 06:32:11 PM: 65  6.8e-11  2.7e-05  2.1e-18  9.99e-01   3.796531244e-01   3.796531244e-01   9.1e-14  1.72  
+(CVXPY) May 18 06:32:11 PM: 66  2.8e-11  8.1e-06  4.1e-19  9.99e-01   3.796531236e-01   3.796531236e-01   3.5e-14  1.76  
+(CVXPY) May 18 06:32:11 PM: 67  7.1e-11  4.4e-05  4.7e-20  9.99e-01   3.796531232e-01   3.796531232e-01   5.6e-15  1.80  
+(CVXPY) May 18 06:32:11 PM: Optimizer terminated. Time: 1.81    
+(CVXPY) May 18 06:32:11 PM: 
+(CVXPY) May 18 06:32:11 PM: 
+(CVXPY) May 18 06:32:11 PM: Interior-point solution summary
+(CVXPY) May 18 06:32:11 PM:   Problem status  : PRIMAL_AND_DUAL_FEASIBLE
+(CVXPY) May 18 06:32:11 PM:   Solution status : OPTIMAL
+(CVXPY) May 18 06:32:11 PM:   Primal.  obj: 3.7965312316e-01    nrm: 1e+00    Viol.  con: 2e-10    var: 4e-11    barvar: 0e+00    cones: 0e+00  
+(CVXPY) May 18 06:32:11 PM:   Dual.    obj: 3.7965312316e-01    nrm: 1e+00    Viol.  con: 0e+00    var: 6e-15    barvar: 2e-15    cones: 0e+00  
+(CVXPY) May 18 06:32:11 PM: Problem status: optimal
+(CVXPY) May 18 06:32:11 PM: Optimal value: 3.797e-01
+(CVXPY) May 18 06:32:11 PM: Compilation took 2.843e+00 seconds
+(CVXPY) May 18 06:32:11 PM: Solver (including time spent in interface) took 2.063e+00 seconds
+=== PRO-12 HEADLINE  N=10000 T=4000 R=10 bn=20  (row 4) ===
+timeout_sec = 3600.0
+
+[1/2] CLARABEL (baseline) ...
+  built in 0.0s
+  reported      = 0.379653395531704
+  rigorous LB   = 0.37965
+  status        = optimal_inaccurate
+  iters total   = 58
+  time          = 59.9s
+
+[2/2] MOSEK ...
+  built in 0.0s
+===============================================================================
+                                     CVXPY                                     
+                                     v1.8.2                                    
+===============================================================================
+-------------------------------------------------------------------------------
+                                  Compilation                                  
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+                                Numerical solver                               
+-------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------
+                                    Summary                                    
+-------------------------------------------------------------------------------
+  prob_value    = 0.37965312316394695
+  primal_obj    = 0.3796531232  (LB cert)
+  dual_obj      = 0.37965312316394695    (UB cert)
+  duality_gap   = 3.6053049434769946e-11
+  primal_viol   = 2e-10
+  dual_viol     = 0.0
+  rigorous LB   = 0.37965312316394695
+  mosek status  = PRIMAL_AND_DUAL_FEASIBLE / OPTIMAL
+  cvxpy status  = optimal
+  iterations    = 67
+  runtime       = 4.9s
+
+--- Mosek vs CLARABEL (row 4 headline) ---
+  Mosek.dual_obj - CLARABEL.reported = -2.724e-07  (encoding consistency)
+  Mosek.primal_obj - CLARABEL.rigLB  = +3.123e-06  (LB margin upgrade)
+
+Wrote: /Users/benzanghi/Documents/Claude/Projects/Erdos/.claude/worktrees/eloquent-ellis-2c99f2/lp_research_state/parallel_results/pro12_mosek_verify.json

@@ -20,7 +20,8 @@ from poly_moment import build_even_moment_nonneg_constraints, build_even_hankel_
 H_BOX = (0.0, 0.06); P_BOX = (0.35, 0.45); TARGET = 0.379005
 
 
-def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max, hankel_n=0, use_T5p=False):
+def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max, hankel_n=0,
+                  use_T5p=False, solver="CLARABEL"):
     Omega, cons, H = build_problem_with_dual_handles(
         N, T, R, h_c, h_c, p_c, p_c, q1, q2, bochner_n=bochner_n, use_T5p=use_T5p,
     )
@@ -31,12 +32,54 @@ def solve_with_pm(N, T, R, h_c, p_c, q1, q2, bochner_n, pm_k_max, hankel_n=0, us
         hk_cons, m_var, tails = build_even_hankel_psd(H["c"], H["d"], T, n_hankel=hankel_n)
         cons.extend(hk_cons)
     prob = cp.Problem(cp.Minimize(Omega), cons)
-    t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+
+    if solver == "MOSEK":
+        # PRO-12 phase 2: route through mosek_runner to get the clean dual cert,
+        # genuine `optimal` status, and the duality gap.  The cvxpy constraint
+        # handles still carry per-constraint dual_value after the solve (Mosek
+        # populates them), which is what the ellipse-extension argument needs.
+        from mosek_runner import solve_with_mosek
+        mk = solve_with_mosek(
+            prob,
+            mosek_params={
+                "MSK_DPAR_INTPNT_CO_TOL_PFEAS":   1e-10,
+                "MSK_DPAR_INTPNT_CO_TOL_DFEAS":   1e-10,
+                "MSK_DPAR_INTPNT_CO_TOL_REL_GAP": 1e-12,
+                "MSK_DPAR_INTPNT_CO_TOL_MU_RED":  1e-12,
+                "MSK_IPAR_NUM_THREADS":           0,
+                "MSK_IPAR_INTPNT_MAX_ITERATIONS": 400,
+            },
+            keep_log=False,
+        )
+        if mk.get("error"):
+            raise RuntimeError(f"Mosek failed: {mk['error']}")
+        dt = mk["runtime_sec"]
+        duals = {k: float(H[k].dual_value) if H[k].dual_value is not None else 0.0
+                 for k in ("con_53", "con_54", "con_512_pL", "con_512_pU",
+                           "con_512_qL", "con_512_qU", "con_513")}
+        # V_c for the ellipse-extension is the rigorous dual lower bound certificate
+        # (primal_obj of our Min, i.e. Mosek POBJ).  The downstream margin then
+        # subtracts an ADDITIONAL safety margin on top.  We expose both numbers.
+        return {
+            "value": float(mk["dual_obj"]),          # cvxpy prob.value (UB cert)
+            "rigorous_dual_LB": float(mk["rigorous_dual_LB"]),  # POBJ - gap (LB cert)
+            "primal_obj": float(mk["primal_obj"]),   # LB cert (Mosek POBJ)
+            "duality_gap": float(mk["duality_gap"]),
+            "status": mk["status"],
+            "mosek_problem_status": mk["mosek_problem_status"],
+            "mosek_solution_status": mk["mosek_solution_status"],
+            "primal_viol": mk["primal_viol"],
+            "dual_viol": mk["dual_viol"],
+            "iterations": mk["iterations"],
+            "duals": duals, "time": dt, "solver": "MOSEK",
+        }
+
+    t0 = time.time(); prob.solve(solver=solver, verbose=False); dt = time.time() - t0
     duals = {k: float(H[k].dual_value) if H[k].dual_value is not None else 0.0
              for k in ("con_53", "con_54", "con_512_pL", "con_512_pU",
                        "con_512_qL", "con_512_qU", "con_513")}
     return {"value": float(prob.value), "status": prob.status,
-            "duals": duals, "time": dt}
+            "duals": duals, "time": dt, "solver": solver}
 
 
 def main():

@@ -1,0 +1,81 @@
+[
+  {
+    "label": "SMOKE",
+    "N": 200,
+    "T": 80,
+    "R": 10,
+    "bochner_n": 4,
+    "clarabel": {
+      "reported_value": 0.3660676944380643,
+      "rigorous_dual_LB": 0.36607,
+      "status": "optimal",
+      "time": 0.13942980766296387
+    },
+    "mosek": {
+      "primal_obj": 0.3660676892,
+      "dual_obj": 0.36606768920709665,
+      "duality_gap": 7.096656595706463e-12,
+      "primal_viol": 4e-11,
+      "dual_viol": 0.0,
+      "rigorous_dual_LB": 0.36606768919290333,
+      "cvxpy_prob_value": 0.36606768920709665,
+      "status": "optimal",
+      "mosek_problem_status": "PRIMAL_AND_DUAL_FEASIBLE",
+      "mosek_solution_status": "OPTIMAL",
+      "iterations": 29,
+      "runtime_sec": 0.1998910903930664
+    },
+    "sdpa_reference": {
+      "primal_obj": 0.36606768920704885,
+      "dual_obj": 0.36606768920704885,
+      "duality_gap": 9.42881498238041e-26,
+      "phase": "pdOPT",
+      "precision_digits": 24.836801517295616
+    },
+    "pairwise_diffs": {
+      "CLARABEL.reported - SDPA.primal_obj": 5.231015454132404e-09,
+      "CLARABEL.reported - Mosek.dual_obj": 5.230967659031194e-09,
+      "CLARABEL.reported - Mosek.primal_obj": 5.2380643156269e-09,
+      "Mosek.primal_obj - SDPA.primal_obj": 7.04886149449635e-12,
+      "Mosek.dual_obj - SDPA.dual_obj": 4.779510121011299e-14,
+      "Mosek.primal_obj - Mosek.dual_obj": 7.096656595706463e-12
+    }
+  },
+  {
+    "label": "HEADLINE_phase5_row4",
+    "N": 10000,
+    "T": 4000,
+    "R": 10,
+    "bochner_n": 20,
+    "centers": {
+      "h": 0.004,
+      "p": 0.3875,
+      "qm": -0.02,
+      "qp": 0.02
+    },
+    "clarabel": {
+      "reported_value": 0.379653395531704,
+      "rigorous_dual_LB": 0.37965,
+      "dual_residual_at_LB": 5.51e-10,
+      "best_iter": 58,
+      "n_iters_total": 58,
+      "status": "optimal_inaccurate",
+      "time": 59.932055950164795
+    },
+    "mosek": {
+      "primal_obj": 0.3796531232,
+      "dual_obj": 0.37965312316394695,
+      "duality_gap": 3.6053049434769946e-11,
+      "primal_viol": 2e-10,
+      "dual_viol": 0.0,
+      "rigorous_dual_LB": 0.37965312316394695,
+      "cvxpy_prob_value": 0.37965312316394695,
+      "status": "optimal",
+      "mosek_problem_status": "PRIMAL_AND_DUAL_FEASIBLE",
+      "mosek_solution_status": "OPTIMAL",
+      "iterations": 67,
+      "runtime_sec": 4.945466041564941,
+      "error": null
+    }
+  }
+]
