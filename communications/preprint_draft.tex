@@ -28,7 +28,7 @@ We give a rigorous improvement on E.~P.~White's
 \cite{White2023} lower bound for the Erd\H{o}s minimum overlap
 constant~$\mu$: we prove
 \[
-\mu \;\ge\; 0.3803027,
+\mu \;\ge\; 0.3803024,
 \]
 an improvement of $+1.30 \times 10^{-3}$ over White's $0.379005$ and the
 first lower-bound advance since 2022. Together with the present best
@@ -94,7 +94,7 @@ $\nu_2^2$~\cite{Rechnitzer2026}.
 
 \paragraph{Result of this paper.}
 \begin{theorem}\label{thm:main}
-$\mu \;\ge\; 0.3803027.$
+$\mu \;\ge\; 0.3803024.$
 \end{theorem}
 
 This is an improvement of $+1.30 \times 10^{-3}$ over White's
@@ -121,7 +121,7 @@ Phase & Augmentation & $\mu \ge$ \\
 6 & + scale to $N = 15{,}000$ & $0.380239$ \\
 7 & + scale to $N = 20{,}000$, $n = 30$ & $0.380299$ \\
 \textbf{8} & \textbf{+ Bochner level $n = 40$ at $N = 20{,}000$} &
-$\mathbf{0.3803027}$ \\
+$\mathbf{0.3803024}$ \\
 \bottomrule
 \end{tabular}
 \caption{Bound improvement trajectory by augmentation phase. Each row
@@ -238,9 +238,11 @@ CDE-discovered centers.
 White's analysis uses cell width $L = 2/N$. We push $N$ from his
 $N = 5000$ to $N = 20{,}000$, and the Bochner truncation $n$ to $40$
 on the binding rows. Memory and compute scale roughly linearly in $N$;
-CLARABEL solves remain \texttt{optimal\_inaccurate} but agree across
-solvers to $\sim 6$ digits and agree with SDPA-GMP spot-checks at
-small $N$ to $\sim 5 \times 10^{-9}$.
+CLARABEL solves remain \texttt{optimal\_inaccurate} at this scale, but
+Mosek~\cite{MOSEK} reaches genuine \texttt{optimal} status (duality
+gaps $\sim 10^{-11}$) on all 12 centers and reproduces the cover bound
+to $\sim 7$ digits; SDPA-GMP spot-checks at small $N$ agree with both
+to $\sim 5 \times 10^{-9}$.
 
 We use throughout the dual-extracted rigorous bound
 $\mathrm{LB}_{\text{rig}} := \mathrm{val} - \mathrm{last\_gap}$ from
@@ -273,7 +275,7 @@ $(h, p, q)$.
 \subsection{Cover extension}
 
 For each row, the level set
-$\{(h, p, q) : \Phi_r(h, p, q) \ge 0.3803027\}$ is an ellipse (the
+$\{(h, p, q) : \Phi_r(h, p, q) \ge 0.3803024\}$ is an ellipse (the
 augmented analogue of White's). A $4001 \times 4001$ grid sweep over
 the residual region $h \in [0, 0.06]$, $p \in [0.35, 0.45]$,
 $q \in \{-0.02, +0.02\}$ finds zero uncovered points.
@@ -288,7 +290,7 @@ Lipschitz grid margin $\varepsilon_{\text{grid}} = 2.17 \times 10^{-6}$
 a $10^{-6}$ CLARABEL margin,
 \[
 \mu \;\ge\; \Phi^* - 10^{-6} - \varepsilon_{\text{grid}}
-\;=\; 0.3803027.
+\;=\; 0.3803024.
 \]
 This proves Theorem~\ref{thm:main}.\qed
 
@@ -422,11 +424,11 @@ F_C) \;\approx\; 0.380558.
 \end{theorem}
 
 \paragraph{Open-gap decomposition.}
-With the current LB $0.3803027$ and asymptotic ceiling
+With the current LB $0.3803024$ and asymptotic ceiling
 $C_\infty \approx 0.380558$, the open interval
-$[0.3803027,\; 0.380871]$ splits as
+$[0.3803024,\; 0.380871]$ splits as
 \[
-\underbrace{[0.3803027,\; 0.380558]}_{\text{framework-attainable},\;\sim 45\%}
+\underbrace{[0.3803024,\; 0.380558]}_{\text{framework-attainable},\;\sim 45\%}
 \;\cup\;
 \underbrace{[0.380558,\; 0.380871]}_{\text{beyond framework},\;\sim 55\%}.
 \]
@@ -537,9 +539,18 @@ on per-row SDP solves to $10$+ digits. A separate agent re-implemented
 the Bochner-PSD encoding from scratch and obtained bit-for-bit
 agreement on test inputs. CLARABEL's printed primal-dual gap on these
 solves is between $4 \times 10^{-8}$ and $3 \times 10^{-6}$,
-comfortably within the $10^{-6}$ safety margin we subtract. An
-SDPA-GMP \cite{SDPA} spot-check at small $N$ agrees with CLARABEL to
-$\sim 5 \times 10^{-9}$.
+comfortably within the $10^{-6}$ safety margin we subtract. As an
+independent commercial-grade cross-check, the entire 12-center cover
+was re-solved with Mosek~\cite{MOSEK}, which reached genuine
+\texttt{optimal} status (duality gaps $6 \times 10^{-13}$ to $5 \times
+10^{-11}$) on every center and produced a rigorous cover bound of
+$0.3803024$ --- agreeing with the CLARABEL value to $\sim 7$ digits and
+landing $2.5 \times 10^{-7}$ \emph{below} it, in the conservative
+direction (CLARABEL's \texttt{optimal\_inaccurate} duals are marginally
+optimistic). We therefore report the Mosek-confirmed
+$\mu \ge 0.3803024$ as the headline. An SDPA-GMP \cite{SDPA} spot-check
+at small $N$ agrees with both solvers to $\sim 5 \times 10^{-9}$;
+Mosek's dual matches the SDPA-GMP reference to $14$ digits.
 
 \paragraph{Reproducibility.}
 The single-row binding-center reproducer is
@@ -618,7 +629,7 @@ $[0, 2]$.
 
 Re-deriving the Madrid--Ramos $\mathcal{L}_g(I)$-class constant under
 the additional $h \le 1$ pointwise bound is open, and likely gives a
-\emph{weaker} bound than our $0.3803027$, but the duality
+\emph{weaker} bound than our $0.3803024$, but the duality
 $\mu = 1 - \mu_{\mathrm{dual}}$ situates the problem cleanly in the
 autocorrelation-extremal literature.
 
@@ -637,7 +648,7 @@ yield a tighter SDP.
 The saturation theorem
 (Theorems~\ref{thm:saturation-informal}, \ref{thm:saturation-formal})
 establishes that approximately $55\%$ of the open gap
-$[0.3803027,\; 0.380871]$ lies beyond the present framework at
+$[0.3803024,\; 0.380871]$ lies beyond the present framework at
 currently-tractable SDP scale. Closing the remaining gap requires
 techniques outside the constraint families F1--F5. We highlight
 several candidate directions.
@@ -745,6 +756,11 @@ $0.38087031058621710878661081496601738896393463045218$.
 M.~Yamashita, K.~Fujisawa, M.~Kojima.
 ``SDPARA: SemiDefinite Programming Algorithm paRAllel version.''
 \textit{Parallel Computing} 29 (2003), 1053--1067.
+
+\bibitem{MOSEK}
+MOSEK ApS.
+``The MOSEK optimization toolbox (Version 11.2).''
+\url{https://www.mosek.com}, 2026.
 
 \bibitem{LasserreTail}
 B.~Zanghi.
