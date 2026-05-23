@@ -1,0 +1,31 @@
+=== VALIDATION (SAT) ===
+  n=10: M=5 exp=5 opt=True t=0.05s OK
+  n=12: M=5 exp=5 opt=True t=0.13s OK
+  n=15: M=6 exp=6 opt=True t=1.28s OK
+  n=16: M=7 exp=7 opt=True t=3.97s OK
+  n=17: M=7 exp=7 opt=True t=4.46s OK
+  n=18: M=8 exp=8 opt=True t=33.16s OK
+
+=== EXTENSION (SAT) ===
+
+--- n=19 (bracket [7,10], budget 1800s) ---
+n=19: binary search M in [7,10], solver=cadical195
+  v=8: SAT  (witness overlap=8) 0.03s
+  v=7: UNSAT  33.29s
+  -> M(19)=8 ratio=0.421053 optimal=True t=33.3s beats_together=False
+
+--- n=20 (bracket [7,10], budget 1800s) ---
+n=20: binary search M in [7,10], solver=cadical195
+  v=8: SAT  (witness overlap=8) 1.47s
+  v=7: UNSAT  34.39s
+  -> M(20)=8 ratio=0.400000 optimal=True t=35.9s beats_together=False
+
+--- n=21 (bracket [7,10], budget 1800s) ---
+n=21: binary search M in [7,10], solver=cadical195
+  v=8: UNSAT  685.88s
+  v=9: SAT  (witness overlap=9) 0.06s
+  -> M(21)=9 ratio=0.428571 optimal=True t=685.9s beats_together=False
+
+--- n=22 (bracket [8,11], budget 1800s) ---
+n=22: binary search M in [8,11], solver=cadical195
+  v=9: SAT  (witness overlap=9) 4.72s

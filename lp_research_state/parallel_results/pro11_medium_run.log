@@ -1,0 +1,56 @@
+
+=== SMOKE  N=200 T=80 R=10 bochner_n=4 ===
+(CVXPY) May 18 12:24:15 PM: Your problem has 581 variables, 1250 constraints, and 0 parameters.
+(CVXPY) May 18 12:24:15 PM: It is compliant with the following grammars: DCP, DQCP
+(CVXPY) May 18 12:24:15 PM: (If you need to solve this problem multiple times, but with different data, consider using parameters.)
+(CVXPY) May 18 12:24:15 PM: CVXPY will first compile your problem; then, it will invoke a numerical solver to obtain a solution.
+(CVXPY) May 18 12:24:15 PM: Your problem is compiled with the CPP canonicalization backend.
+(CVXPY) May 18 12:24:15 PM: Compiling problem (target solver=CLARABEL).
+(CVXPY) May 18 12:24:15 PM: Reduction chain: Dcp2Cone -> CvxAttr2Constr -> ConeMatrixStuffing -> CLARABEL
+(CVXPY) May 18 12:24:15 PM: Applying reduction Dcp2Cone
+(CVXPY) May 18 12:24:15 PM: Applying reduction CvxAttr2Constr
+(CVXPY) May 18 12:24:15 PM: Applying reduction ConeMatrixStuffing
+(CVXPY) May 18 12:24:15 PM: Applying reduction CLARABEL
+(CVXPY) May 18 12:24:15 PM: Finished problem compilation (took 8.133e-02 seconds).
+(CVXPY) May 18 12:24:15 PM: Invoking solver CLARABEL  to obtain a solution.
+(CVXPY) May 18 12:24:15 PM: Problem status: optimal
+(CVXPY) May 18 12:24:15 PM: Optimal value: 3.661e-01
+(CVXPY) May 18 12:24:15 PM: Compilation took 8.133e-02 seconds
+(CVXPY) May 18 12:24:15 PM: Solver (including time spent in interface) took 5.067e-02 seconds
+CLARABEL: reported=0.3660676944380643
+CLARABEL: rigorous LB=0.36607  status=optimal  time=0.14s
+SDPA-GMP: serializing + solving (timeout=600s) ...
+SDPA-GMP: phase=pdOPT  primal=0.36606768920704885
+SDPA-GMP: dual=0.36606768920704885  gap=9.42881498238041e-26  digits=24.836801517295616
+SDPA-GMP: m=803 blocks=45  serialize=0.16s  solve=220.2419400215149s  total=220.40s
+
+  >> SDPA primal - CLARABEL reported = -5.231e-09
+  >> SDPA dual   - CLARABEL reported = -5.231e-09
+  >> SDPA dual   - CLARABEL rig LB  = -2.311e-06
+
+=== MEDIUM  N=2000 T=800 R=10 bochner_n=10 ===
+(CVXPY) May 18 12:27:56 PM: Your problem has 5621 variables, 10658 constraints, and 0 parameters.
+(CVXPY) May 18 12:27:56 PM: It is compliant with the following grammars: DCP, DQCP
+(CVXPY) May 18 12:27:56 PM: (If you need to solve this problem multiple times, but with different data, consider using parameters.)
+(CVXPY) May 18 12:27:56 PM: CVXPY will first compile your problem; then, it will invoke a numerical solver to obtain a solution.
+(CVXPY) May 18 12:27:56 PM: Your problem is compiled with the CPP canonicalization backend.
+(CVXPY) May 18 12:27:56 PM: Compiling problem (target solver=CLARABEL).
+(CVXPY) May 18 12:27:56 PM: Reduction chain: Dcp2Cone -> CvxAttr2Constr -> ConeMatrixStuffing -> CLARABEL
+(CVXPY) May 18 12:27:56 PM: Applying reduction Dcp2Cone
+(CVXPY) May 18 12:27:56 PM: Applying reduction CvxAttr2Constr
+(CVXPY) May 18 12:27:56 PM: Applying reduction ConeMatrixStuffing
+(CVXPY) May 18 12:27:56 PM: Applying reduction CLARABEL
+(CVXPY) May 18 12:27:56 PM: Finished problem compilation (took 3.438e-01 seconds).
+(CVXPY) May 18 12:27:56 PM: Invoking solver CLARABEL  to obtain a solution.
+(CVXPY) May 18 12:28:04 PM: Problem status: optimal_inaccurate
+(CVXPY) May 18 12:28:04 PM: Optimal value: 3.773e-01
+(CVXPY) May 18 12:28:04 PM: Compilation took 3.438e-01 seconds
+(CVXPY) May 18 12:28:04 PM: Solver (including time spent in interface) took 7.998e+00 seconds
+CLARABEL: reported=0.3773221936308763
+CLARABEL: rigorous LB=0.37732  status=optimal_inaccurate  time=8.36s
+SDPA-GMP: serializing + solving (timeout=10800s) ...
+SDPA-GMP: phase=None  primal=None
+SDPA-GMP: dual=None  gap=None  digits=None
+SDPA-GMP: m=None blocks=0  serialize=1.25s  solve=Nones  total=10801.35s
+
+Results saved to: /Users/benzanghi/Documents/Claude/Projects/Erdos/.claude/worktrees/eloquent-ellis-2c99f2/lp_research_state/parallel_results/pro11_sdpa_s_serializer.json

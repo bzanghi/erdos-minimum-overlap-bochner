@@ -1,0 +1,6 @@
+=== Validation: Haugland reproduction ===
+  n=10: M=5 (expected 5) verified=5 t=1.74s opt=True gap=0.00e+00 -> OK
+  n=12: M=5 (expected 5) verified=5 t=2.42s opt=True gap=0.00e+00 -> OK
+  n=15: M=6 (expected 6) verified=6 t=21.44s opt=True gap=0.00e+00 -> OK
+  n=18: M=8 (expected 8) verified=8 t=600.00s opt=False gap=3.75e-01 -> FAIL
+ABORT: validation failed — encoding bug.
