@@ -1,0 +1,105 @@
+{
+  "region": 16,
+  "claimed_floor": 0.380355,
+  "full_box": {
+    "h_range": [
+      0.0,
+      0.06
+    ],
+    "p_range": [
+      0.33,
+      0.45
+    ],
+    "q_range": [
+      -0.025,
+      -0.02
+    ]
+  },
+  "full_box_cover_min": 0.3760641,
+  "full_box_grid_min": 0.3804047,
+  "full_box_eps_grid": 0.004341,
+  "full_box_L_max": 7.7166,
+  "worst_point_full": {
+    "h": 0.008,
+    "p": 0.392,
+    "q": -0.02
+  },
+  "worst_point_feasible": {
+    "h": 0.0082,
+    "p": 0.39225,
+    "q": -0.02
+  },
+  "feasible_certified_floor": 0.3794022,
+  "feasible_certified_floor_note": "cover_min over a fine box tightly bracketing the binding feasible point; equals the true SDP optimum there to ~5e-5 (solver tolerance). Adaptive subdivision over the full box drives the floor down toward ~0.3788 and lower as eps shrinks; the floor is CAPPED by the true SDP optimum ~0.3793-0.3794 at the binding feasible point. No value >= 0.3802838 is attainable.",
+  "binding_feasible_point": {
+    "h": 0.0082,
+    "p": 0.39225,
+    "q": -0.02,
+    "true_sdp_optimum": 0.37935,
+    "status": "optimal_inaccurate(=solved)"
+  },
+  "eps_grid_achieved": 0.001001,
+  "eps_grid_note": "L_max stays ~7.7 even on tight boxes (dominated by the con_54 quadratic lambda_54*h term, NOT by q-width); the narrow-q hint does NOT rescue the floor. eps_grid can be driven below 5e-4 with finer h,p grids but the floor only DROPS toward the true SDP value ~0.3793.",
+  "infeasible_subboxes": [],
+  "infeasibility_rigor_note": "NO infeasible sub-boxes exist in R16. The entire box is SDP-FEASIBLE, including the deepest corner (h=0,q=-0.025): probed at p in {0.33,0.36,0.39,0.42,0.45} and h in {0,0.008,0.03,0.06}, q in {-0.020,-0.0225,-0.025} -- ALL returned optimal / optimal_inaccurate (solved) with finite values. The candidates infeasibility-exclusion lever therefore does NOT apply to R16; no exclusion can shrink the box.",
+  "feasibility_map_samples": [
+    {
+      "h": 0.008,
+      "p": 0.392,
+      "q": -0.02,
+      "status": "solved",
+      "sdp_value": 0.379329
+    },
+    {
+      "h": 0.00375,
+      "p": 0.3915,
+      "q": -0.025,
+      "status": "solved",
+      "sdp_value": 0.379119
+    },
+    {
+      "h": 0.0,
+      "p": 0.39,
+      "q": -0.025,
+      "status": "solved",
+      "sdp_value": 0.379093
+    },
+    {
+      "h": 0.0,
+      "p": 0.39,
+      "q": -0.02,
+      "status": "solved",
+      "sdp_value": 0.379098
+    },
+    {
+      "h": 0.03,
+      "p": 0.39,
+      "q": -0.0225,
+      "status": "solved",
+      "sdp_value": 0.38329
+    },
+    {
+      "h": 0.06,
+      "p": 0.39,
+      "q": -0.025,
+      "status": "solved",
+      "sdp_value": 0.391598
+    },
+    {
+      "h": 0.0,
+      "p": 0.33,
+      "q": -0.025,
+      "status": "optimal",
+      "sdp_value": 0.384141
+    },
+    {
+      "h": 0.0,
+      "p": 0.36,
+      "q": -0.025,
+      "status": "solved",
+      "sdp_value": 0.379854
+    }
+  ],
+  "verdict": "REFUTE",
+  "subdivision_note": "Standard full-box cover_min=0.376 (eps-driven). Adaptive subdivision (4000 leaves, prioritizing lowest-floor leaf) localizes the worst point to a FEASIBLE neighborhood h~0.008-0.009, p~0.392-0.394, q~-0.020 to -0.022, with the cover floor DECREASING toward ~0.3788 as boxes shrink. A fine box bracketing the binding feasible point gives cover_min=0.379402, matching the true SDP optimum 0.379350 there. Since this worst point is genuinely FEASIBLE and its true SDP optimum is ~0.3793-0.3794, NO valid lower-bound cover can reach 0.3802838 over R16. REFUTED by rule (3): the covers low point is at a FEASIBLE (h,p,q) and fine subdivision there stays < 0.3802838."
+}

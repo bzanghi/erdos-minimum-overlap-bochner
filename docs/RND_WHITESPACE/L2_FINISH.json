@@ -1,0 +1,103 @@
+{
+  "thrust": "PRO-47 L2 verified-bound finish (data rider + production-N ladder + cover lift)",
+  "date": "2026-06-06",
+  "WHITE": 0.379005,
+  "PRIOR_PUB": 0.379544,
+  "HEADLINE": 0.380284,
+  "1_data_rider": {
+    "verified_jansson_config_T1200": {
+      "file": "L2_FINISH_row4_N3000.json",
+      "VERDICT": {
+        "poly_moment_tb_valid_STRICT": true,
+        "cell_bounds_valid": true,
+        "cell_bounds_strict": false,
+        "odd_coeff_valid": true,
+        "odd_coeff_strict": false,
+        "tail_caps_valid": true,
+        "tail_caps_strict": false,
+        "total_FP_propagation_budget_on_SDP_opt": 6.859685190423506e-15,
+        "ALL_DATA_VALID": true,
+        "poly_moment_STRICT_note": "tb >= verified true-tail upper bound for EVERY even k (the 2026-05-22 trap surface is closed with strict rigor; margin ~1e-19).",
+        "FP_propagation_note": "cell bounds / odd-coeff af,bf / tail caps differ from their exact values only by <=~1e-14 (cells) / <=0.5 ULP (af,bf) / sub-ULP (caps); the SUMMED propagated shift of the SDP optimum is <= 6.86e-15, ~1e+10x below the binding ~1e-4 margin.  Directed-rounding these coefficients in the encoder would make them strictly valid with zero impact."
+      }
+    },
+    "production_config_T4000": {
+      "file": "L2_FINISH_prod_T4000.json",
+      "VERDICT": {
+        "poly_moment_tb_valid_STRICT": true,
+        "cell_bounds_valid": true,
+        "cell_bounds_strict": false,
+        "odd_coeff_valid": true,
+        "odd_coeff_strict": false,
+        "tail_caps_valid": true,
+        "tail_caps_strict": false,
+        "total_FP_propagation_budget_on_SDP_opt": 4.464498652188008e-15,
+        "ALL_DATA_VALID": true,
+        "poly_moment_STRICT_note": "tb >= verified true-tail upper bound for EVERY even k (the 2026-05-22 trap surface is closed with strict rigor; margin ~1e-19).",
+        "FP_propagation_note": "cell bounds / odd-coeff af,bf / tail caps differ from their exact values only by <=~1e-14 (cells) / <=0.5 ULP (af,bf) / sub-ULP (caps); the SUMMED propagated shift of the SDP optimum is <= 4.46e-15, ~2e+10x below the binding ~1e-4 margin.  Directed-rounding these coefficients in the encoder would make them strictly valid with zero impact."
+      }
+    },
+    "headline": "poly-moment tb STRICTLY valid (>= verified true-tail upper) at BOTH configs for all k; cells/af/bf/caps valid up to summed FP-propagation <=4.5e-15 on SDP_opt. Trap surface CLOSED."
+  },
+  "2_n_ladder_production": {
+    "file": "L2_PROD.json",
+    "runs": [
+      {
+        "center": "row4",
+        "N": 10000,
+        "p_lo": 0.3801816684146017,
+        "value": 0.3801832933423268,
+        "penalty": 1.438305265158397e-06,
+        "vs_white": 0.0011766684146017337,
+        "vs_headline": -0.00010233158539829645
+      },
+      {
+        "center": "cde_n30_iter3",
+        "N": 10000,
+        "p_lo": 0.380127864444888,
+        "value": 0.3801285910818952,
+        "penalty": 6.505806860833965e-07,
+        "vs_white": 0.0011228644448880165,
+        "vs_headline": -0.0001561355551120136
+      },
+      {
+        "center": "cde_n30_iter3",
+        "N": 20000,
+        "p_lo": 0.38030985999933864,
+        "value": 0.38031231589211345,
+        "penalty": 2.271532909819878e-06,
+        "vs_white": 0.001304859999338659,
+        "vs_headline": 2.5859999338628814e-05
+      },
+      {
+        "center": "row4",
+        "N": 20000,
+        "p_lo": 0.3803798129433894,
+        "value": 0.38038907679916384,
+        "penalty": 8.51788634726988e-06,
+        "vs_white": 0.0013748129433894252,
+        "vs_headline": 9.581294338939506e-05
+      }
+    ],
+    "headline": "Both binding centers verified p_lo ABOVE 0.380284 at production N=20000 (cde +2.6e-5, row4 +9.6e-5). Bochner n=82 blocks rigorously PSD all solves."
+  },
+  "3_cover_lift": {
+    "file": "L2_FINISH_cover.json",
+    "verified_anchor_floor": 0.3802958272915938,
+    "margin_vs_white": 0.001290827291593799,
+    "margin_vs_headline": 1.182729159376894e-05,
+    "binding_witness": "cde_n30_iter3",
+    "pointwise_formula_crosscheck_worst": 1.1102230246251565e-16,
+    "headline": "verified-anchor (2 binding centers) cover floor mu >= 0.3802958 (+1.18e-5 over headline); two cover impls agree to 1.1e-16 at formula level.",
+    "scope": "Per-center ANCHOR is Jansson-verified p_lo. NOT yet verified: (1) box-constraint duals lam_* (ellipse slopes) \u2014 need interval dual-feasibility check of z at perturbed RHS; (2) region coverage is inherited from path_b (White 5.1), unchanged. So this is 'mu >= floor MODULO dual-slope interval-cert + (argued) coverage'."
+  },
+  "WHAT_IS_VERIFIED": "SDP_opt(center) >= p_lo (Jansson interval dual cert, Bochner PSD blocks certified) AND the SDP DATA is a valid relaxation up to a certified summed FP budget <=4.5e-15 (data rider, both configs). Poly-moment tail-bound trap surface CLOSED with strict rigor.",
+  "WHAT_REMAINS_for_full_verified_mu_0.380284": [
+    "production-N verified p_lo at the OTHER 10 cover centers (have both binding centers at N=20000; 10 more heavy solves)",
+    "interval-certify the box-constraint duals lam_* (ellipse SLOPES) -- they are components of the same Jansson-certified z; need a dual-feasibility-at-perturbed-RHS interval check",
+    "region coverage inherited unchanged from White 5.1 (geometric, already argued)",
+    "optional: tighten CLARABEL tol on binding solves to shrink penalty (row4 N=20k penalty 8.5e-6)"
+  ],
+  "mu_floor_achieved_verified_anchor": 0.3802958272915938,
+  "strength_note": "RIGOR upgrade only; bound strength unchanged, does not push past conjectured C_inf~0.380558."
+}

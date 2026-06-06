@@ -1,0 +1,134 @@
+{
+  "kind": "l2_clean_theorem",
+  "cover_json": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/cde_phase5_corrected_tail.json",
+  "sc_json": "../../docs/RND_WHITESPACE/L2_CLEAN_sc_prod_N20000.json",
+  "penalty_fallback": 1e-06,
+  "WHITE": 0.379005,
+  "PRIOR_PUB": 0.379544,
+  "HEADLINE": 0.380284,
+  "binding_centers": [
+    "row4",
+    "cde_n30_iter3"
+  ],
+  "self_consistent_extraction": {
+    "sc_config": {
+      "row4": {
+        "N": 20000,
+        "T": 4000,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "p_lo": 0.3803798129433894,
+        "prob_value": 0.38038907679916384,
+        "penalty_total": -8.51788634726988e-06,
+        "psd_lambda_min_lowers": [
+          2.0407939842119756e-11,
+          2.1355678624704787e-11
+        ],
+        "status": "AlmostSolved"
+      },
+      "cde_n30_iter3": {
+        "N": 20000,
+        "T": 4000,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "p_lo": 0.38030985999933864,
+        "prob_value": 0.38031231589211345,
+        "penalty_total": -2.271532909819878e-06,
+        "psd_lambda_min_lowers": [
+          5.568491625110722e-12,
+          5.56815901407558e-12
+        ],
+        "status": "AlmostSolved"
+      }
+    },
+    "binding_anchor_check": {
+      "row4": {
+        "p_lo": 0.3803798129433894,
+        "prob_value": 0.38038907679916384,
+        "p_lo_le_value": true,
+        "both_psd_blocks_certified": true
+      },
+      "cde_n30_iter3": {
+        "p_lo": 0.38030985999933864,
+        "prob_value": 0.38031231589211345,
+        "p_lo_le_value": true,
+        "both_psd_blocks_certified": true
+      }
+    },
+    "dual_drift_cover_vs_sc": {
+      "row4": {
+        "con_53": -0.02610391090259182,
+        "con_54": -0.0005216911770493382,
+        "con_512_pL": 0.0024598538460117725,
+        "con_512_pU": 0.002039872151525096,
+        "con_512_qL": -8.485895088196169e-10,
+        "con_512_qU": -3.208315311053976e-10,
+        "con_513": 0.004847680270295418
+      },
+      "cde_n30_iter3": {
+        "con_53": 1.782307360508578e-08,
+        "con_54": -0.0006702109338061479,
+        "con_512_pL": -0.007902163428983089,
+        "con_512_pU": -0.008409652979391002,
+        "con_512_qL": 2.4233299658338213e-11,
+        "con_512_qU": 2.423145194678397e-11,
+        "con_513": 0.0020820962358503725
+      }
+    }
+  },
+  "CLEAN_TIER1_unconditional_selfconsistent": {
+    "floor": 0.3793989110498319,
+    "binding_witness": "cde_n30_iter3",
+    "worst_cell": [
+      0.00885,
+      0.008879999999999999,
+      0.44995,
+      0.45
+    ],
+    "what": "UNCONDITIONAL. 2 binding centers ONLY; each anchored at its OWN production self-consistent Jansson p_lo with its OWN same-solve duals. NO duality-gap assumption, NO cross-solve mix -- the two-solve nondeterminism residual is ELIMINATED. Weaker in VALUE than TIER 2c because a 2-center (h,p) cover dips at the far box corners (binds at [0.00885, 0.008879999999999999]x[0.44995, 0.45]), but airtight.",
+    "clears_white": true,
+    "clears_prior_pub": false,
+    "clears_headline": false,
+    "margin_vs_white": 0.0003939110498319409,
+    "margin_vs_prior_pub": -0.00014508895016807077
+  },
+  "CLEAN_TIER2c_production_selfconsistent_binding": {
+    "floor": 0.38029523937666176,
+    "binding_witness": "cde_n30_iter3",
+    "binding_witness_is_self_consistent": true,
+    "worst_cell": [
+      0.00282,
+      0.00285,
+      0.3921,
+      0.39215
+    ],
+    "nonrigorous_anchor_ever_binds": true,
+    "what": "HEADLINE-STRENGTH. All 12 production (N=20000) centers; shift + box-min fully interval-certified. The 2 binding centers (row4, cde_n30_iter3) use their SELF-CONSISTENT (p_lo anchor + same-solve duals) -- the two-solve residual is ELIMINATED for the centers that actually set the floor. The 10 NON-binding centers keep the cover-solve duals + V_c-margin anchor (documented convention; non-binding + robustness-stress-bounded). Since the binding witness is one of the self-consistent centers, the floor's binding anchor is interval-certified and self-consistent (NOT a margin convention).",
+    "clears_white": true,
+    "clears_prior_pub": true,
+    "clears_headline": true,
+    "margin_vs_white": 0.0012902393766617837,
+    "margin_vs_prior_pub": 0.000751239376661772,
+    "margin_vs_headline": 1.1239376661753564e-05
+  },
+  "rigor_self_checks": {
+    "fast_vs_slow_iv_coarse_diff_tier2c": 1.0000333894311098e-12,
+    "fast_vs_slow_iv_coarse_diff_tier1": 9.999778782798785e-13,
+    "independent_formula_crosscheck": {
+      "worst_abs_diff": 5.551115123125783e-17,
+      "worst_loc": [
+        "row4",
+        0.058854818357838325,
+        0.3704509461330045
+      ],
+      "agree_10digit": true,
+      "note": "interval Phi(midpoint) vs path_b_independent.Phi_row, SELF-CONSISTENT duals"
+    },
+    "lemma10_and_shift_eq_dualobj": "verified by _verify_shift_eq_dualobj.py: max|A_theta-A_c|=0, max|c_theta-c_c|=0, shift recon vs exact -b(theta)^Tz change worst|\u0394|=1.95e-16 -> con_* duals ARE the z-components driving p_lo",
+    "clarabel_determinism": "verified: solve_via_data on identical canonical data is bit-for-bit deterministic (||z-z2||_inf=0); prob.solve()==solve_via_data obj to 0 -> within ONE process the p_lo and con_* duals come from the SAME z"
+  },
+  "VERIFIED_CLEAN_FLOOR": 0.38029523937666176,
+  "VERIFIED_CLEAN_FLOOR_unconditional": 0.3793989110498319,
+  "elapsed_s": 11.599132776260376,
+  "RESIDUAL_STATUS": "ELIMINATED for the binding centers. CLEAN TIER 2c floor=0.3802952394 is set by a self-consistent binding witness (cde_n30_iter3) whose anchor (production Jansson p_lo) and shift duals come from ONE N=20000 solve. CLEAN TIER 1=0.3793989110 is fully unconditional (2 self-consistent centers, no gap assumption)."
+}

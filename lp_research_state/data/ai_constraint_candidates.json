@@ -1,0 +1,99 @@
+{
+  "baseline": {
+    "Omega": 0.3660683530393997,
+    "status": "optimal",
+    "time_s": 0.12665891647338867
+  },
+  "families": {
+    "F3_T5p_k2": {
+      "Omega": 0.36606835431737267,
+      "delta_Omega": 1.2779729496870118e-09,
+      "status": "optimal",
+      "time_s": 0.12071776390075684
+    },
+    "F3_T5p_k3": {
+      "Omega": 0.3660775068928041,
+      "delta_Omega": 9.15385340438668e-06,
+      "status": "optimal",
+      "time_s": 0.11758589744567871
+    },
+    "F3_T5p_k4": {
+      "Omega": 0.36606835551967676,
+      "delta_Omega": 2.4802770393073104e-09,
+      "status": "optimal",
+      "time_s": 0.11734986305236816
+    },
+    "F3_T5p_k5": {
+      "Omega": 0.3660809843852763,
+      "delta_Omega": 1.2631345876590316e-05,
+      "status": "optimal",
+      "time_s": 0.11733722686767578
+    },
+    "F3_T5p_k6": {
+      "Omega": 0.36606835260753323,
+      "delta_Omega": -4.318664870162081e-10,
+      "status": "optimal",
+      "time_s": 0.11826586723327637
+    },
+    "F3_T5p_k8": {
+      "Omega": 0.3660683565821998,
+      "delta_Omega": 3.5428001088355643e-09,
+      "status": "optimal",
+      "time_s": 0.1209261417388916
+    },
+    "F4_sumcos_uniform_5": {
+      "Omega": 0.36607182953794676,
+      "delta_Omega": 3.4764985470392418e-06,
+      "status": "optimal",
+      "time_s": 0.11743783950805664
+    },
+    "F4_sumcos_uniform_10": {
+      "Omega": 0.36606840299224547,
+      "delta_Omega": 4.995284574871306e-08,
+      "status": "optimal",
+      "time_s": 0.11577510833740234
+    },
+    "F4_sumcos_decay_1overK_5": {
+      "Omega": 0.3660757183084938,
+      "delta_Omega": 7.365269094061766e-06,
+      "status": "optimal",
+      "time_s": 0.10960793495178223
+    },
+    "F4_sumcos_decay_1overK_10": {
+      "Omega": 0.36607269910920814,
+      "delta_Omega": 4.346069808425224e-06,
+      "status": "optimal",
+      "time_s": 0.11723804473876953
+    },
+    "F5_fejer_5": {
+      "Omega": 0.36607207091358523,
+      "delta_Omega": 3.717874185515946e-06,
+      "status": "optimal",
+      "time_s": 0.12970805168151855
+    },
+    "F5_fejer_10": {
+      "Omega": 0.3660694130125975,
+      "delta_Omega": 1.05997319777007e-06,
+      "status": "optimal",
+      "time_s": 0.12565398216247559
+    },
+    "F5_fejer_20": {
+      "Omega": 0.36606874556433777,
+      "delta_Omega": 3.925249380531959e-07,
+      "status": "optimal",
+      "time_s": 0.12971806526184082
+    },
+    "F2_cell_env_high_m4": {
+      "Omega": 0.3660683626775398,
+      "delta_Omega": 9.638140063827905e-09,
+      "status": "optimal",
+      "time_s": 0.12284016609191895
+    },
+    "F2_cell_env_high_m8": {
+      "Omega": 0.36607923264335784,
+      "delta_Omega": 1.0879603958124928e-05,
+      "status": "optimal",
+      "time_s": 0.13947582244873047
+    }
+  }
+}

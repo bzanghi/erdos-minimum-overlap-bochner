@@ -1,0 +1,416 @@
+{
+  "region": 8,
+  "target": 0.380284,
+  "config": {
+    "N": 5000,
+    "T": 2000,
+    "R": 10,
+    "bochner_n": 30,
+    "pm_k_max": 20,
+    "mside_sin_coeff": 4.0
+  },
+  "anchor": "dual_LB - 1e-5 (conservative)",
+  "centers": [
+    {
+      "label": "R8_h0.0_c0.0_q0.1",
+      "h_c": 0.0,
+      "p_c": 0.0,
+      "q1": 0.1,
+      "q2": 0.1,
+      "primal": 0.43796,
+      "reported_primal": 0.43796099530921556,
+      "dual_lb": 0.43796,
+      "dual_resid": 1.45e-11,
+      "status": "optimal",
+      "duals": {
+        "con_53": 0.2630859863227423,
+        "con_54": 0.8750309311663669,
+        "con_512_pL": 0.18547374523776647,
+        "con_512_pU": 0.18547374513041973,
+        "con_512_qL": 0.3571704618827588,
+        "con_512_qU": 0.1252834070582473,
+        "con_513": 1.2270610631687533
+      },
+      "time": 36.14348793029785,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.0_c0.0_q0.25",
+      "h_c": 0.0,
+      "p_c": 0.0,
+      "q1": 0.25,
+      "q2": 0.25,
+      "primal": 0.44564,
+      "reported_primal": 0.4456404009103272,
+      "dual_lb": 0.44564,
+      "dual_resid": 5.84e-11,
+      "status": "optimal",
+      "duals": {
+        "con_53": 0.32798249615790903,
+        "con_54": 0.7621488868859396,
+        "con_512_pL": 0.19020844475769721,
+        "con_512_pU": 0.19020844323492656,
+        "con_512_qL": 0.4434143352350131,
+        "con_512_qU": 0.12151022140131709,
+        "con_513": 0.9141969649583596
+      },
+      "time": 40.98573708534241,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.0_c0.2_q0.1",
+      "h_c": 0.0,
+      "p_c": 0.2,
+      "q1": 0.1,
+      "q2": 0.1,
+      "primal": 0.41836,
+      "reported_primal": 0.41835699005625016,
+      "dual_lb": 0.41836,
+      "dual_resid": 3.96e-05,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.2649953521892045,
+        "con_54": 0.7986684557813464,
+        "con_512_pL": 0.20901964070121454,
+        "con_512_pU": 0.16277026944013387,
+        "con_512_qL": 0.35288203189141343,
+        "con_512_qU": 0.12358039259574814,
+        "con_513": 1.1437528388540206
+      },
+      "time": 39.80084300041199,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.0_c0.2_q0.25",
+      "h_c": 0.0,
+      "p_c": 0.2,
+      "q1": 0.25,
+      "q2": 0.25,
+      "primal": 0.43906,
+      "reported_primal": 0.43906450870725816,
+      "dual_lb": 0.43906,
+      "dual_resid": 9.29e-10,
+      "status": "optimal",
+      "duals": {
+        "con_53": 0.28353346179260486,
+        "con_54": 0.3744419731738596,
+        "con_512_pL": 0.19480379944557624,
+        "con_512_pU": 0.18673146216089884,
+        "con_512_qL": 0.48500003946198694,
+        "con_512_qU": 0.11884095515920132,
+        "con_513": 0.04929293359415528
+      },
+      "time": 35.62796902656555,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.0_c0.4_q0.1",
+      "h_c": 0.0,
+      "p_c": 0.4,
+      "q1": 0.1,
+      "q2": 0.1,
+      "primal": 0.39439,
+      "reported_primal": 0.39438692993636093,
+      "dual_lb": 0.39439,
+      "dual_resid": 3.38e-07,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.175621079049457,
+        "con_54": 0.3472833568256522,
+        "con_512_pL": 0.25636976422841307,
+        "con_512_pU": 0.14407788794294132,
+        "con_512_qL": 0.4128240438110401,
+        "con_512_qU": 0.11830483041799951,
+        "con_513": 1.1572899671520748e-09
+      },
+      "time": 36.9855751991272,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.0_c0.4_q0.25",
+      "h_c": 0.0,
+      "p_c": 0.4,
+      "q1": 0.25,
+      "q2": 0.25,
+      "primal": 0.47782,
+      "reported_primal": 0.4778222341200804,
+      "dual_lb": 0.47782,
+      "dual_resid": 1.63e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.4199542893652911,
+        "con_54": 0.6186672464848624,
+        "con_512_pL": 0.5796014529612642,
+        "con_512_pU": 0.1266422586169523,
+        "con_512_qL": 1.025402066849959,
+        "con_512_qU": 0.11585783466783474,
+        "con_513": 5.527499689129554e-09
+      },
+      "time": 35.587852239608765,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.08_c0.0_q0.1",
+      "h_c": 0.08,
+      "p_c": 0.0,
+      "q1": 0.1,
+      "q2": 0.1,
+      "primal": 0.45787,
+      "reported_primal": 0.45786791338875793,
+      "dual_lb": 0.45787,
+      "dual_resid": 6.26e-09,
+      "status": "optimal",
+      "duals": {
+        "con_53": 0.3096640104545698,
+        "con_54": 0.9439665965600369,
+        "con_512_pL": 0.19043367501460393,
+        "con_512_pU": 0.1904336570856689,
+        "con_512_qL": 0.3530073555388976,
+        "con_512_qU": 0.13041944113751955,
+        "con_513": 1.265992679380509
+      },
+      "time": 34.16130304336548,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.08_c0.0_q0.25",
+      "h_c": 0.08,
+      "p_c": 0.0,
+      "q1": 0.25,
+      "q2": 0.25,
+      "primal": 0.47599,
+      "reported_primal": 0.47598723252004277,
+      "dual_lb": 0.47599,
+      "dual_resid": 4.36e-11,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.5166553843406443,
+        "con_54": 0.792313859430181,
+        "con_512_pL": 0.19780967490036241,
+        "con_512_pU": 0.19780967494682428,
+        "con_512_qL": 0.5680004085502726,
+        "con_512_qU": 0.1198888340757282,
+        "con_513": 0.5503813749717152
+      },
+      "time": 38.622856855392456,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.08_c0.2_q0.1",
+      "h_c": 0.08,
+      "p_c": 0.2,
+      "q1": 0.1,
+      "q2": 0.1,
+      "primal": 0.43909,
+      "reported_primal": 0.4390924476786144,
+      "dual_lb": 0.43909,
+      "dual_resid": 7.72e-07,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.31900430741941577,
+        "con_54": 0.7817288633538718,
+        "con_512_pL": 0.21740158154854658,
+        "con_512_pU": 0.166884449480095,
+        "con_512_qL": 0.3622376735784568,
+        "con_512_qU": 0.127654398298315,
+        "con_513": 1.070975919567635
+      },
+      "time": 37.89708209037781,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.08_c0.2_q0.25",
+      "h_c": 0.08,
+      "p_c": 0.2,
+      "q1": 0.25,
+      "q2": 0.25,
+      "primal": 0.47444,
+      "reported_primal": 0.47444267819260494,
+      "dual_lb": 0.47444,
+      "dual_resid": 1.18e-07,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.6383892047805492,
+        "con_54": 0.5780657366831234,
+        "con_512_pL": 0.2346501033055556,
+        "con_512_pU": 0.17394071606655415,
+        "con_512_qL": 0.7442894561754357,
+        "con_512_qU": 0.11541711706748527,
+        "con_513": 1.710663415041652e-09
+      },
+      "time": 42.3569540977478,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.08_c0.4_q0.1",
+      "h_c": 0.08,
+      "p_c": 0.4,
+      "q1": 0.1,
+      "q2": 0.1,
+      "primal": 0.42319,
+      "reported_primal": 0.4231904769818731,
+      "dual_lb": 0.42319,
+      "dual_resid": 2.51e-08,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.4908318417097673,
+        "con_54": 0.49984484630208015,
+        "con_512_pL": 0.29162049766114273,
+        "con_512_pU": 0.14242459352992184,
+        "con_512_qL": 0.4403361739249923,
+        "con_512_qU": 0.12219623882361176,
+        "con_513": 1.0992333232417992e-09
+      },
+      "time": 39.792527198791504,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    },
+    {
+      "label": "R8_h0.08_c0.4_q0.25",
+      "h_c": 0.08,
+      "p_c": 0.4,
+      "q1": 0.25,
+      "q2": 0.25,
+      "primal": 0.55438,
+      "reported_primal": 0.5543859899549576,
+      "dual_lb": 0.55438,
+      "dual_resid": 7.11e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 4.400018311789342,
+        "con_54": 3.6737983411127852,
+        "con_512_pL": 3.2622071488787854,
+        "con_512_pU": 0.11956383049490904,
+        "con_512_qL": 5.623165008840726,
+        "con_512_qU": 0.11774206380222105,
+        "con_513": 1.6889190520309058e-06
+      },
+      "time": 35.64900612831116,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R8_centers.json"
+    }
+  ],
+  "feasible_subbox": {
+    "h": [
+      0.0,
+      0.08
+    ],
+    "p": [
+      0.0,
+      0.5
+    ],
+    "q": [
+      0.05,
+      0.35
+    ]
+  },
+  "n_core": 12,
+  "n_fresh": 12,
+  "feasible_cover_phi_min": 0.35961036420839493,
+  "feasible_cover_grid_min": 0.3799638337901962,
+  "feasible_cover_eps_grid": 0.0203534695818013,
+  "feasible_cover_L_max": 7.71660864917999,
+  "feasible_cover_worst_point": [
+    0.002,
+    0.3875,
+    0.053750000000000006
+  ],
+  "feasible_cover_witness": "cde_n30_iter3",
+  "clears_380000_indep_feasible": false,
+  "clears_380284_indep_feasible": false,
+  "note": "center cover over the FEASIBLE sub-box only; the complementary part of R8 (p>~0.6 / q>q_max) is cleanly SDP-infeasible (vacuous) -- see fullspace_promote_R8.json box-LP leaves for the rigorous full-region certificate."
+}

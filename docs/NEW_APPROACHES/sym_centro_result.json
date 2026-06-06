@@ -1,0 +1,185 @@
+{
+  "win_measurements": [
+    {
+      "bochner_n": 20,
+      "real": {
+        "form": "real",
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bn": 20,
+        "psd_blocks": [
+          42,
+          42
+        ],
+        "A_shape": [
+          38060,
+          18083
+        ],
+        "A_nnz": 795968,
+        "wall": 29.859448194503784,
+        "peak_mb": 821.734375,
+        "status": "optimal_inaccurate",
+        "value": 0.3792916110355166,
+        "rigorous_dual_LB": null
+      },
+      "centro": {
+        "form": "centro",
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bn": 20,
+        "psd_blocks": [
+          21,
+          21
+        ],
+        "A_shape": [
+          36716,
+          18083
+        ],
+        "A_nnz": 795148,
+        "wall": 2.818258762359619,
+        "peak_mb": 644.484375,
+        "status": "optimal_inaccurate",
+        "value": 0.37929163160506013,
+        "rigorous_dual_LB": null
+      },
+      "time_factor_real_over_centro": 10.594998796172861,
+      "mem_factor_real_over_centro": 1.2750260625015153
+    },
+    {
+      "bochner_n": 30,
+      "real": {
+        "form": "real",
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bn": 30,
+        "psd_blocks": [
+          62,
+          62
+        ],
+        "A_shape": [
+          40160,
+          18083
+        ],
+        "A_nnz": 798008,
+        "wall": 39.67002487182617,
+        "peak_mb": 1389.1875,
+        "status": "optimal_inaccurate",
+        "value": 0.3795473247810863,
+        "rigorous_dual_LB": null
+      },
+      "centro": {
+        "form": "centro",
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bn": 30,
+        "psd_blocks": [
+          31,
+          31
+        ],
+        "A_shape": [
+          37246,
+          18083
+        ],
+        "A_nnz": 796178,
+        "wall": 23.895466089248657,
+        "peak_mb": 735.9375,
+        "status": "optimal_inaccurate",
+        "value": 0.37954729376204677,
+        "rigorous_dual_LB": null
+      },
+      "time_factor_real_over_centro": 1.6601486124464004,
+      "mem_factor_real_over_centro": 1.8876433121019107
+    },
+    {
+      "bochner_n": 40,
+      "real": {
+        "form": "real",
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bn": 40,
+        "psd_blocks": [
+          82,
+          82
+        ],
+        "A_shape": [
+          43060,
+          18083
+        ],
+        "A_nnz": 800848,
+        "wall": 64.81599807739258,
+        "peak_mb": 2781.296875,
+        "status": "optimal_inaccurate",
+        "value": 0.37965352410204495,
+        "rigorous_dual_LB": 0.37965
+      },
+      "centro": {
+        "form": "centro",
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bn": 40,
+        "psd_blocks": [
+          41,
+          41
+        ],
+        "A_shape": [
+          37976,
+          18083
+        ],
+        "A_nnz": 797608,
+        "wall": 30.180840969085693,
+        "peak_mb": 859.34375,
+        "status": "optimal_inaccurate",
+        "value": 0.3796535629089986,
+        "rigorous_dual_LB": 0.37965
+      },
+      "time_factor_real_over_centro": 2.1475875421690125,
+      "mem_factor_real_over_centro": 3.236535874031783
+    }
+  ],
+  "win_config": {
+    "N": 5000,
+    "T": 2000,
+    "R": 10,
+    "row4": [
+      0.004,
+      0.3875,
+      -0.02,
+      0.02
+    ],
+    "scale_note": "moderate (N<=5000) to coexist with co-running L2 solve"
+  },
+  "highbn_measurements": [
+    {
+      "form": "centro",
+      "bn": 60,
+      "psd_blocks": [
+        61,
+        61
+      ],
+      "wall": 36.028952836990356,
+      "peak_mb": 1237.015625,
+      "status": "optimal_inaccurate",
+      "value": 0.3797342496924713,
+      "rigorous_dual_LB": 0.37973
+    },
+    {
+      "form": "centro",
+      "bn": 80,
+      "psd_blocks": [
+        81,
+        81
+      ],
+      "wall": 63.55245900154114,
+      "peak_mb": 2729.125,
+      "status": "optimal_inaccurate",
+      "value": 0.379768289350015,
+      "rigorous_dual_LB": 0.37977
+    }
+  ]
+}

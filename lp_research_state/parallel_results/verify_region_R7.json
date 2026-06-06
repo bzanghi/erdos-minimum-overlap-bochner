@@ -1,0 +1,68 @@
+{
+  "region": 7,
+  "claimed_floor": 0.380554,
+  "full_box": {
+    "h_range": [
+      0.0,
+      0.08
+    ],
+    "p_range": [
+      0.0,
+      1.0
+    ],
+    "q_range": [
+      -0.05,
+      -0.025
+    ]
+  },
+  "full_box_cover_min": 0.3678875,
+  "full_box_cover_min_note": "Standard cover_min_over_box over all 121 harvested centers, n_h=81 n_p=321 n_q=81: grid_min=0.3806042 but eps_grid=1.272e-2 (L_max=7.717 driven by one outlier center R8_h0.08_c0.4_q0.25 with gh=4.40,gp=3.14,gq=5.51). This is the eps-driven floor on the wide un-subdivided box.",
+  "worst_point_full": {
+    "h": 0.014,
+    "p": 0.3875,
+    "q": -0.025,
+    "witness": "R16_N20K_h0.0_p0.39_qm0.025"
+  },
+  "worst_point_feasible": {
+    "h": 0.014,
+    "p": 0.3862,
+    "q": -0.025,
+    "feasible": true,
+    "sdp_status_N8000bn40": "optimal_inaccurate",
+    "sdp_rigorous_dual_LB_N8000bn40": 0.3808,
+    "note": "This cover-min point is FEASIBLE (not excluded). Its rigorous dual LB at N=8000,bn=40 is 0.3808 (rises monotonically with N: 0.37979@N4000 -> 0.3808@N8000 -> 0.38104@N12000-primal). The cover's transferred value 0.3805985 there is BELOW the true mu => valid conservative LB."
+  },
+  "feasible_certified_floor": 0.3809326,
+  "feasible_certified_floor_deep_recheck": 0.3809727,
+  "binding_feasible_point": {
+    "h_box": [
+      0.02,
+      0.04
+    ],
+    "p_box": [
+      0.37,
+      0.4
+    ],
+    "q_box": [
+      -0.0375,
+      -0.025
+    ],
+    "grid_min": 0.3811543,
+    "eps_grid": 0.000182,
+    "L_keep": 0.144,
+    "witness": "r7_h0.003_c0.39_q-0.027_-0.027_N20000_bn40"
+  },
+  "eps_grid_achieved": 0.000182,
+  "method": "RIGOROUS active-center-pruned adaptive subdivision over the FULL box (p in [0,1], NOT restricted to a feasible sub-region). cover=max_c Phi_c via path_b_analytical.dual_objective_shift, anchor=primal-1e-5. Per-subbox L_max computed only over centers that can possibly be active (a center is dropped iff grid_max_c + L_c*half_diag < env_grid_min - L_keep*half_diag, i.e. provably below the envelope minus kept Lipschitz slack everywhere in the subbox -- a rigorous exclusion from the Lipschitz constant, NOT from the cover). Recursively split longest dimension until per-subbox eps<5e-4 (deep recheck: 2e-4).",
+  "infeasible_subboxes": [
+    {
+      "region": "p>=0.7 (at q in [-0.05,-0.025])",
+      "status": "robustly infeasible",
+      "evidence": "CLARABEL 'infeasible' at p=0.7,0.8,0.9,0.95,0.97,1.0 across h in {0,0.04,0.08}, q in {-0.025,-0.04,-0.05} (>=7 interior points)"
+    }
+  ],
+  "infeasibility_rigor_note": "High-p corner (p>=0.7) is robustly infeasible at >=7 distinct interior points. However CLARABEL does NOT emit an explicit Farkas/dual-ray certificate (status string only). RIGOR LEVEL = empirical-robust-multipoint, NOT a certified primal-infeasibility ray. CRITICALLY: this verdict does NOT depend on infeasibility exclusion -- the certified floor 0.3809 holds over the FULL box including the infeasible region (where the cover is ~0.41, far above target). Infeasibility is reported only to characterize the region.",
+  "verdict": "CONFIRM",
+  "subdivision_note": "The candidate's small reported L_max~0.46/eps_grid~1.5e-3 vs the plain cover's L_max=7.72 is explained: one outlier center (R8_h0.08_c0.4_q0.25, Phi=-1.28 at the binding point, 1.66 below the cover) inflates the GLOBAL Lipschitz constant but is provably never active near the floor. Dropping it (and other provably-dominated centers) from the Lipschitz constant is rigorous. With active-center pruning the binding-region L_keep is ~0.14, eps<2e-4 after adaptive subdivision, and the certified floor lands at 0.3809 -- ABOVE both the claimed 0.380554 and the target 0.3802838. The raw cover grid_min over the full box (no eps) is 0.3805981 with ZERO grid points below 0.3802838.",
+  "verification_independence": "Re-derived the floor from scratch (own pruned-Lipschitz adaptive subdivision) without using the missing R7 driver script; cross-validated the cover against fresh SDP dual-LB solves at the binding point (N up to 12000)."
+}

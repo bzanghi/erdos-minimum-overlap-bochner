@@ -1,0 +1,328 @@
+{
+  "region": 6,
+  "h_range": [
+    0.0,
+    0.08
+  ],
+  "p_range": [
+    0.0,
+    1.0
+  ],
+  "q_range": [
+    -1.0,
+    -0.05
+  ],
+  "config_note": "single-point augmented centers @ N=5000,T=2000,R=10,bn=30,pm_k=20; corrected mside coeff=4.0 baked in path_b builder",
+  "anchor": "primal-1e-5 (conservative)",
+  "feasibility_note": "R6 program INFEASIBLE for |d1|>~0.45-0.55 at all c1 (verified at N=2500 and N=5000); deep-q corner has no admissible function",
+  "centers": [
+    {
+      "label": "R6_c1_p33_q19",
+      "h_c": 0.016,
+      "p_c": 0.325,
+      "q1": -0.1925,
+      "q2": -0.1925,
+      "primal": 0.4100714690735246,
+      "dual_lb": 0.41007,
+      "gap": 1.469073524607012e-06,
+      "dual_resid": 2.9e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 5.5726908346455135e-11,
+        "con_54": 0.3402871265755006,
+        "con_512_pL": 0.2586544474592011,
+        "con_512_pU": 0.14768927833828882,
+        "con_512_qL": 0.11668310844885639,
+        "con_512_qU": 0.47657890021189675,
+        "con_513": 7.50494736874207e-09
+      },
+      "time": 44.66198992729187,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c2_p05_q05",
+      "h_c": 0.016,
+      "p_c": 0.05,
+      "q1": -0.05,
+      "q2": -0.05,
+      "primal": 0.4265576903881437,
+      "dual_lb": 0.42656,
+      "gap": -2.309611856321503e-06,
+      "dual_resid": 6.69e-10,
+      "status": "optimal",
+      "duals": {
+        "con_53": 9.861754481409893e-11,
+        "con_54": 0.6365075684860501,
+        "con_512_pL": 0.18619592720147762,
+        "con_512_pU": 0.1796580227416225,
+        "con_512_qL": 0.17714794127011074,
+        "con_512_qU": 0.18896795121108842,
+        "con_513": 1.091862368524656
+      },
+      "time": 45.09198212623596,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c3_p05_q20",
+      "h_c": 0.016,
+      "p_c": 0.05,
+      "q1": -0.2,
+      "q2": -0.2,
+      "primal": 0.41657465662687065,
+      "dual_lb": 0.41657,
+      "gap": 4.656626870658265e-06,
+      "dual_resid": 3.12e-07,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 4.148004755710616e-12,
+        "con_54": 1.668896440257783,
+        "con_512_pL": 0.2084205132045337,
+        "con_512_pU": 0.16743300115942678,
+        "con_512_qL": 0.11891491367496375,
+        "con_512_qU": 0.43818697348180996,
+        "con_513": 1.649176049305849
+      },
+      "time": 38.00648021697998,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c4_p05_q40",
+      "h_c": 0.016,
+      "p_c": 0.05,
+      "q1": -0.4,
+      "q2": -0.4,
+      "primal": 0.49390871823498994,
+      "dual_lb": 0.49391,
+      "gap": -1.2817650100749312e-06,
+      "dual_resid": 1.2e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 7.683860237544172e-12,
+        "con_54": 1.8532179194203273,
+        "con_512_pL": 0.24622769751951218,
+        "con_512_pU": 0.1860870736311521,
+        "con_512_qL": 0.12070471499266246,
+        "con_512_qU": 1.0965669876405262,
+        "con_513": 0.2893504353121088
+      },
+      "time": 38.68186593055725,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c6_p38_q09",
+      "h_c": 0.005,
+      "p_c": 0.38,
+      "q1": -0.0856,
+      "q2": -0.0856,
+      "primal": 0.38671174145812287,
+      "dual_lb": 0.38671,
+      "gap": 1.741458122872519e-06,
+      "dual_resid": 2.42e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 3.2415728540292407e-10,
+        "con_54": 0.26552341343181585,
+        "con_512_pL": 0.23677061223294654,
+        "con_512_pU": 0.1475480871336557,
+        "con_512_qL": 0.12531646371777497,
+        "con_512_qU": 0.3276990082211082,
+        "con_513": 1.595563834725413e-08
+      },
+      "time": 35.159273862838745,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c7_p29_q12",
+      "h_c": 0.014,
+      "p_c": 0.29,
+      "q1": -0.115,
+      "q2": -0.115,
+      "primal": 0.3911625270245144,
+      "dual_lb": 0.39116,
+      "gap": 2.5270245143649284e-06,
+      "dual_resid": 3.09e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 2.7984412693288096e-11,
+        "con_54": 0.24767560714609638,
+        "con_512_pL": 0.19718022417379966,
+        "con_512_pU": 0.16663666061235005,
+        "con_512_qL": 0.1412675021610573,
+        "con_512_qU": 0.2504624942406817,
+        "con_513": 0.5093110870382941
+      },
+      "time": 39.46633195877075,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c8_p38_q05",
+      "h_c": 0.001,
+      "p_c": 0.384,
+      "q1": -0.05,
+      "q2": -0.05,
+      "primal": 0.3812358093656717,
+      "dual_lb": 0.38124,
+      "gap": -4.190634328327114e-06,
+      "dual_resid": 1.05e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 4.587059437163262e-10,
+        "con_54": 0.24753677120562909,
+        "con_512_pL": 0.2360094913074035,
+        "con_512_pU": 0.14513944840525056,
+        "con_512_qL": 0.13748789850657028,
+        "con_512_qU": 0.2592627748369371,
+        "con_513": 0.11986802658206977
+      },
+      "time": 37.17402195930481,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c9_p43_q05",
+      "h_c": 0.001,
+      "p_c": 0.43,
+      "q1": -0.05,
+      "q2": -0.05,
+      "primal": 0.3868450566293625,
+      "dual_lb": 0.38684,
+      "gap": 5.056629362509835e-06,
+      "dual_resid": 2.29e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 2.434684482154066e-09,
+        "con_54": 0.2309995876145709,
+        "con_512_pL": 0.3002023999940489,
+        "con_512_pU": 0.13220238411050786,
+        "con_512_qL": 0.13602668261180625,
+        "con_512_qU": 0.2801658544219009,
+        "con_513": 3.627025964398962e-08
+      },
+      "time": 32.21316695213318,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    },
+    {
+      "label": "R6_c10_p366_q05",
+      "h_c": 0.012,
+      "p_c": 0.366,
+      "q1": -0.05,
+      "q2": -0.05,
+      "primal": 0.38102130103125303,
+      "dual_lb": 0.38102,
+      "gap": 1.3010312530092882e-06,
+      "dual_resid": 4.14e-11,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 4.437443233012239e-10,
+        "con_54": 0.2550149850774831,
+        "con_512_pL": 0.22620067639367838,
+        "con_512_pU": 0.14779461780351166,
+        "con_512_qL": 0.1464001494020107,
+        "con_512_qU": 0.22953905552102466,
+        "con_513": 0.2697772555572541
+      },
+      "time": 45.21777892112732,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      }
+    }
+  ],
+  "recommended_center_subset": [
+    "R6_c1_p33_q19",
+    "R6_c4_p05_q40",
+    "R6_c6_p38_q09",
+    "R6_c7_p29_q12",
+    "R6_c8_p38_q05",
+    "R6_c9_p43_q05",
+    "R6_c10_p366_q05"
+  ],
+  "dropped_for_lipschitz": [
+    "R6_c2_p05_q05",
+    "R6_c3_p05_q20"
+  ],
+  "final_eval": {
+    "grid": "161x321x161",
+    "box_min_lb": 0.3774191728072844,
+    "grid_min_pointwise": 0.380781280936292,
+    "eps_grid": 0.003362108129007631,
+    "L_max": 0.9993984547108824,
+    "worst_point": {
+      "h": 0.021,
+      "p": 0.375,
+      "q": -0.05
+    },
+    "worst_witness": "row3",
+    "clears_380000_box_min_lb": false,
+    "clears_380284_box_min_lb": false,
+    "pointwise_grid_min_clears_380000": true,
+    "pointwise_grid_min_clears_380284": true
+  },
+  "adaptive_eval": {
+    "method": "_eval_r6_box.py adaptive subdivision (per-subbox local L_max, R7 playbook)",
+    "centers_used": "12 core + 7 fresh (spiky c2,c3 dropped to control L_max)",
+    "region_ours_phi_min_after": 0.380309,
+    "grid_min_ceiling": 0.38078,
+    "binding_subbox": "q in [-0.08,-0.05], p in [0.33,0.45] (q=-0.05 boundary strip adjacent to core)",
+    "worst_point": {
+      "h": 0.021,
+      "p": 0.375,
+      "q": -0.05
+    },
+    "clears_380000_indep": true,
+    "clears_380284_indep": true,
+    "margin_over_380284": 2.5e-05,
+    "robustness": "stable lb=0.380309-0.380312 across base=(21..41)^3, max_depth 8-10"
+  },
+  "note": "R6 INDEPENDENTLY CERTIFIED >=0.380284 via adaptive box-min over 12 core + 7 fresh centers. cover_min_over_box single-global-grid gives only 0.379113 (Lipschitz-limited by wide q-axis); adaptive per-subbox subdivision drives eps_grid down locally at the binding q=-0.05 strip to certify 0.380309. Deep-q region |d1|>~0.45-0.55 is INFEASIBLE (verified) so contributes nothing to mu."
+}

@@ -11,6 +11,11 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+# Secrets / local config
+.env
+.env.*
+!.env.example
+
 # Editors
 .vscode/
 .idea/
@@ -28,3 +33,11 @@ lp_research_state/cron_log.txt
 # Don't track per-run pickle dumps that get re-generated
 lp_research_state/code/_indep_ckpt_full/
 lp_research_state/parallel_results/_run_*.tmp
+
+# Local agent / harness state — machine-specific, not project source
+.megamemory/
+.claude/federation-loop/
+.claude/worktrees/
+
+# Compiled solver binaries — rebuild from source per CLAUDE.md "Extra math tooling"
+lp_research_state/bin/

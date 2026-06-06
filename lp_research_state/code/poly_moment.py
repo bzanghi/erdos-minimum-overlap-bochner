@@ -65,14 +65,29 @@ def fourier_coeffs_of_xk(k_max: int, j_max: int):
     return alpha0, alpha, beta
 
 
-def even_moment_tail_bound(k: int, T_lp: int, j_far: int = 20000) -> float:
-    """Upper bound on |tail_k| = |Σ_{j>T_lp} (c_j α_j^(k) + d_j β_j^(k))| given LP bounds
-    |c_j|, |d_j| ≤ 2/π.  For even k, returns a finite small bound."""
+def even_moment_tail_bound(k: int, T_lp: int, j_part: int = 200000) -> float:
+    """RIGOROUS upper bound on |tail_k| = |Σ_{j>T_lp} (c_j α_j^(k) + d_j β_j^(k))|
+    given |c_j|, |d_j| ≤ 2/π (a consequence of 0 ≤ f ≤ 1).
+
+    For even k the bound is finite and small:
+      * β_j^(k) = 0 exactly (parity: x^k sin(πjx) is odd).
+      * Two integrations by parts give the EXACT identity
+            α_j^(k) = 2k(-1)^j/(π²j²) − k(k-1)/(π²j²) · ∫_{-1}^1 x^{k-2} cos(πjx) dx,
+        and |∫ x^{k-2} cos| ≤ 2/(k-1), hence |α_j^(k)| ≤ 4k/(π²j²) for all j ≥ 1.
+
+    We sum the exact coefficients for T_lp < j ≤ j_part and add the rigorous
+    analytic remainder for the omitted infinite tail:
+        Σ_{j>j_part} |α_j^(k)| ≤ (4k/π²) Σ_{j>j_part} 1/j² < (4k/π²)·(1/j_part).
+    Earlier versions truncated the sum at j_far=20000 WITHOUT this remainder,
+    under-counting the tail by ~20% (the omitted Σ_{j>20000} 1/j² ~ 1/20000),
+    which made the cuts m_k ≥ −tail_bound too tight and the bound non-rigorous.
+    """
     if k % 2 != 0:
-        return float("inf")  # odd-k tail is too loose for rigorous use here
-    alpha0, alpha, beta = fourier_coeffs_of_xk(k, j_far)
-    tail = (np.abs(alpha[k, T_lp:]).sum() + np.abs(beta[k, T_lp:]).sum())
-    return float((2.0 / np.pi) * tail)
+        return float("inf")  # odd-k tail decays only as O(1/j); too loose to use
+    alpha0, alpha, beta = fourier_coeffs_of_xk(k, j_part)
+    partial = (np.abs(alpha[k, T_lp:]).sum() + np.abs(beta[k, T_lp:]).sum())
+    remainder = 4.0 * k / (np.pi ** 2 * j_part)  # rigorous tail-of-tail
+    return float((2.0 / np.pi) * (partial + remainder))
 
 
 def build_even_moment_nonneg_constraints(

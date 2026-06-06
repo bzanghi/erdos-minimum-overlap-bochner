@@ -1,0 +1,21 @@
+=== Phase 3: re-solve all 12 centers at bochner_n=30 + poly_moment k_max=14 + hankel_n=4 ===
+
+[1/12] row1                 (h=0.0150, p=0.3810) ...
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:33: UserWarning: Constraint #97 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  prob = cp.Problem(cp.Minimize(Omega), cons)
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:33: UserWarning: Constraint #98 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  prob = cp.Problem(cp.Minimize(Omega), cons)
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:34: UserWarning: Constraint #185 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:34: UserWarning: Constraint #186 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:34: UserWarning: Solution may be inaccurate. Try another solver, adjusting the solver settings, or solve with verbose=True for more information.
+  t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+   V_c = 0.3804889  (optimal_inaccurate, 80.4s)
+[2/12] row2                 (h=0.0150, p=0.3850) ...
+   V_c = 0.3804700  (optimal_inaccurate, 74.2s)
+[3/12] row3                 (h=0.0200, p=0.3750) ...
+   V_c = 0.3808167  (optimal_inaccurate, 78.4s)
+[4/12] row4                 (h=0.0040, p=0.3875) ...
+   V_c = 0.3801559  (optimal_inaccurate, 75.2s)
+[5/12] row5                 (h=0.0000, p=0.4000) ...

@@ -1,0 +1,47 @@
+[
+  {
+    "h": 0.04,
+    "p": 0.6,
+    "q": -0.05,
+    "label": "p06",
+    "status": "optimal_inaccurate",
+    "value": 0.4568129922266795,
+    "sec": 26.4
+  },
+  {
+    "h": 0.04,
+    "p": 0.7,
+    "q": -0.05,
+    "label": "p07",
+    "status": "infeasible",
+    "value": Infinity,
+    "sec": 10.1
+  },
+  {
+    "h": 0.04,
+    "p": 0.8,
+    "q": -0.05,
+    "label": "p08",
+    "status": "infeasible",
+    "value": Infinity,
+    "sec": 8.7
+  },
+  {
+    "h": 0.0,
+    "p": 0.95,
+    "q": -0.025,
+    "label": "p095_h0",
+    "status": "infeasible",
+    "value": Infinity,
+    "sec": 8.2
+  },
+  {
+    "h": 0.04,
+    "p": 0.9,
+    "q": -0.05,
+    "label": "p09",
+    "status": "infeasible",
+    "value": Infinity,
+    "sec": 8.6
+  }
+]
