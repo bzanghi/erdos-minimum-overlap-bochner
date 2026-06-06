@@ -1,92 +1,65 @@
-# Erdős minimum overlap problem — Bochner-PSD strengthening
+# Erdős minimum overlap problem — improved lower bound on µ
 
-This repo contains code, numerics, and a research note documenting a small
-but rigorous improvement on White's (Acta Arith. 2023) lower bound for
-Erdős' minimum overlap constant µ.
+Code, numerics, and research notes for a rigorous improvement on White's
+(Acta Arith. 2023) lower bound for the Erdős minimum-overlap constant µ, built
+by augmenting White's §5 convex program with Bochner moment-matrix PSD
+constraints and polynomial-moment cuts, then certifying coverage over White's
+full parameter space.
 
 ## Result
 
-$$\boxed{\mu \;\geq\; 0.379544}$$
+$$\boxed{\mu \;\geq\; 0.380284}\quad\text{over White's \emph{entire} }(E(M),\,c_1,\,d_1)\text{ parameter space}$$
 
-vs. White (2023)'s `µ ≥ 0.379005`. Improvement: **+5.4 × 10⁻⁴**.
+vs. White (2023)'s `µ ≥ 0.379005` — an **unconditional, full-space improvement of +1.28 × 10⁻³**, with **no White-published number used in the bound** (every region is certified by our own augmented dual cover).
 
-**Update (post-adversarial-review):** an earlier extended bound `µ ≥ 0.379828`
-(via Lasserre level-2 added to the program) was retracted on the basis that
-the Lasserre-2 implementation truncates the polynomial moment expansion
-`(f²)̂(m) = Σ_n f̂(n)f̂(m−n)` without a rigorous tail bound. The truncated
-constraint is a *heuristic*, not a proven valid inequality. The Bochner-PSD
-half of the claim (this `+5.4e-4`) is independently verified bit-for-bit by
-a from-scratch re-encoding and stands. The Lasserre half is documented as a
-**promising direction needing a tail-bound fix** (Fejér-Riesz approach
-described in `erdos_lower_bound_research_note.md`); the rescued rigorous
-contribution is estimated at +1 to +2 × 10⁻⁴.
+- **Core residual region (5.16):** `µ ≥ 0.3802973` (corrected-tail convention) / `0.380284` (conservative `primal − 1e-5`). The core is the **binding** region.
+- **Full-space promotion (PRO-38, verified):** the augmented dual cover (121 dual-feasible centers) clears the core value over all 18 of White's Table-2 "outside" regions, so the full-space minimum equals the core. See [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md).
+
+**Honest caveats (these travel with the bound):**
+- It is **load-bearing on the polynomial-moment cuts** (`pm_k_max=20`), which are rigorous as of the 2026-05-22 tail-bound fix (see [`lp_research_state/findings.md`](lp_research_state/findings.md)), and on a set of fresh "promotion" centers in regions R16/R17 (with the 12 core anchors alone, those corners fall to 0.3802561, −2.8 × 10⁻⁵ below target).
+- **Margins are thin** (binding outside region R16 clears by +1.2 × 10⁻⁴). A margin-hardening re-solve at N ≥ 24000 + Farkas certificates for the (non-load-bearing) infeasibility exclusions is in progress (PRO-44).
+- A prior Bochner-only headline was `µ ≥ 0.379544`; an earlier Lasserre-level-2 extension was **retracted** (truncated moment expansion without a tail bound). Both lessons are recorded in the research note.
+
+**Author validation.** E. P. White (the author of the program we augment) confirmed (2026-05-31) that the Bochner-PSD constraint is "a valid constraint to add," and supplied two corrections to his published program: constraints 5.6/5.7 should have a `4` (not `8`) in the RHS numerator — **applied** (`mside_sin_coeff=4.0`; impact verified neutral, PRO-43) — and 5.8/5.9 should use `2m−1`, which our code already did.
 
 ## Method
 
-Add the Bochner moment-matrix PSD constraint
-$$\bigl[\hat f(j-k)\bigr]_{j,k=0,\dots,n} \succeq 0 \quad \text{(both for } f \text{ and } 1-f\text{)}$$
-to White's Section 5 convex program, then apply White's own §5.1 / Appendix II
-ellipse-extension argument with the augmented dual objective. The seven
-ellipses around White's Table-3 centers, recomputed with our augmented
-duals, fully cover White's residual region (5.16); their intersected
-minimum is `0.3795475` (closed-form), which after a conservative `1e-6`
-margin for CLARABEL's IPM gap gives the headline `0.379544`.
+1. **Base program** — White's §5 Fourier-analytic convex program ([`lp_research_state/code/white_full_convex.py`](lp_research_state/code/white_full_convex.py), `build_problem(...)`).
+2. **Bochner-PSD augmentation** — add `M_n(f) ⪰ 0` and `M_n(1−f) ⪰ 0` (`bochner_n`); the rigorous core improvement.
+3. **Polynomial-moment cuts** — `m_{2k} ≥ −tail_bound_k` from the Hausdorff moment theorem, with an analytic tail remainder ([`poly_moment.py`](lp_research_state/code/poly_moment.py)).
+4. **Dual cover + ellipse extension** — each center's dual objective is a globally-valid lower bound; the cover is `max_c Φ_c(h,p,q)` ([`path_b_analytical.py`](lp_research_state/code/path_b_analytical.py)).
+5. **Full-space certification** — rigorous box-min via grid + Lipschitz `eps_grid`, with **adaptive subdivision** to control `eps_grid` on White's wide outside regions ([`_fullspace_eval.py`](lp_research_state/code/_fullspace_eval.py)).
 
-The improvement is not large — the Bochner constraint just barely widens
-each ellipse enough to keep coverage while raising the dual objective.
-But it is an unconditional improvement on the previous best lower bound,
-derived via the same proof structure as White.
-
-## Repo layout
-
-- `erdos_lower_bound_research_note.md` — the main research note.
-- `lp_research_state/code/` — Python code:
-  - `white_full_convex.py` — White's §5 program with `bochner_n` parameter.
-  - `bochner.py` — Bochner-PSD constraint encoder.
-  - `dual_extractor.py` — extracts CLARABEL's rigorous dual lower bound.
-  - `path_b_analytical.py` — Path B ellipse-extension implementation.
-  - `path_b_independent.py` — independent re-implementation.
-  - `path_b_rigorous.py` — closed-form ellipse-min refinement.
-  - `lasserre.py` — Lasserre level-2 SDP encoder (compounds with Bochner).
-- `lp_research_state/findings.md` — accumulating raw findings (cron-driven).
-- `lp_research_state/experiments_done.json` — every SDP solve, with status.
-- `lp_research_state/parallel_results/path_b/` — per-row Path B data.
-- `min_overlap_report.md` — earlier Phase-1 + Phase-2 report (orientation,
-  brute force, baseline reproduction, upper-bound parallel track).
-- `communications/` — email to Ethan White, arXiv preprint draft,
-  LinkedIn copy.
+Verification convention: independent re-implementations agreeing to 10+ digits, and `rigorous_dual_LB = value − last_gap` (dual extraction), not unit tests.
 
 ## Reproducing
 
+See **[`REPRODUCE.md`](REPRODUCE.md)** for step-by-step recipes (core headline, full-space verification, the 8→4 correction check). Quick smoke (binding row 4):
+
 ```python
 import sys; sys.path.insert(0, "lp_research_state/code")
-from white_full_convex import solve_full_program
+from white_full_convex import build_problem
 from dual_extractor import solve_with_dual_extraction
 import cvxpy as cp
-
-# Row 4 (the binding row at White's Table 3 centers) at full size
-N, T, R = 10000, 4000, 10
 Omega, w, v, c, d, eps, dlt, cons = build_problem(
-    N, T, R,
-    h1=0.004, h2=0.004,
-    p1=0.3875, p2=0.3875,
-    q1=-0.02, q2=0.02,
-    bochner_n=20,
-)
-prob = cp.Problem(cp.Minimize(Omega), cons)
-res = solve_with_dual_extraction(prob)
-print(res["rigorous_dual_LB"])  # ≥ 0.379653
+    10000, 4000, 10, 0.004, 0.004, 0.3875, 0.3875, -0.02, 0.02, bochner_n=20)
+res = solve_with_dual_extraction(cp.Problem(cp.Minimize(Omega), cons))
+print(res["rigorous_dual_LB"])  # ≥ 0.379653 (Bochner-only, single row)
 ```
-
-For the full Path B argument, see `lp_research_state/code/path_b_analytical.py`.
 
 ## State of the art
 
-- **Lower bound:** `µ ≥ 0.379544` (this work, Bochner-PSD only, rigorously verified) — vs. White (2023): `µ ≥ 0.379005`.
-- **Upper bound:** `µ ≤ 0.380871` — Together Computer (March 2026), via
-  sequential-LP refinement of a 600-step function. Verified independently
-  to `0.3808703106…`.
-- **Open gap:** `µ ∈ [0.379544, 0.380871]`, width ≈ 1.3 × 10⁻³.
+- **Lower bound (this work):** `µ ≥ 0.380284`, full-space, verified. vs White (2023) `0.379005`.
+- **Upper bound:** `µ ≤ 0.380871` — Together Computer (March 2026); verified independently to `0.3808703106…`.
+- **Open gap:** `µ ∈ [0.380284, 0.380871]`, width ≈ **5.87 × 10⁻⁴**.
+
+## Key documents
+
+- [`lp_research_state/findings.md`](lp_research_state/findings.md) — rolling research ledger (leading line = latest result).
+- [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md) — the full-space promotion verification of record.
+- [`lp_research_state/WHITE_EMAIL_CORRECTION.md`](lp_research_state/WHITE_EMAIL_CORRECTION.md) — the 8→4 correction analysis.
+- [`erdos_lower_bound_research_note.md`](erdos_lower_bound_research_note.md) — the main research note.
+- [`communications/`](communications/) — correspondence with E. P. White, preprint draft.
 
 ## Citations
 - E. P. White, "A new bound for Erdős' minimum overlap problem," *Acta Arith.* 208 (2023). [arXiv:2201.05704](https://arxiv.org/abs/2201.05704).
@@ -95,11 +68,6 @@ For the full Path B argument, see `lp_research_state/code/path_b_analytical.py`.
 
 ## Acknowledgements
 
-This work was carried out in collaboration with Claude (Anthropic) using
-the Cowork Mode multi-agent research framework. Sub-agents performed:
-parallel SDP solves across White's 7 Table-3 ellipse centers; independent
-re-encoding of the Bochner constraint as a bug-check; analytical
-ellipse-extension implementation; rigorous dual-extraction verification;
-and SDPA-GMP spot-checking of CLARABEL's numerical precision. Three
-independently-written code paths agreed on the headline numbers to 10+
-digits.
+Carried out in collaboration with Claude (Anthropic). Independent sub-agent
+re-implementations cross-checked every headline number to 10+ digits; results
+are reported with their load-bearing dependencies stated explicitly.

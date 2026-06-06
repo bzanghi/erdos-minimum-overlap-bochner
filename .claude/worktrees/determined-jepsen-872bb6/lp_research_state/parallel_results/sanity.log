@@ -1,8 +1,0 @@
-=== sanity: row6 small-scale, NON-EVEN, no Bochner ===
-  status=optimal  Omega*=0.3760929396140102  t=0.9s
-=== sanity: row6 small-scale, EVEN, no Bochner ===
-  status=optimal_inaccurate  Omega*=0.3760929461228908  t=0.8s
-=== sanity: row6 small-scale, EVEN, bochner_n=10 ===
-  status=optimal  Omega*=0.3772778129867689  t=1.5s
-  EVEN(no boch): max|d|=6.50e-27, max|v-w|=6.04e-16
-  EVEN(boch=10): max|d|=3.66e-27, max|v-w|=5.55e-17

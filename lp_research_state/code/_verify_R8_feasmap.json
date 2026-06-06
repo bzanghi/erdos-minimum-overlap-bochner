@@ -1,0 +1,254 @@
+[
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.05,
+  "tag": "q-scan p0.37 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.38120832562950574,
+  "t": 20.8
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.1,
+  "tag": "q-scan p0.37 h0",
+  "status": "optimal",
+  "val": 0.3909357903366621,
+  "t": 22.6
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.15,
+  "tag": "q-scan p0.37 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.4058778123125857,
+  "t": 18.8
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.2,
+  "tag": "q-scan p0.37 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.4299386556537744,
+  "t": 20.0
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.25,
+  "tag": "q-scan p0.37 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.46384395126178796,
+  "t": 19.2
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.3,
+  "tag": "q-scan p0.37 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.5150200637471289,
+  "t": 22.1
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.35,
+  "tag": "q-scan p0.37 h0",
+  "status": "error:Solver 'CLARABEL' failed. Try another so",
+  "val": NaN,
+  "t": 14.6
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.4,
+  "tag": "q-scan p0.37 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 14.4
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.5,
+  "tag": "q-scan p0.37 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 11.9
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 0.7,
+  "tag": "q-scan p0.37 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 8.9
+ },
+ {
+  "h": 0.0,
+  "p": 0.37,
+  "q": 1.0,
+  "tag": "q-scan p0.37 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 6.7
+ },
+ {
+  "h": 0.0,
+  "p": 0.0,
+  "q": 0.05,
+  "tag": "q-scan p0 h0",
+  "status": "optimal",
+  "val": 0.4300120705436611,
+  "t": 19.0
+ },
+ {
+  "h": 0.0,
+  "p": 0.0,
+  "q": 0.2,
+  "tag": "q-scan p0 h0",
+  "status": "optimal",
+  "val": 0.4420901397356977,
+  "t": 23.3
+ },
+ {
+  "h": 0.0,
+  "p": 0.0,
+  "q": 0.4,
+  "tag": "q-scan p0 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.5487775225003443,
+  "t": 21.3
+ },
+ {
+  "h": 0.0,
+  "p": 0.0,
+  "q": 0.6,
+  "tag": "q-scan p0 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 11.0
+ },
+ {
+  "h": 0.0,
+  "p": 0.0,
+  "q": 1.0,
+  "tag": "q-scan p0 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 6.7
+ },
+ {
+  "h": 0.0,
+  "p": 0.0,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal",
+  "val": 0.4300120705436611,
+  "t": 16.0
+ },
+ {
+  "h": 0.0,
+  "p": 0.15,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.4189284272620181,
+  "t": 17.6
+ },
+ {
+  "h": 0.0,
+  "p": 0.25,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.40108144484352604,
+  "t": 17.8
+ },
+ {
+  "h": 0.0,
+  "p": 0.3,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.39131536353792706,
+  "t": 21.9
+ },
+ {
+  "h": 0.0,
+  "p": 0.33,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.3857195174912385,
+  "t": 20.2
+ },
+ {
+  "h": 0.0,
+  "p": 0.42,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.38459628270687907,
+  "t": 19.6
+ },
+ {
+  "h": 0.0,
+  "p": 0.5,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "optimal_inaccurate",
+  "val": 0.40192712441388473,
+  "t": 21.8
+ },
+ {
+  "h": 0.0,
+  "p": 0.7,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 9.8
+ },
+ {
+  "h": 0.0,
+  "p": 1.0,
+  "q": 0.05,
+  "tag": "p-scan q0.05 h0",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 7.2
+ },
+ {
+  "h": 0.08,
+  "p": 0.37,
+  "q": 0.05,
+  "tag": "q-scan p0.37 h0.08",
+  "status": "optimal_inaccurate",
+  "val": 0.4059486258009201,
+  "t": 21.3
+ },
+ {
+  "h": 0.08,
+  "p": 0.37,
+  "q": 0.2,
+  "tag": "q-scan p0.37 h0.08",
+  "status": "optimal_inaccurate",
+  "val": 0.4617324197128439,
+  "t": 20.4
+ },
+ {
+  "h": 0.08,
+  "p": 0.37,
+  "q": 0.4,
+  "tag": "q-scan p0.37 h0.08",
+  "status": "infeasible",
+  "val": Infinity,
+  "t": 11.5
+ }
+]

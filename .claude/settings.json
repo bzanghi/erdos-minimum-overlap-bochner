@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "SESSION_ID=$(jq -r '.session_id // empty' < /dev/stdin); rm -f \"/tmp/claude-linear-reminded-${SESSION_ID:-default}.flag\" 2>/dev/null; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "SESSION_ID=$(jq -r '.session_id // empty' < /dev/stdin); FLAG=\"/tmp/claude-linear-reminded-${SESSION_ID:-default}.flag\"; if [ -f \"$FLAG\" ]; then exit 0; fi; touch \"$FLAG\"; cat <<'EOF'\n{\"decision\":\"block\",\"reason\":\"Linear sync check: before ending this turn, verify (a) any closed/canceled/done work has its Linear issue updated, (b) any work just started has a Linear issue moved to In Progress, (c) any breakthroughs/negative-results have a brief comment on the relevant issue. Skip if no Linear-trackable work happened this turn.\"}\nEOF"
+          }
+        ]
+      }
+    ]
+  }
+}

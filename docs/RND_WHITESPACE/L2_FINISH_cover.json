@@ -1,0 +1,117 @@
+{
+  "kind": "cover_lift",
+  "cover_json": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/cde_phase5_corrected_tail.json",
+  "plo_json": "/Users/benzanghi/Documents/Claude/Projects/Erdos/docs/RND_WHITESPACE/L2_PROD.json",
+  "anchors": [
+    {
+      "label": "row1",
+      "V_c": 0.38071540440507445,
+      "anchor": 0.38071490440507444,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "row2",
+      "V_c": 0.38069354524305166,
+      "anchor": 0.38069304524305164,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "row3",
+      "V_c": 0.38106110979652735,
+      "anchor": 0.38106060979652734,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "row4",
+      "V_c": 0.3803541349157238,
+      "anchor": 0.38034487105994935,
+      "anchor_source": "jansson(N=20000,penalty=9.26e-06)"
+    },
+    {
+      "label": "row5",
+      "V_c": 0.38062519801399614,
+      "anchor": 0.3806246980139961,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "row6",
+      "V_c": 0.3804533980160451,
+      "anchor": 0.3804528980160451,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "row7",
+      "V_c": 0.3820213947369146,
+      "anchor": 0.3820208947369146,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "cde_n30_iter1",
+      "V_c": 0.38036049305487374,
+      "anchor": 0.3803599930548737,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "cde_n30_iter2",
+      "V_c": 0.38039420265069834,
+      "anchor": 0.38039370265069833,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "cde_n30_iter3",
+      "V_c": 0.3803173325640859,
+      "anchor": 0.3803148766713111,
+      "anchor_source": "jansson(N=20000,penalty=2.46e-06)"
+    },
+    {
+      "label": "cde_n30_iter4",
+      "V_c": 0.3806216889500568,
+      "anchor": 0.3806211889500568,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    },
+    {
+      "label": "cde_n30_iter5",
+      "V_c": 0.38040910846940723,
+      "anchor": 0.3804086084694072,
+      "anchor_source": "fallback(V_c - 5.0e-07)"
+    }
+  ],
+  "analytical": {
+    "grid_min": 0.38029819657991043,
+    "eps_grid": 2.168518999427645e-06,
+    "L_max": 0.14875917610259598,
+    "floor": 0.380296028060911,
+    "binding_label": "cde_n30_iter3",
+    "binding_point": [
+      0.004155,
+      0.3922
+    ]
+  },
+  "independent": {
+    "grid_min_indep": 0.3802982112490502,
+    "binding_point_indep": [
+      0.00414,
+      0.3922,
+      -0.02
+    ],
+    "binding_label_indep": "cde_n30_iter3"
+  },
+  "pointwise_formula_crosscheck": {
+    "worst_abs_diff": 1.1102230246251565e-16,
+    "worst_loc": [
+      "row1",
+      0.04807646791238381,
+      0.4082162036064368
+    ],
+    "agree_10digit": true
+  },
+  "cross_check_grid_min_abs_diff": 1.4669139791756436e-08,
+  "cross_check_grid_note": "grid_min diff ~4e-7 reflects DIFFERENT GRIDS (analytical 4001x4001 (h,p) at row q-endpoints; independent 1001x1001x41 (h,p,q)); the FORMULA agreement is the pointwise cross-check above. Same binding witness in both.",
+  "cross_check_agree_10digits": true,
+  "VERIFIED_FLOOR(anchor-verified)": 0.380296028060911,
+  "margin_vs_white": 0.0012910280609110258,
+  "margin_vs_prior_pub": 0.0007520280609110142,
+  "margin_vs_headline": 1.202806091099573e-05,
+  "SCOPE_NOTE": "Per-center ANCHOR is Jansson-verified p_lo. NOT yet verified: (1) box-constraint duals lam_* (ellipse slopes) \u2014 need interval dual-feasibility check of z at perturbed RHS; (2) region coverage is inherited from path_b (White 5.1), unchanged. So this is 'mu >= floor MODULO dual-slope interval-cert + (argued) coverage'.",
+  "elapsed_s": 2.8975830078125
+}

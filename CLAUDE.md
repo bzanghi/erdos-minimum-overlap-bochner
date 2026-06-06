@@ -86,3 +86,17 @@ If you modify `bochner.py`, `white_full_convex.py`'s constraint section, or `pat
 - White (2023) Acta Arith.: [arXiv:2201.05704](https://arxiv.org/abs/2201.05704) — the program being augmented.
 - Together Computer (March 2026) upper bound: [GitHub](https://github.com/togethercomputer/erdos-minimum-overlap) — gives `µ ≤ 0.380871`. Open gap is `[0.379544, 0.380871]`, width ~1.3 × 10⁻³.
 - Preprint draft: [communications/preprint_draft.tex](communications/preprint_draft.tex). Email draft to E. P. White: [communications/email_to_ethan_white.md](communications/email_to_ethan_white.md).
+
+## Extra math tooling (added 2026-05-18)
+
+In addition to the cvxpy/CLARABEL stack, the following project-local tooling is available:
+
+- **mpmath, sympy** (in `.venv`) — arbitrary-precision arithmetic and symbolic algebra. PSLQ via `mpmath.pslq`. Already used in [lp_research_state/code/pslq_hunt.py](lp_research_state/code/pslq_hunt.py), which sweeps a basis of standard constants {1, π, e, log 2, √2, ζ(2), Γ(1/4), ...} looking for integer relations with the LB/UB headlines.
+
+- **SDPA-GMP at [lp_research_state/bin/sdpa_gmp](lp_research_state/bin/sdpa_gmp)** — arbitrary-precision SDP solver built from [sdpa-python/sdpa-multiprecision](https://github.com/sdpa-python/sdpa-multiprecision). Smoke-tested via [lp_research_state/code/sdpa_gmp_wrapper.py](lp_research_state/code/sdpa_gmp_wrapper.py); example1.dat-s solves to feasibility error ~10⁻⁷⁵ vs CLARABEL's ~10⁻⁷. Build details: `/tmp/sdpa_build/` contains source + custom-built GMP 6.3.0. Two upstream patches were required for modern clang on macOS: SPOOLES `IVinit(nfront, NULL)` → `IVinit(nfront, 0)` (applied via a sed step injected into `spooles/Makefile`); and `sdpa_struct.cpp` C++11 user-defined-literal spacing around the `P_FORMAT` macro. The `libsdpa_gmp.a` static library is also installed at `lp_research_state/bin/`. **What's missing for production use:** a cvxpy → SDPA-S serializer so White's SDP can be cross-verified at GMP precision. Currently the wrapper handles arbitrary .dat-s files but doesn't yet auto-translate from cvxpy. This is the next engineering step for PRO-11.
+
+- **Wolfram Alpha integration** via [lp_research_state/code/wolfram_alpha.py](lp_research_state/code/wolfram_alpha.py). Uses the LLM API endpoint `https://www.wolframalpha.com/api/v1/llm-api` (per [Anthropic's cookbook](https://platform.claude.com/cookbook/third-party-wolframalpha-using-llm-api)) as the default `query_llm()`; falls back to the Simple API (`/v2/result`) and Full JSON API (`/v2/query`). Requires `WOLFRAM_APP_ID` in env or `<repo>/.env`. Useful for closed-form integral verification, inverse-symbolic lookup on bracket endpoints, and special-function manipulations sympy can't reduce.
+
+- **arXiv search** via [lp_research_state/code/arxiv_search.py](lp_research_state/code/arxiv_search.py). Free, no key needed; uses the export API. Use it before claiming priority on any new lever — the Erdős literature has had occasional bursts of activity post-2024.
+
+The MCP registry (as exposed to this client) has no math/research connectors as of 2026-05-18; we surveyed wolfram, mathematica, arxiv, sage, sympy, lean, coq, solver, optimization, latex, math, science, jupyter — all empty. The above tools cover the gap by combining `Bash` + `WebFetch` + local installs.

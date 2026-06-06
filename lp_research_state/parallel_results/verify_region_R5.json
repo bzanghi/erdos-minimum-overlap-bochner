@@ -1,0 +1,43 @@
+{
+  "region": 5,
+  "box": {"h_range": [0.08, 0.1], "p_range": [0.0, 1.0], "q_range": [-1.0, 1.0]},
+  "claimed_floor": 0.38198,
+  "claimed_mechanism": "stage2_box_lp.min_cleared_cert",
+  "claimed_worst_point": {"h": 0.1, "p": 0.0, "q": -1.0},
+  "target_to_clear": 0.3802838,
+
+  "full_box_cover_min": 0.343643,
+  "full_box_cover_min_note": "Single-grid cover_min_over_box on the full box (n_h=41,n_p=201,n_q=201): grid_min=0.385907 but eps_grid=4.23e-2 (L_max=7.55 over wide q-range [-1,1]) pulls cover_min to 0.343643. This eps_grid penalty, NOT a genuine low cover value, is the only obstacle; it is removed by subdivision/grid-refinement.",
+  "worst_point_full": {"h": 0.08, "p": 0.325, "q": -0.11, "note": "argmin of the eps-penalized grid; coincides with the TRUE cover infimum location"},
+
+  "true_cover_infimum": 0.3858746,
+  "true_cover_infimum_point": {"h": 0.08, "p": 0.324, "q": -0.11},
+  "true_cover_infimum_note": "Raw grid_min (NO eps) of max_c Phi_c via very fine scan (p:1001 pts, q:901 pts over [-0.3,0.15], h:9 pts). This is the genuine infimum of the dual cover over the entire R5 box; +5.59e-3 above target. Cover grows rapidly away from this point (e.g. >0.40 at |q|>=0.3, >0.97 at q=-0.7).",
+
+  "worst_point_feasible": {"h": 0.08, "p": 0.324, "q": -0.110},
+  "binding_feasible_point": {"h": 0.08, "p": 0.324, "q": -0.110},
+  "binding_feasible_point_sdp": {"status": "optimal_inaccurate", "primal_value_N4000": 0.39218, "primal_value_N5000_at_0.085_0.32": 0.39345, "note": "FEASIBLE at N=4000 (val=0.392) and at nearby (0.085,0.32,-0.11) N=5000 (val=0.393). This is the true infimum location AND it is feasible -> it governs the floor."},
+
+  "feasible_certified_floor": 0.385468,
+  "eps_grid_achieved": 4.0e-4,
+  "verdict": "CONFIRM",
+
+  "subdivision_note": "Rigorous adaptive subdivision (min over a partition of cover_min_over_box(subbox); each subbox bound = grid_min - L_max*half_diag is a rigorous LB of max_c Phi_c, min over partition is rigorous). KEY FIX vs naive: eps_grid is dominated by the h-axis cell (h-gradient ~4.1 from center R8_h0.08_c0.4_q0.25 with con_53=4.4); BOTH h and (p,q) must be refined. Phase A: q-tiles outside [-0.42,0.20] all cover_min>=0.442 (cleared, eps<=2e-3). Low q-band [-0.42,0.20] partitioned in p: p[0,0.20] cover_min=0.39657; p[0.20,0.55] in 7 targeted boxes (each grid ~329x819x1310, eps~4e-4) giving {p[0.20,0.25]:0.391577, p[0.25,0.30]:0.385495, p[0.30,0.35]:0.385468 (BINDING, worst@(0.08,0.324,-0.110), wit=row7), p[0.35,0.40]:0.386411, p[0.40,0.45]:0.387912, p[0.45,0.50]:0.389286}; p[0.50,0.55] cover_min=0.393540; p[0.55,1.0] cover_min=0.401655. Min over all tiles = 0.385468. NO infeasibility exclusion required -- the cover clears target on pure geometry over the ENTIRE box (including infeasible corners, where cover is 1.6+).",
+
+  "infeasible_subboxes": [
+    {"point": {"h": 0.1, "p": 0.0, "q": -1.0}, "status_N4000": "infeasible", "status_N5000": "infeasible", "cover_value_there": 1.5987},
+    {"point": {"h": 0.08, "p": 0.0, "q": -1.0}, "status_N4000": "infeasible"},
+    {"point": {"h": 0.1, "p": 1.0, "q": 1.0}, "status_N4000": "infeasible"},
+    {"point": {"h": 0.08, "p": 0.5, "q": -1.0}, "status_N4000": "infeasible"},
+    {"point": {"h": 0.1, "p": 0.5, "q": 1.0}, "status_N4000": "infeasible"},
+    {"point": {"h": 0.08, "p": 1.0, "q": 1.0}, "status_N5000": "infeasible"},
+    {"point": {"h": 0.09, "p": 0.5, "q": 0.6}, "status_N5000": "infeasible"}
+  ],
+  "infeasibility_rigor_note": "The candidate's claimed worst point (0.1,0,-1.0) and all large-|q| corners are SDP-INFEASIBLE, robustly so across N=4000 and N=5000. Rigor level: SOLVER-REPORTED infeasible (CLARABEL status='infeasible'), reproduced at multiple interior corners and two mesh sizes; NO Farkas/dual-ray certificate was extracted (one probe at (0.1,0,-0.5) returned a CLARABEL solver-failure rather than a clean 'infeasible', so the infeasible region's exact boundary is not certified). HOWEVER this rigor gap is IRRELEVANT to the verdict: the certified floor 0.385468 is established by pure cover geometry over the WHOLE box, including those infeasible corners (cover there is 1.6+ >> target). Infeasibility exclusion was NOT used.",
+
+  "candidate_assessment": "The candidate's claimed floor 0.38198 is CONSERVATIVE relative to the true certified floor 0.385468 found here, so R5 CONFIRMS and clears 0.3802838 with margin +5.18e-3. The candidate's reported worst point (0.1,0,-1.0) is an artifact of the box-LP corner accounting and is in fact SDP-infeasible with a large cover value (1.6); the TRUE binding point is the feasible interior point (0.08,0.324,-0.110) with cover infimum 0.385875.",
+
+  "method": "cover_min_over_box (rigorous grid + Lipschitz, from _fullspace_eval.py) on 121 harvested dual centers (anchor=primal-1e-5); SDP feasibility via path_b_analytical.build_problem_with_dual_handles(N in {4000,5000}, T=1600, R=10, bochner_n=20).",
+  "anchor_convention": "primal_m1e5 (primal - 1e-5), matching the candidate's anchor_convention.",
+  "n_centers": 121
+}

@@ -141,7 +141,8 @@ def solve_one_center(N, T, R, h_c, p_c, q1_c, q2_c, bochner_n=20, solver="CLARAB
         bm = b_expr[m - 1]
         b_minus, b_plus = sin_cell_bounds_exact(j, m, L)
         sin_pi_half_m = np.sin(np.pi * m / 2)
-        rhs = -(8.0 / (m * np.pi)) * sin_pi_half_m * bm
+        # White's 2026-05-31 email correction: constraints 5.6/5.7 had an 8 in the RHS numerator, should be 4.
+        rhs = -(4.0 / (m * np.pi)) * sin_pi_half_m * bm
         cons.append((L / 2) * (b_minus @ w - b_plus @ v) <= rhs)
         cons.append((L / 2) * (b_plus @ w - b_minus @ v) >= rhs)
 
