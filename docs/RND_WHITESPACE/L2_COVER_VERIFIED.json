@@ -1,0 +1,269 @@
+{
+  "kind": "cover_iv_certify",
+  "cover_json": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/cde_phase5_corrected_tail.json",
+  "plo_json": "/Users/benzanghi/Documents/Claude/Projects/Erdos/docs/RND_WHITESPACE/L2_PROD.json",
+  "penalty_fallback": 1e-06,
+  "WHITE": 0.379005,
+  "PRIOR_PUB": 0.379544,
+  "HEADLINE": 0.380284,
+  "anchors": [
+    {
+      "label": "row1",
+      "anchor_lo": 0.3807144044050744,
+      "anchor_hi": 0.3807144044050744,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "row2",
+      "anchor_lo": 0.3806925452430517,
+      "anchor_hi": 0.3806925452430517,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "row3",
+      "anchor_lo": 0.3810601097965273,
+      "anchor_hi": 0.3810601097965273,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "row4",
+      "anchor_lo": 0.3803531349157238,
+      "anchor_hi": 0.3803531349157238,
+      "rigorous": true,
+      "source": "V_c-1.0e-06 (gap<=margin); prod-Jansson p_lo xref=0.3803798129 (N=20000, diff solve)"
+    },
+    {
+      "label": "row5",
+      "anchor_lo": 0.38062419801399616,
+      "anchor_hi": 0.38062419801399616,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "row6",
+      "anchor_lo": 0.3804523980160451,
+      "anchor_hi": 0.3804523980160451,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "row7",
+      "anchor_lo": 0.3820203947369146,
+      "anchor_hi": 0.3820203947369146,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "cde_n30_iter1",
+      "anchor_lo": 0.38035949305487377,
+      "anchor_hi": 0.38035949305487377,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "cde_n30_iter2",
+      "anchor_lo": 0.3803932026506983,
+      "anchor_hi": 0.3803932026506983,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "cde_n30_iter3",
+      "anchor_lo": 0.3803163325640859,
+      "anchor_hi": 0.3803163325640859,
+      "rigorous": true,
+      "source": "V_c-1.0e-06 (gap<=margin); prod-Jansson p_lo xref=0.3803098600 (N=20000, diff solve)"
+    },
+    {
+      "label": "cde_n30_iter4",
+      "anchor_lo": 0.3806206889500568,
+      "anchor_hi": 0.3806206889500568,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    },
+    {
+      "label": "cde_n30_iter5",
+      "anchor_lo": 0.3804081084694072,
+      "anchor_hi": 0.3804081084694072,
+      "rigorous": false,
+      "source": "V_c-1.0e-06 (gap<=margin) [no Jansson xref]"
+    }
+  ],
+  "M1_cell_enclosure": {
+    "method": "vectorized cell-enclosure (concave -> min at cell corners) + iv recheck",
+    "n_h": 2000,
+    "n_p": 2000,
+    "floor_verified_only": 0.3791854385656808,
+    "floor_verified_only_float": 0.3791854385666808,
+    "floor_verified_only_iv_at_cell": 0.3791854385666808,
+    "worst_cell_verified_only": [
+      0.059969999999999996,
+      0.06,
+      0.44995,
+      0.45
+    ],
+    "worst_witness_verified_only": "row4",
+    "worst_witness_at_floor_all_is_rigorous": true,
+    "floor_lo": 0.3802990935632999,
+    "floor_all_float": 0.3802990935642999,
+    "floor_all_iv_at_cell": 0.3802990935642999,
+    "round_margin": 1e-12,
+    "worst_cell": [
+      0.0039299999999999995,
+      0.00396,
+      0.39225,
+      0.3923
+    ],
+    "worst_witness": "cde_n30_iter3",
+    "nonrigorous_anchor_ever_binds": true,
+    "elapsed_s": 1.7537450790405273,
+    "fast_vs_slow_iv_coarse_diff": 1.0000333894311098e-12
+  },
+  "M2_grid_lipschitz": {
+    "method": "grid + Lipschitz (matches cover_min_over_box convention)",
+    "n_grid": 2001,
+    "grid_min_lo": 0.380299522130845,
+    "L_max_upper": 0.14894379514866657,
+    "eps_grid_upper": 4.342420522737838e-06,
+    "floor_lo": 0.3802951797103223,
+    "worst_point": [
+      0.0039,
+      0.39225
+    ],
+    "worst_witness": "cde_n30_iter3",
+    "elapsed_s": 0.15537309646606445
+  },
+  "self_consistent_floor": {
+    "floor": 0.3788995508588899,
+    "method": "vectorized cell-enclosure (concave -> min at cell corners) + iv recheck",
+    "n_h": 2000,
+    "n_p": 2000,
+    "floor_verified_only": 0.3788995508588899,
+    "floor_verified_only_float": 0.3788995508598899,
+    "floor_verified_only_iv_at_cell": 0.37889955085988997,
+    "worst_cell_verified_only": [
+      0.059969999999999996,
+      0.06,
+      0.35,
+      0.35005
+    ],
+    "worst_witness_verified_only": "row4",
+    "worst_witness_at_floor_all_is_rigorous": true,
+    "floor_lo": 0.3788995508588899,
+    "floor_all_float": 0.3788995508598899,
+    "floor_all_iv_at_cell": 0.37889955085988997,
+    "round_margin": 1e-12,
+    "worst_cell": [
+      0.059969999999999996,
+      0.06,
+      0.35,
+      0.35005
+    ],
+    "worst_witness": "row4",
+    "nonrigorous_anchor_ever_binds": false,
+    "elapsed_s": 0.7640221118927002,
+    "centers": [
+      {
+        "label": "row4",
+        "anchor": 0.37916887445140407,
+        "src": "selfconsistent(N=3000,p_lo=0.3791688745)"
+      },
+      {
+        "label": "cde_n30_iter3",
+        "anchor": 0.379185378558701,
+        "src": "selfconsistent(N=3000,p_lo=0.3791853786)"
+      }
+    ],
+    "config": {
+      "row4": {
+        "N": 3000,
+        "p_lo": 0.37916887445140407,
+        "penalty": -2.135113264783974e-07
+      },
+      "cde_n30_iter3": {
+        "N": 3000,
+        "p_lo": 0.379185378558701,
+        "penalty": -2.186010820457294e-07
+      }
+    }
+  },
+  "crosscheck_independent": {
+    "worst_abs_diff": 5.551115123125783e-17,
+    "worst_loc": [
+      "row1",
+      0.01818194560915881,
+      0.3778425612100773
+    ],
+    "agree_10digit": true,
+    "note": "interval Phi midpoint vs path_b_independent.Phi_row, SAME stored duals"
+  },
+  "robustness_stress_float_anchors": [
+    {
+      "fallback_extra": 0.0,
+      "floor_all": 0.3802990935632999,
+      "witness": "cde_n30_iter3",
+      "witness_rigorous": true,
+      "clears_headline": true
+    },
+    {
+      "fallback_extra": 5e-06,
+      "floor_all": 0.3802982937572903,
+      "witness": "row4",
+      "witness_rigorous": true,
+      "clears_headline": true
+    },
+    {
+      "fallback_extra": 1.5e-05,
+      "floor_all": 0.3802960051888713,
+      "witness": "cde_n30_iter1",
+      "witness_rigorous": false,
+      "clears_headline": true
+    },
+    {
+      "fallback_extra": 5e-05,
+      "floor_all": 0.38028847648525765,
+      "witness": "cde_n30_iter3",
+      "witness_rigorous": true,
+      "clears_headline": true
+    }
+  ],
+  "TIER1_unconditional_selfconsistent": {
+    "floor": 0.3788995508588899,
+    "what": "2 binding centers ONLY, anchor == Jansson-certified p_lo for the SAME solve's duals; interval shift + interval box-min. NO gap assumption -- unconditionally rigorous. Config = the SC extraction (N=3000 here; weak in VALUE because only 2 of 12 centers cover the box and N is small, but airtight).",
+    "clears_headline": false,
+    "clears_white": false
+  },
+  "TIER2c_production_binding_jansson_anchor": {
+    "floor": 0.3802959547529065,
+    "binding_witness": "cde_n30_iter3",
+    "what": "HEADLINE. ALL 12 production (N=20000) centers; dual-shift coeffs + find_ellipse quadratic + box-min (cell-enclosure) ALL interval-certified. The binding/verified centers (row4, cde_n30_iter3) are anchored at their PRODUCTION Jansson INTERVAL-CERTIFIED p_lo (L2_PROD); the 10 non-binding centers at V_c-margin (gap<=margin). Residual: the binding center's shift uses the cover-solve duals while its anchor uses the Jansson-solve p_lo (CLARABEL nondeterminism, ~5e-6) -- bounded by the robustness stress (clears headline even at +5e-5 float degradation).",
+    "clears_headline": true,
+    "margin_vs_headline": 1.1954752906495614e-05
+  },
+  "TIER2_production_uniform_margin": {
+    "floor_all_12_centers": 0.3802990935632999,
+    "binding_witness": "cde_n30_iter3",
+    "what": "ALL 12 production centers at V_c-margin (documented convention); shift + box-min interval-certified. The ONLY non-interval input is each center's scalar duality gap (cover solve optimal_inaccurate). Trusted base reduced to: 'cover-solve gaps <= margin'.",
+    "clears_headline": true,
+    "margin_vs_headline": 1.509356329987277e-05
+  },
+  "TIER2b_production_verified_anchors_only": {
+    "floor": 0.3791854385656808,
+    "witness": "row4",
+    "what": "production centers but using ONLY the 2 Jansson-anchored centers (row4, cde_n30_iter3) -- drops all 10 float-anchor centers (valid LB since more centers only raise the cover). Airtight w.r.t. anchors EXCEPT the 2 anchors mix the cover-solve duals with the DIFFERENT Jansson-solve p_lo (CLARABEL nondeterminism ~5e-6), so NOT self-consistent; see TIER1 for the self-consistent version.",
+    "clears_headline": false
+  },
+  "VERIFIED_COVER_FLOOR": 0.3802959547529065,
+  "VERIFIED_COVER_FLOOR_most_conservative": 0.3788995508588899,
+  "floor_grid_lipschitz_M2": 0.3802951797103223,
+  "clears_headline_0p380284": true,
+  "margin_vs_white": 0.0012909547529065257,
+  "margin_vs_prior_pub": 0.000751954752906514,
+  "margin_vs_headline": 1.1954752906495614e-05,
+  "float_floor_reference_0p3802958": 0.3802958272915938,
+  "elapsed_s": 19.27882218360901,
+  "RIGOR_NOTE": "DUAL-SHIFT INTERVAL CERTIFICATION (the PRO-47 gap) IS CLOSED. Per-center duals lambda_i are the EXACT components of the fixed numeric conic dual z (NOT approximations of any 'true' dual): by White Lemma 10 (A,c,K theta-independent; VERIFIED |A_theta-A_c|=0 bit-for-bit at small N), and since the Jansson defect penalty pen_Dx is theta-independent and pen_zs=0 (cones certified in K*), Phi_c(theta)= -b(theta)^T z - pen_Dx is a valid LB on SDP_opt(theta) for the SAME z at ALL theta, and -b(theta)^T z equals p_lo_center + shift(theta; lambda_i) EXACTLY (verified to 1.95e-16). So enclosing the consumed float lambda_i as thin FP intervals and propagating shift + find_ellipse quadratic + box-min in directed-rounding mpmath.iv is the correct rigorous operation -- DONE here (two box-min methods: M1 cell-enclosure, M2 grid+Lipschitz; fast vs slow-iv agree to 1e-12). WHAT REMAINS between this and a clean 'verified mu>=X theorem': (1) a self-consistent (anchor==certified p_lo, duals) pair at PRODUCTION N for the binding centers -- the stored production cover duals lack a certified anchor (cover solve was optimal_inaccurate; only a 1e-6 margin), and the L2_PROD Jansson p_lo is from a DIFFERENT solve (CLARABEL nondeterminism). TIER1 gives the unconditional version at N=3000; TIER2 gives the production value under the single scalar assumption 'cover-solve gaps <= margin'. (2) production-N verified anchors for the 10 NON-binding centers (cheap re-Jansson, deferred -- no heavy solves per charter). (3) region coverage (White 5.1 / PRO-38 full-space promotion) -- argued separately."
+}

@@ -1,0 +1,12 @@
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:33: UserWarning: Constraint #96 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  prob = cp.Problem(cp.Minimize(Omega), cons)
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:33: UserWarning: Constraint #97 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  prob = cp.Problem(cp.Minimize(Omega), cons)
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:34: UserWarning: Constraint #182 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:34: UserWarning: Constraint #183 contains too many subexpressions. Consider vectorizing your CVXPY code to speed up compilation.
+  t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/path_b_with_polymoment.py:34: UserWarning: Solution may be inaccurate. Try another solver, adjusting the solver settings, or solve with verbose=True for more information.
+  t0 = time.time(); prob.solve(solver="CLARABEL", verbose=False); dt = time.time() - t0
+R17_h0.0_p0.39_q0.02: N24K=0.3806813 margin_vs_target=+3.97e-04 status=optimal_inaccurate 182s
+DONE

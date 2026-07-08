@@ -1,0 +1,654 @@
+{
+  "task2_core_anchor": {
+    "config": {
+      "N": 20000,
+      "T": 4000,
+      "R": 10,
+      "bochner_n": 40,
+      "pm_k_max": 20
+    },
+    "n_grid": 4001,
+    "margin": 1e-05,
+    "from_scratch": {
+      "rigorous_LB": 0.38028378466570156,
+      "grid_min": 0.3802859582359558,
+      "eps_grid": 2.1735702542108495e-06,
+      "L_max": 0.14910568932200155,
+      "binding_point": [
+        0.00399,
+        0.392275
+      ]
+    },
+    "canonical_crosscheck": {
+      "rigorous_LB": 0.3802837846529683,
+      "grid_min": 0.38028595822322253,
+      "eps_grid": 2.1735702542108495e-06,
+      "L_max": 0.14910568932200155
+    },
+    "recorded_core_headline_conservative": 0.380284,
+    "recorded_stage1_core_eval": 0.3802837846529683,
+    "agree_with_recorded_1e6": true,
+    "agree_with_canonical_1e6": true,
+    "diff_vs_recorded": 1.2733258891728383e-11
+  },
+  "_meta": {
+    "updated": "2026-05-25 17:45:45",
+    "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/code/_fullspace_rigor.py"
+  },
+  "task1_box_validity_check": {
+    "box_LB": 0.37481,
+    "box_reported": 0.37481399076159144,
+    "box_range": {
+      "h": [
+        0.0,
+        0.08
+      ],
+      "p": [
+        0.0,
+        1.0
+      ],
+      "q": [
+        0.05,
+        1.0
+      ]
+    },
+    "interior_points": [
+      {
+        "pt": [
+          0.0,
+          0.0,
+          0.05
+        ],
+        "true_opt": 0.4271618455411787,
+        "gap": 0.05235184554117872
+      },
+      {
+        "pt": [
+          0.04,
+          0.5,
+          0.5
+        ],
+        "true_opt": Infinity,
+        "gap": Infinity
+      },
+      {
+        "pt": [
+          0.08,
+          1.0,
+          1.0
+        ],
+        "true_opt": Infinity,
+        "gap": Infinity
+      },
+      {
+        "pt": [
+          0.02,
+          0.2,
+          0.3
+        ],
+        "true_opt": Infinity,
+        "gap": Infinity
+      },
+      {
+        "pt": [
+          0.0,
+          1.0,
+          0.05
+        ],
+        "true_opt": Infinity,
+        "gap": Infinity
+      },
+      {
+        "pt": [
+          0.08,
+          0.0,
+          1.0
+        ],
+        "true_opt": Infinity,
+        "gap": Infinity
+      }
+    ],
+    "worst_gap": 0.05235184554117872,
+    "box_valid_ok": true
+  },
+  "task1_unaugmented_regions": {
+    "config": {
+      "N": 5000,
+      "T": 2000,
+      "R": 10,
+      "bochner_n": 0,
+      "margin": 1e-05,
+      "augmentations": "NONE (pure White Section 5)"
+    },
+    "white_outside_floor": 0.38,
+    "white_strip_bound": 0.37925,
+    "regions": [
+      {
+        "region": 1,
+        "h_range": [
+          0.75,
+          2.0
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -1.0,
+          1.0
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.4394309558854273,
+        "dual_lb": 0.43943,
+        "our_conservative_box_LB": 0.43942,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 3.55e-12,
+        "status": "optimal",
+        "time_s": 2.2127699851989746,
+        "clears_380000": true,
+        "margin_over_380000": 0.05941999999999997
+      },
+      {
+        "region": 2,
+        "h_range": [
+          0.4,
+          0.75
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -1.0,
+          1.0
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.40854973775251885,
+        "dual_lb": 0.40855,
+        "our_conservative_box_LB": 0.40854,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 3.24e-11,
+        "status": "optimal",
+        "time_s": 2.149555206298828,
+        "clears_380000": true,
+        "margin_over_380000": 0.02854000000000001
+      },
+      {
+        "region": 3,
+        "h_range": [
+          0.2,
+          0.4
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -1.0,
+          1.0
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3969043280419014,
+        "dual_lb": 0.3969,
+        "our_conservative_box_LB": 0.39688999999999997,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 7.43e-10,
+        "status": "optimal",
+        "time_s": 2.518479108810425,
+        "clears_380000": true,
+        "margin_over_380000": 0.01688999999999996
+      },
+      {
+        "region": 4,
+        "h_range": [
+          0.1,
+          0.2
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -1.0,
+          1.0
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.383255929956116,
+        "dual_lb": 0.38326,
+        "our_conservative_box_LB": 0.38325,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 4.08e-09,
+        "status": "optimal",
+        "time_s": 2.5955820083618164,
+        "clears_380000": true,
+        "margin_over_380000": 0.003249999999999975
+      },
+      {
+        "region": 5,
+        "h_range": [
+          0.08,
+          0.1
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -1.0,
+          1.0
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3828022535270628,
+        "dual_lb": 0.3828,
+        "our_conservative_box_LB": 0.38278999999999996,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 6.1e-09,
+        "status": "optimal",
+        "time_s": 2.3005309104919434,
+        "clears_380000": true,
+        "margin_over_380000": 0.002789999999999959
+      },
+      {
+        "region": 6,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -1.0,
+          -0.05
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3765106100670021,
+        "dual_lb": 0.37651,
+        "our_conservative_box_LB": 0.3765,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 1.01e-11,
+        "status": "optimal",
+        "time_s": 2.13063383102417,
+        "clears_380000": false,
+        "margin_over_380000": -0.003500000000000003
+      },
+      {
+        "region": 7,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          -0.05,
+          -0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.37349933572420824,
+        "dual_lb": 0.3735,
+        "our_conservative_box_LB": 0.37349,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 1.02e-11,
+        "status": "optimal",
+        "time_s": 2.180014133453369,
+        "clears_380000": false,
+        "margin_over_380000": -0.006510000000000016
+      },
+      {
+        "region": 8,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          0.05,
+          1.0
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3826676583112173,
+        "dual_lb": 0.38267,
+        "our_conservative_box_LB": 0.38266,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 1.31e-11,
+        "status": "optimal",
+        "time_s": 2.091233015060425,
+        "clears_380000": true,
+        "margin_over_380000": 0.0026599999999999957
+      },
+      {
+        "region": 9,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.0,
+          1.0
+        ],
+        "q_range": [
+          0.025,
+          0.05
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3736169999815501,
+        "dual_lb": 0.37362,
+        "our_conservative_box_LB": 0.37361,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 5.6e-11,
+        "status": "optimal",
+        "time_s": 2.0830371379852295,
+        "clears_380000": false,
+        "margin_over_380000": -0.006390000000000007
+      },
+      {
+        "region": 10,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.0,
+          0.25
+        ],
+        "q_range": [
+          -0.025,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.39894778097478284,
+        "dual_lb": 0.39895,
+        "our_conservative_box_LB": 0.39894,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 5.83e-10,
+        "status": "optimal",
+        "time_s": 2.28872013092041,
+        "clears_380000": true,
+        "margin_over_380000": 0.018940000000000012
+      },
+      {
+        "region": 11,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.25,
+          0.3
+        ],
+        "q_range": [
+          -0.025,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.389562128418722,
+        "dual_lb": 0.38956,
+        "our_conservative_box_LB": 0.38955,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 5.26e-11,
+        "status": "optimal",
+        "time_s": 2.5664420127868652,
+        "clears_380000": true,
+        "margin_over_380000": 0.009550000000000003
+      },
+      {
+        "region": 12,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.3,
+          0.33
+        ],
+        "q_range": [
+          -0.025,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3833349519463999,
+        "dual_lb": 0.38333,
+        "our_conservative_box_LB": 0.38332,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 5.44e-11,
+        "status": "optimal",
+        "time_s": 2.512468099594116,
+        "clears_380000": true,
+        "margin_over_380000": 0.0033199999999999896
+      },
+      {
+        "region": 13,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.5,
+          1.0
+        ],
+        "q_range": [
+          -0.025,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.39149100899613276,
+        "dual_lb": 0.39149,
+        "our_conservative_box_LB": 0.39148,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 4.96e-09,
+        "status": "optimal",
+        "time_s": 2.5141408443450928,
+        "clears_380000": true,
+        "margin_over_380000": 0.01147999999999999
+      },
+      {
+        "region": 14,
+        "h_range": [
+          0.0,
+          0.08
+        ],
+        "p_range": [
+          0.45,
+          0.5
+        ],
+        "q_range": [
+          -0.025,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3811680870825037,
+        "dual_lb": 0.38117,
+        "our_conservative_box_LB": 0.38116,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 2.35e-10,
+        "status": "optimal",
+        "time_s": 2.6794180870056152,
+        "clears_380000": true,
+        "margin_over_380000": 0.0011599999999999944
+      },
+      {
+        "region": 15,
+        "h_range": [
+          0.06,
+          0.08
+        ],
+        "p_range": [
+          0.33,
+          0.45
+        ],
+        "q_range": [
+          -0.025,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.38297660646965187,
+        "dual_lb": 0.38298,
+        "our_conservative_box_LB": 0.38297,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 3.14e-09,
+        "status": "optimal",
+        "time_s": 2.5658938884735107,
+        "clears_380000": true,
+        "margin_over_380000": 0.0029699999999999727
+      },
+      {
+        "region": 16,
+        "h_range": [
+          0.0,
+          0.06
+        ],
+        "p_range": [
+          0.33,
+          0.45
+        ],
+        "q_range": [
+          -0.025,
+          -0.02
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3745263958452658,
+        "dual_lb": 0.37453,
+        "our_conservative_box_LB": 0.37451999999999996,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 5.67e-11,
+        "status": "optimal",
+        "time_s": 2.2132818698883057,
+        "clears_380000": false,
+        "margin_over_380000": -0.00548000000000004
+      },
+      {
+        "region": 17,
+        "h_range": [
+          0.0,
+          0.06
+        ],
+        "p_range": [
+          0.33,
+          0.45
+        ],
+        "q_range": [
+          0.02,
+          0.025
+        ],
+        "white_displayed": 0.38,
+        "reported_value": 0.3745423912284475,
+        "dual_lb": 0.37454,
+        "our_conservative_box_LB": 0.37453,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 1.11e-10,
+        "status": "optimal",
+        "time_s": 2.092971086502075,
+        "clears_380000": false,
+        "margin_over_380000": -0.00547000000000003
+      },
+      {
+        "region": 18,
+        "h_range": [
+          0.0,
+          0.06
+        ],
+        "p_range": [
+          0.33,
+          0.35
+        ],
+        "q_range": [
+          -0.02,
+          0.02
+        ],
+        "white_displayed": 0.37925,
+        "reported_value": 0.3794336636960865,
+        "dual_lb": 0.37943,
+        "our_conservative_box_LB": 0.37942,
+        "anchor_src": "dual_extracted_minus_margin",
+        "dual_resid_at_LB": 6.44e-11,
+        "status": "optimal",
+        "time_s": 2.5311269760131836,
+        "clears_380000": false,
+        "margin_over_380000": -0.0005800000000000249
+      }
+    ],
+    "verdict": {
+      "regions_1_17_all_clear_380000": false,
+      "n_regions_1_17_below_380000": 5,
+      "strip_R18_box_LB": 0.37942,
+      "strip_R18_clears_380000": false,
+      "worst_region": 7,
+      "worst_box_LB": 0.37349,
+      "note": "mu>=0.380000 full-space = (regions 1-17 from this rounding-free unaugmented recompute) AND (strip R18 + core from augmented cover, Task 2).  R18 is NOT certifiable from White's own bound."
+    }
+  },
+  "task1a_rounding_convention": {
+    "white_table2_column_header": "Optimum lower bound",
+    "white_quote_table_meaning": "In Table 2 we display the value of the objective function of the dual program for a verified feasible point in the dual space for several choices of input.",
+    "white_quote_divide_conquer": "the optimum ends up close to 0.25 for any choice of N,T,R. In order to use our program to give a good bound on mu, we will need a divide and conquer strategy of breaking up the valid ranges ... into small chunks. The minimum of all the optimums over these smaller intervals will be our lower bound on mu.",
+    "white_quote_table2_method": "Note that we have used the divide and conquer strategy mentioned above to narrow down the location of E(M*),c1* and d1*.",
+    "white_quote_combination": "Combining all data from Table 2 shows that either mu>=0.37925 or [region (5.16)].",
+    "finding": "Table-2 entries are by-construction VALID lower bounds (dual objective of a verified feasible point). BUT they are displayed to 2 dp (0.38) with NO explicit statement that they are rounded DOWN. White DID give 5 sig figs (0.37925) for the one entry near the binding threshold, evidence he shows more digits when a value is close to a decision boundary -- weak evidence the 0.38 entries are comfortably >0.380. White does NOT state 0.38 means >=0.380000; it could be round-to-nearest of a value in [0.375,0.385).",
+    "verdict": "Rounding direction is NOT stated by White. Literal floor 0.380000 is an ASSUMPTION, not established by the paper text."
+  },
+  "task1_MECHANISM_CORRECTION": {
+    "critical_finding": "My Task-1 per-region recompute solved each Table-2 region as a SINGLE full-range box. This is NOT the mechanism White used. White explicitly uses DIVIDE-AND-CONQUER (min over many small sub-boxes) and for the CORE he uses a 7-ELLIPSE feasible-point COVER. A single wide-box solve is far weaker: my unaugmented single-box solve of the CORE (5.16) gives 0.37510 at N=5000 vs White cover 0.379005, and my unaugmented 7-ellipse COVER of the core gives 0.37833 at N=5000 (N-limited; converges up with N). So single-box numbers UNDER-state the true regional bound and must NOT be read as refuting White.",
+    "core_singlebox_N5000": 0.3751,
+    "core_cover7ellipse_N5000": 0.378335,
+    "white_core_cover_N25000": 0.379005,
+    "cross_solver_R16": {
+      "CLARABEL": 0.374526,
+      "SCS": 0.374599,
+      "agree": true
+    },
+    "augmented_row4_sanity_N10000": 0.3801569
+  },
+  "task1_Nscaling_probe": {
+    "note": "Unaugmented box LB increases monotonically with N (White: optimum increases with N). Values are valid LBs at every N.",
+    "R6": {
+      "N5000": 0.3765,
+      "N10000": 0.37811
+    },
+    "R7": {
+      "N5000": 0.37349,
+      "N10000": 0.37428,
+      "N20000": 0.37469
+    },
+    "R9": {
+      "N5000": 0.37361,
+      "N10000": 0.3755
+    },
+    "R16": {
+      "N5000": 0.37452,
+      "N10000": 0.37507,
+      "N20000": 0.37539
+    },
+    "R17": {
+      "N5000": 0.37453,
+      "N10000": 0.37532,
+      "N20000": 0.37612
+    },
+    "R18_strip": {
+      "N2000": 0.37885,
+      "N5000": 0.37943,
+      "N8000": 0.37964,
+      "white_N20000": 0.37925
+    }
+  },
+  "task1_augmented_fullbox_discrepant": {
+    "note": "Even AUGMENTED (bn=20,pmk=14) FULL-BOX solves of discrepant regions do NOT reach 0.380000 (augmentation can only raise, but the wide-box relaxation stays loose).",
+    "R7_N4000": 0.37323,
+    "R16_N4000": 0.37474,
+    "R6_N4000": 0.37586
+  },
+  "saved_augmented_cover_on_discrepant_regions": {
+    "note": "Stage-1 12-anchor augmented Phi cover (the mechanism Stage-1 actually used) on discrepant regions. All <0.380284, so Stage-1 relies on Whites 0.380000 floor there.",
+    "R6": 0.277475,
+    "R7": 0.365885,
+    "R9": 0.365885,
+    "R16": 0.380256,
+    "R17": 0.380256
+  }
+}

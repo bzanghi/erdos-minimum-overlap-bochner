@@ -1,0 +1,354 @@
+{
+  "region": 16,
+  "method": "fresh_augmented_dualfeasible_centers",
+  "box": {
+    "h": [
+      0.0,
+      0.06
+    ],
+    "p": [
+      0.33,
+      0.45
+    ],
+    "q": [
+      -0.025,
+      -0.02
+    ]
+  },
+  "anchor": "primal_m1e5",
+  "corrected_mside_coeff": 4.0,
+  "note": "promotion_center role = the validated N=20000 centers used to lift the floor; strip_map_probe role = N=5000/8000 solves mapping the strip (NOT used to lift, weaker relaxations).",
+  "centers": [
+    {
+      "label": "R16_N20K_h0.00375_p0.3915_qm0.025",
+      "h_c": 0.00375,
+      "p_c": 0.3915,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.3807302002435447,
+      "dual_lb": 0.38073,
+      "gap": 2.002435446901707e-07,
+      "dual_resid": 1.38e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 1.0698629446301089e-09,
+        "con_54": 0.23848214200765178,
+        "con_512_pL": 0.2313652491666886,
+        "con_512_pU": 0.1288315634743971,
+        "con_512_qL": 0.1370980288215214,
+        "con_512_qU": 0.20835624130926095,
+        "con_513": 0.1807820047729541
+      },
+      "time": 155.69369196891785,
+      "config": {
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20
+      },
+      "role": "promotion_center"
+    },
+    {
+      "label": "R16_N20K_h0.0_p0.39_qm0.025",
+      "h_c": 0.0,
+      "p_c": 0.39,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.38069201155603116,
+      "dual_lb": 0.38069,
+      "gap": 2.011556031189521e-06,
+      "dual_resid": 4.26e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 4.865060731550415e-10,
+        "con_54": 0.24201351692583112,
+        "con_512_pL": 0.22924640213276773,
+        "con_512_pU": 0.1301840881617628,
+        "con_512_qL": 0.13848421961335092,
+        "con_512_qU": 0.20683231067955543,
+        "con_513": 0.19921275584334344
+      },
+      "time": 153.6560697555542,
+      "config": {
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20
+      },
+      "role": "promotion_center"
+    },
+    {
+      "label": "R16_worst_h0.00375_p0.3915_qm0.025",
+      "h_c": 0.00375,
+      "p_c": 0.3915,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.37978414728488397,
+      "dual_lb": 0.37978,
+      "gap": 4.1472848839596566e-06,
+      "dual_resid": 2.55e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.017862702208208205,
+        "con_54": 0.23294489792719678,
+        "con_512_pL": 0.24850008701149467,
+        "con_512_pU": 0.1408100645512416,
+        "con_512_qL": 0.17249726109978258,
+        "con_512_qU": 0.18757965310784214,
+        "con_513": 0.2222574068887894
+      },
+      "time": 37.68539595603943,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "R16_worst_N8K_h0.00375_p0.3915_qm0.025",
+      "h_c": 0.00375,
+      "p_c": 0.3915,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.3802007439487685,
+      "dual_lb": 0.3802,
+      "gap": 7.439487685334534e-07,
+      "dual_resid": 2.77e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 2.9260355624618488e-09,
+        "con_54": 0.22867432780231414,
+        "con_512_pL": 0.2498969791733292,
+        "con_512_pU": 0.13801118688602934,
+        "con_512_qL": 0.15679486891482391,
+        "con_512_qU": 0.2052306058569486,
+        "con_513": 0.21219566747086824
+      },
+      "time": 98.87406492233276,
+      "config": {
+        "N": 8000,
+        "T": 3000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "probe_h0_p0.36_qm0.025",
+      "h_c": 0.0,
+      "p_c": 0.36,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.3805369023081282,
+      "dual_lb": 0.38054,
+      "gap": -3.097691871789543e-06,
+      "dual_resid": 3.62e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 6.352829301397933e-10,
+        "con_54": 0.2461480975749443,
+        "con_512_pL": 0.2276324790921527,
+        "con_512_pU": 0.14759582142921043,
+        "con_512_qL": 0.17624770670204898,
+        "con_512_qU": 0.18182081877940265,
+        "con_513": 0.3750577960298458
+      },
+      "time": 42.7769091129303,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "probe_h0_p0.39_qm0.025",
+      "h_c": 0.0,
+      "p_c": 0.39,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.3797591475115111,
+      "dual_lb": 0.37976,
+      "gap": -8.52488488911618e-07,
+      "dual_resid": 1.15e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 1.376684419108196e-09,
+        "con_54": 0.23788376540699668,
+        "con_512_pL": 0.24577545319947564,
+        "con_512_pU": 0.14281632214245477,
+        "con_512_qL": 0.17325741308785192,
+        "con_512_qU": 0.188616304061462,
+        "con_513": 0.24538298928792446
+      },
+      "time": 39.69660806655884,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "probe_h0_p0.42_qm0.025",
+      "h_c": 0.0,
+      "p_c": 0.42,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.3823946831197824,
+      "dual_lb": 0.38239,
+      "gap": 4.683119782411538e-06,
+      "dual_resid": 1.47e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 3.424405072532252e-09,
+        "con_54": 0.23948223772854502,
+        "con_512_pL": 0.27372659985459086,
+        "con_512_pU": 0.13535534433453272,
+        "con_512_qL": 0.1570437226934541,
+        "con_512_qU": 0.21378123815655856,
+        "con_513": 2.3090849598357355e-08
+      },
+      "time": 42.4790780544281,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "probe_h0.00375_p0.36_qm0.025",
+      "h_c": 0.00375,
+      "p_c": 0.36,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.38053517922749214,
+      "dual_lb": 0.38054,
+      "gap": -4.820772507851956e-06,
+      "dual_resid": 8.94e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 5.2674706510181704e-09,
+        "con_54": 0.24613532257084034,
+        "con_512_pL": 0.2271232812409111,
+        "con_512_pU": 0.14707481136140352,
+        "con_512_qL": 0.17575759039204483,
+        "con_512_qU": 0.18133119236265186,
+        "con_513": 0.375074179412849
+      },
+      "time": 45.269134759902954,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "probe_h0.00375_p0.42_qm0.025",
+      "h_c": 0.00375,
+      "p_c": 0.42,
+      "q1": -0.025,
+      "q2": -0.025,
+      "primal": 0.3824019270012825,
+      "dual_lb": 0.3824,
+      "gap": 1.9270012824867955e-06,
+      "dual_resid": 1.07e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.01782576536113198,
+        "con_54": 0.2393876226091393,
+        "con_512_pL": 0.2736290641903633,
+        "con_512_pU": 0.13531604459277227,
+        "con_512_qL": 0.16032008136442233,
+        "con_512_qU": 0.20793596299731523,
+        "con_513": 1.5606290638588913e-08
+      },
+      "time": 41.60357594490051,
+      "config": {
+        "N": 5000,
+        "T": 2000,
+        "R": 10,
+        "bochner_n": 30,
+        "pm_k_max": 20
+      },
+      "role": "strip_map_probe"
+    },
+    {
+      "label": "R16_N20K_h0.0_p0.3877_qm0.02",
+      "h_c": 0.0,
+      "p_c": 0.3877,
+      "q1": -0.02,
+      "q2": -0.02,
+      "primal": 0.38044787152753484,
+      "dual_lb": 0.38045,
+      "gap": -2.1284724651682296e-06,
+      "dual_resid": 2.67e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 2.24967868369049e-09,
+        "con_54": 0.23917042404830466,
+        "con_512_pL": 0.2301748987420602,
+        "con_512_pU": 0.12909373408140806,
+        "con_512_qL": 0.1500501073852361,
+        "con_512_qU": 0.18393846625736832,
+        "con_513": 0.27448149171661806
+      },
+      "time": 173.02589225769043,
+      "config": {
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20
+      },
+      "role": "promotion_center"
+    }
+  ],
+  "result": {
+    "region": 16,
+    "width_class": "narrow",
+    "box": {
+      "h": [
+        0.0,
+        0.06
+      ],
+      "p": [
+        0.33,
+        0.45
+      ],
+      "q": [
+        -0.025,
+        -0.02
+      ]
+    },
+    "baseline_corehalo_floor_n241": 0.38020997,
+    "after_promo_floor_n241": 0.38035473771024,
+    "after_promo_grid_min_n241": 0.38040425,
+    "after_promo_eps_grid_n241": 4.952e-05,
+    "after_promo_L_max": 0.1767,
+    "grid_used": "n_h=241,n_p=241,n_q=121",
+    "clears_380284_indep": true,
+    "margin_vs_380284": 7.074e-05,
+    "clears_380000_indep": true,
+    "margin_vs_380000": 0.0003547,
+    "n_promotion_centers": 3,
+    "core_headline_reproduced": 0.3802837847,
+    "note": "Independent Phi-cover floor over R16 lifted from 0.380110 (corehalo) to 0.380355 by 3 fresh N=20000,bochner_n=40,pm_k_max=20 single-point dual-feasible centers near the p~0.39 dip at the strip endpoints q=-0.025 and q=-0.02. grid_min (true Phi-cover min) = 0.380404; reported floor includes rigorous Lipschitz eps_grid. Clears at grid n>=161; n=241 gives +7e-5 margin. Corrected mside coeff 4.0 (baked in path_b_analytical). White-reliant floor for R16 was already 0.380000; this makes R16 INDEPENDENT of White for the 0.380284 target."
+  }
+}

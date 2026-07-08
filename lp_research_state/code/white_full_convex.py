@@ -105,6 +105,9 @@ def build_problem(
     use_T3: bool = False,        # Tightening 3: L Σ (w² + v²) ≤ Ω    (NEW)
     use_T5: bool = False,        # Tightening 5: φ = 1+cos(πx)
     use_T5p: bool = False,       # Tightening 5': φ = 1-cos(πx) — VIOLATED at White's optimum (NEW)
+    mside_sin_coeff: float = 4.0,  # RHS coeff of imag/sine cell-consistency constraint 5.6/5.7.
+                                 # White's 2026-05-31 email correction: this was 8, should be 4
+                                 # (default now 4.0; pass mside_sin_coeff=8.0 to reproduce old behavior).
     bochner_n: int = 0,          # Bochner level (0 = off). Adds PSD constraints for f≥0 and 1-f≥0
     mside_bochner_n: int = 0,    # M-side Bochner (SOC-relaxed) level (0 = off). Adds PSD on T_relax(c,d,U)
     mside_bochner_schur_n: int = 0,  # M-side Bochner via EXACT Schur lifting (0 = off). Adds PSD on T_relax(c,d,s)
@@ -185,7 +188,8 @@ def build_problem(
         bm = b_expr[m - 1]
         b_minus, b_plus = sin_bnds(j, m, L)
         sin_pi_half_m = np.sin(np.pi * m / 2)
-        rhs = -(8.0 / (m * np.pi)) * sin_pi_half_m * bm
+        # White's 2026-05-31 email correction: constraints 5.6/5.7 had an 8 in the RHS numerator, should be 4 (default now 4.0; pass mside_sin_coeff=8.0 to reproduce old behavior).
+        rhs = -(mside_sin_coeff / (m * np.pi)) * sin_pi_half_m * bm
         cons.append((L / 2) * (b_minus @ w - b_plus @ v) <= rhs)
         cons.append((L / 2) * (b_plus @ w - b_minus @ v) >= rhs)
 

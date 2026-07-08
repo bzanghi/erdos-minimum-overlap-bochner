@@ -1,0 +1,322 @@
+{
+  "meta": {
+    "charter": "L2 Jansson rigorous a-posteriori LB; PRODUCTION N",
+    "WHITE": 0.379005,
+    "PRIOR_PUB": 0.379544,
+    "HEADLINE": 0.380284
+  },
+  "runs": [
+    {
+      "key": {
+        "center": "row4",
+        "N": 10000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "use_T5p": false,
+        "slack_infl": 1.0
+      },
+      "ok": true,
+      "prob_value": 0.3801832933423268,
+      "p_lo": 0.3801816684146017,
+      "penalty_total": -1.438305265158397e-06,
+      "penalty_Dx_upper": 1.438305265158397e-06,
+      "penalty_zs_lower": 0.0,
+      "defect_inf": 5.423435938123333e-07,
+      "defect_inf_rigorous": 5.423440391143073e-07,
+      "defect_1": 1.514975587102265e-06,
+      "margin_vs_white": 0.0011766684146017337,
+      "margin_vs_prior_pub": 0.000637668414601722,
+      "margin_vs_headline": -0.00010233158539829645,
+      "psd_lambda_min_lowers": [
+        6.7409858640256595e-12,
+        6.924069805197585e-12
+      ],
+      "xbar_flags": {
+        "unmapped_cols": 8062,
+        "total_cols": 36083,
+        "mapped_cols": 28021,
+        "layout": {
+          "Omega": [
+            0,
+            1
+          ],
+          "w": [
+            1,
+            10001
+          ],
+          "v": [
+            10001,
+            20001
+          ],
+          "c": [
+            20012,
+            24012
+          ],
+          "d": [
+            24023,
+            28023
+          ],
+          "eps": [
+            20002,
+            20012
+          ],
+          "dlt": [
+            24013,
+            24023
+          ]
+        },
+        "structural_aux_cap": 3.7695329003269444,
+        "aux_hard_capped": 42,
+        "aux_fallback_cap": 4.0,
+        "aux_max_box": 4.0,
+        "passes_used": 2,
+        "aux_max_box_final": 3.7695329003269444
+      },
+      "self_checks": {
+        "|c@x - obj_val|": 0.0,
+        "|-b@z - obj_val_dual|": 1.237343560944737e-13,
+        "r_prim": 1.2806935684440946e-09,
+        "r_dual": 1.0147053320678859e-08,
+        "status": "AlmostSolved"
+      },
+      "solve_time_s": 121.35311913490295,
+      "wall_s": 141.31198024749756
+    },
+    {
+      "key": {
+        "center": "cde_n30_iter3",
+        "N": 10000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "use_T5p": false,
+        "slack_infl": 1.0
+      },
+      "ok": true,
+      "prob_value": 0.3801285910818952,
+      "p_lo": 0.380127864444888,
+      "penalty_total": -6.505806860833965e-07,
+      "penalty_Dx_upper": 6.505806860833965e-07,
+      "penalty_zs_lower": 0.0,
+      "defect_inf": 2.203886899643237e-07,
+      "defect_inf_rigorous": 2.2038923217153595e-07,
+      "defect_1": 6.821957044563793e-07,
+      "margin_vs_white": 0.0011228644448880165,
+      "margin_vs_prior_pub": 0.0005838644448880048,
+      "margin_vs_headline": -0.0001561355551120136,
+      "psd_lambda_min_lowers": [
+        2.650982773746739e-12,
+        2.653719056447019e-12
+      ],
+      "xbar_flags": {
+        "unmapped_cols": 8062,
+        "total_cols": 36083,
+        "mapped_cols": 28021,
+        "layout": {
+          "Omega": [
+            0,
+            1
+          ],
+          "w": [
+            1,
+            10001
+          ],
+          "v": [
+            10001,
+            20001
+          ],
+          "c": [
+            20012,
+            24012
+          ],
+          "d": [
+            24023,
+            28023
+          ],
+          "eps": [
+            20002,
+            20012
+          ],
+          "dlt": [
+            24013,
+            24023
+          ]
+        },
+        "structural_aux_cap": 3.7695329003269444,
+        "aux_hard_capped": 42,
+        "aux_fallback_cap": 4.0,
+        "aux_max_box": 4.0,
+        "passes_used": 2,
+        "aux_max_box_final": 3.7695329003269444
+      },
+      "self_checks": {
+        "|c@x - obj_val|": 0.0,
+        "|-b@z - obj_val_dual|": 1.2490009027033011e-14,
+        "r_prim": 6.075984088919289e-10,
+        "r_dual": 4.122803746335657e-09,
+        "status": "AlmostSolved"
+      },
+      "solve_time_s": 131.66636490821838,
+      "wall_s": 152.03257584571838
+    },
+    {
+      "key": {
+        "center": "cde_n30_iter3",
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "use_T5p": false,
+        "slack_infl": 1.0
+      },
+      "ok": true,
+      "prob_value": 0.38031231589211345,
+      "p_lo": 0.38030985999933864,
+      "penalty_total": -2.271532909819878e-06,
+      "penalty_Dx_upper": 2.271532909819878e-06,
+      "penalty_zs_lower": 0.0,
+      "defect_inf": 9.53375791645783e-07,
+      "defect_inf_rigorous": 9.53376872574556e-07,
+      "defect_1": 2.3334559729952643e-06,
+      "margin_vs_white": 0.001304859999338659,
+      "margin_vs_prior_pub": 0.0007658599993386472,
+      "margin_vs_headline": 2.5859999338628814e-05,
+      "psd_lambda_min_lowers": [
+        5.568491625110722e-12,
+        5.56815901407558e-12
+      ],
+      "xbar_flags": {
+        "unmapped_cols": 8062,
+        "total_cols": 56083,
+        "mapped_cols": 48021,
+        "layout": {
+          "Omega": [
+            0,
+            1
+          ],
+          "w": [
+            1,
+            20001
+          ],
+          "v": [
+            20001,
+            40001
+          ],
+          "c": [
+            40012,
+            44012
+          ],
+          "d": [
+            44023,
+            48023
+          ],
+          "eps": [
+            40002,
+            40012
+          ],
+          "dlt": [
+            44013,
+            44023
+          ]
+        },
+        "structural_aux_cap": 3.7695329003269444,
+        "aux_hard_capped": 42,
+        "aux_fallback_cap": 4.0,
+        "aux_max_box": 4.0,
+        "passes_used": 2,
+        "aux_max_box_final": 3.7695329003269444
+      },
+      "self_checks": {
+        "|c@x - obj_val|": 0.0,
+        "|-b@z - obj_val_dual|": 7.216449660063518e-15,
+        "r_prim": 3.396088768428782e-09,
+        "r_dual": 1.3782077526895381e-08,
+        "status": "AlmostSolved"
+      },
+      "solve_time_s": 187.84701490402222,
+      "wall_s": 216.57049202919006
+    },
+    {
+      "key": {
+        "center": "row4",
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "use_T5p": false,
+        "slack_infl": 1.0
+      },
+      "ok": true,
+      "prob_value": 0.38038907679916384,
+      "p_lo": 0.3803798129433894,
+      "penalty_total": -8.51788634726988e-06,
+      "penalty_Dx_upper": 8.51788634726988e-06,
+      "penalty_zs_lower": 0.0,
+      "defect_inf": 3.8725578186404874e-06,
+      "defect_inf_rigorous": 3.872558703326409e-06,
+      "defect_1": 8.797978005623605e-06,
+      "margin_vs_white": 0.0013748129433894252,
+      "margin_vs_prior_pub": 0.0008358129433894135,
+      "margin_vs_headline": 9.581294338939506e-05,
+      "psd_lambda_min_lowers": [
+        2.0407939842119756e-11,
+        2.1355678624704787e-11
+      ],
+      "xbar_flags": {
+        "unmapped_cols": 8062,
+        "total_cols": 56083,
+        "mapped_cols": 48021,
+        "layout": {
+          "Omega": [
+            0,
+            1
+          ],
+          "w": [
+            1,
+            20001
+          ],
+          "v": [
+            20001,
+            40001
+          ],
+          "c": [
+            40012,
+            44012
+          ],
+          "d": [
+            44023,
+            48023
+          ],
+          "eps": [
+            40002,
+            40012
+          ],
+          "dlt": [
+            44013,
+            44023
+          ]
+        },
+        "structural_aux_cap": 3.7695329003269444,
+        "aux_hard_capped": 42,
+        "aux_fallback_cap": 4.0,
+        "aux_max_box": 4.0,
+        "passes_used": 2,
+        "aux_max_box_final": 3.7695329003269444
+      },
+      "self_checks": {
+        "|c@x - obj_val|": 0.0,
+        "|-b@z - obj_val_dual|": 2.986499936241671e-14,
+        "r_prim": 2.3199416654748886e-09,
+        "r_dual": 5.740517167387816e-08,
+        "status": "AlmostSolved"
+      },
+      "solve_time_s": 165.92345094680786,
+      "wall_s": 194.02187609672546
+    }
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "task": "PRO-38 R9 full-space promotion: independently lift gate region 9",
+  "region": 9,
+  "width_class": "moderate",
+  "h_range": [
+    0.0,
+    0.08
+  ],
+  "p_range": [
+    0.0,
+    1.0
+  ],
+  "q_range": [
+    0.025,
+    0.05
+  ],
+  "method": "Divide-and-conquer: R9 p-range partitioned into LEFT[0,0.33], STRIP[0.33,0.45], RIGHT[0.45,1.0]. LEFT/RIGHT already cleared by existing 23 corehalo centers. STRIP lifted by 3 fresh augmented dual-feasible centers (bn=40) placed at the worst corner (h=0, c1~0.385-0.39, q across [0.025,0.05]). Combined cover = max over (12 core + 11 halo + 3 fresh); rigorous box-min via cover_min_over_box grid+Lipschitz. R9 floor = min of the 3 p-strip floors.",
+  "target": 0.380284,
+  "anchor_convention": "conservative: anchor = dual_lb - 1e-5 (primal field set := dual_lb so anchor_value primal_m1e5 = dual_lb - 1e-5)",
+  "mside_sin_coeff": "4.0 (corrected; baked into build_problem_with_dual_handles 5.6/5.7 RHS numerator)",
+  "config": {
+    "N": 8000,
+    "T": 4000,
+    "R": 10,
+    "bochner_n": 40,
+    "pm_k_max": 20,
+    "solver": "CLARABEL",
+    "dual_extraction": true
+  },
+  "core_headline_reproduced": {
+    "rigorous_LB": 0.3802837846529683,
+    "CORE_HEADLINE": 0.380284,
+    "reproduced": true
+  },
+  "centers": [
+    {
+      "label": "r9_h0.0_c0.385_q0.025_0.025_N8000bn40",
+      "h_c": 0.0,
+      "p_c": 0.385,
+      "q1": 0.025,
+      "q2": 0.025,
+      "primal": 0.38044090929273194,
+      "dual_lb": 0.38044,
+      "dual_resid": 9.7e-11,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.08650162614802855,
+        "con_54": 0.2493355061808099,
+        "con_512_pL": 0.23975682039810067,
+        "con_512_pU": 0.146923888533575,
+        "con_512_qL": 0.22955194109178514,
+        "con_512_qU": 0.15100100391589485,
+        "con_513": 0.23726745087846485
+      },
+      "time": 92.39979696273804,
+      "config": {
+        "N": 8000,
+        "T": 4000,
+        "bn": 40,
+        "pm_k": 20
+      }
+    },
+    {
+      "label": "r9_h0.0_c0.39_q0.0375_0.0375_N8000bn40",
+      "h_c": 0.0,
+      "p_c": 0.39,
+      "q1": 0.0375,
+      "q2": 0.0375,
+      "primal": 0.38184566247467244,
+      "dual_lb": 0.38185,
+      "dual_resid": 4.27e-11,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.11663616812107029,
+        "con_54": 0.2706504158919708,
+        "con_512_pL": 0.2294396383340267,
+        "con_512_pU": 0.15125932064812928,
+        "con_512_qL": 0.2713665670953611,
+        "con_512_qU": 0.13736623129635558,
+        "con_513": 0.07457767963252489
+      },
+      "time": 83.24059820175171,
+      "config": {
+        "N": 8000,
+        "T": 4000,
+        "bn": 40,
+        "pm_k": 20
+      }
+    },
+    {
+      "label": "r9_h0.0_c0.39_q0.05_0.05_N8000bn40",
+      "h_c": 0.0,
+      "p_c": 0.39,
+      "q1": 0.05,
+      "q2": 0.05,
+      "primal": 0.3837533407819822,
+      "dual_lb": 0.38375,
+      "dual_resid": 5.67e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.12919723714385056,
+        "con_54": 0.29220122832618023,
+        "con_512_pL": 0.2192677150490031,
+        "con_512_pU": 0.15659345129366548,
+        "con_512_qL": 0.3061860374111202,
+        "con_512_qU": 0.13032443871389532,
+        "con_513": 0.0005282356666920545
+      },
+      "time": 81.99975085258484,
+      "config": {
+        "N": 8000,
+        "T": 4000,
+        "bn": 40,
+        "pm_k": 20
+      }
+    }
+  ],
+  "region_eval": {
+    "LEFT": {
+      "p_range": [
+        0.0,
+        0.33
+      ],
+      "floor": 0.38338469182713947,
+      "grid_min": 0.3836543833545674,
+      "eps_grid": 0.00026969152742797544,
+      "L_max": 0.22703005676600546,
+      "worst_point": {
+        "h": 0.023,
+        "p": 0.33,
+        "q": 0.05
+      },
+      "witness": "r9_h0.0_c0.385_q0.025_0.025_N8000bn40",
+      "grid": [
+        81,
+        161,
+        41
+      ],
+      "clears_380284": true
+    },
+    "STRIP": {
+      "p_range": [
+        0.33,
+        0.45
+      ],
+      "floor": 0.38036671736066713,
+      "grid_min": 0.38042026975100723,
+      "eps_grid": 5.3552390340102693e-05,
+      "L_max": 0.2269819961716592,
+      "worst_point": {
+        "h": 0.0,
+        "p": 0.38025000000000003,
+        "q": 0.025
+      },
+      "witness": "r9_h0.0_c0.385_q0.025_0.025_N8000bn40",
+      "grid": [
+        321,
+        481,
+        81
+      ],
+      "clears_380284": true
+    },
+    "RIGHT": {
+      "p_range": [
+        0.45,
+        1.0
+      ],
+      "floor": 0.38668824793821727,
+      "grid_min": 0.38716810896639225,
+      "eps_grid": 0.00047986102817500117,
+      "L_max": 0.46043067676268795,
+      "worst_point": {
+        "h": 0.032,
+        "p": 0.45,
+        "q": 0.025
+      },
+      "witness": "wide_h0.000_c0.4400_q-0.05_0.05",
+      "grid": [
+        81,
+        321,
+        41
+      ],
+      "clears_380284": true
+    }
+  },
+  "region_ours_phi_min_after": 0.38036671736066713,
+  "clears_380000_indep": true,
+  "clears_380284_indep": true,
+  "n_existing_corehalo": 23,
+  "n_fresh": 3
+}

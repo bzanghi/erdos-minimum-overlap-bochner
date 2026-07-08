@@ -107,19 +107,31 @@ def build_interval_pos(m: np.ndarray, n: int) -> np.ndarray:
     return A
 
 
-def estimate_tail_bound(k: int, T_lp: int, j_far: int = 100000) -> float:
-    """Estimate the maximum possible value of |Σ_{j>T_lp} (c_j α_j^(k) + d_j β_j^(k))|
+def estimate_tail_bound(k: int, T_lp: int, j_far: int = 200000) -> float:
+    """RIGOROUS upper bound on |Σ_{j>T_lp} (c_j α_j^(k) + d_j β_j^(k))|
     given the LP bounds |c_j|, |d_j| ≤ 2/π.
 
-    Returns an upper bound on the truncation error in m_k.
+    For even k the bound is finite and small:
+      * β_j^(k) = 0 exactly (parity: x^k sin(πjx) is odd).
+      * Two integrations by parts give |α_j^(k)| ≤ 4k/(π²j²) for all j ≥ 1.
+
+    We sum the exact coefficients for T_lp < j ≤ j_far and add the rigorous
+    analytic remainder for the omitted infinite tail:
+        Σ_{j>j_far} |α_j^(k)| ≤ (4k/π²) Σ_{j>j_far} 1/j² < (4k/π²)·(1/j_far).
+    Earlier versions truncated the sum at a hard cutoff WITHOUT this remainder,
+    under-counting the tail (the omitted Σ_{j>j_far} 1/j² ~ 1/j_far), which made
+    any cut derived from m_k too tight and the bound non-rigorous.
+
+    For ODD k the coefficients decay only as O(1/j) (the β boundary term), so the
+    tail is not rigorously boundable here; we return inf to flag that.
+    Mirrors poly_moment.even_moment_tail_bound (the rigorous production path).
     """
+    if k % 2 != 0:
+        return float("inf")  # odd-k tail decays only as O(1/j); too loose to use
     alpha0, alpha, beta = fourier_coeffs_of_xk(k, j_far)
-    # Tail = j_max - T_lp:
-    tail_alpha = np.abs(alpha[k, T_lp:]).sum()
-    tail_beta = np.abs(beta[k, T_lp:]).sum()
-    bound_c = (2.0 / np.pi) * tail_alpha
-    bound_d = (2.0 / np.pi) * tail_beta
-    return float(bound_c + bound_d)
+    partial = np.abs(alpha[k, T_lp:]).sum() + np.abs(beta[k, T_lp:]).sum()
+    remainder = 4.0 * k / (np.pi ** 2 * j_far)  # rigorous tail-of-tail
+    return float((2.0 / np.pi) * (partial + remainder))
 
 
 def main():

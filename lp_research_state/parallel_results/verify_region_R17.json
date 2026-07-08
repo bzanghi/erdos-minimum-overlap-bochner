@@ -1,0 +1,62 @@
+{
+  "region": 17,
+  "claimed_floor": 0.380335,
+  "box": {"h_range": [0.0, 0.06], "p_range": [0.33, 0.45], "q_range": [0.02, 0.025]},
+  "method": "Independent re-run of cover_min_over_box (grid + Lipschitz) on all 121 harvested centers, plus subset analysis and adaptive subdivision. Reused _fs_standard_floor.py loading pattern (harvest_centers + per-center primal=dual_lb+1e-5).",
+
+  "full_box_cover_min": {
+    "all_121_centers": {
+      "box_min_lb_converged": 0.3790059,
+      "grid_min": 0.3804528,
+      "eps_grid": 0.001447,
+      "L_max": 7.7166,
+      "note": "L_max is dominated by spiky stage2 box-LP leaves -> large eps_grid on the full union; box_min_lb is therefore weak unless subdivided or a low-L_max subset is used. grid_min (pointwise cover) is healthy at 0.38045."
+    },
+    "worst_point_full": {"h": 0.0, "p": 0.3805, "q": 0.02, "witness": "R17_h0.0_c0.39_q0.02"}
+  },
+
+  "subset_analysis": {
+    "rationale": "max-of-(any subset of centers) <= max-of-(all centers) = true cover, so cover_min_over_box on a SUBSET is a valid (conservative) lower bound on the true cover's box-min. A low-L_max subset that still dominates the cover in the binding region gives a tight rigorous floor; this is the documented divide-and-conquer in _fs_recompute.main (smooth/corehalo subsets).",
+    "candR17_15ctr": {
+      "centers": "12 core anchors + 3 fresh R17 point-centers (h_c=0.0, q=0.02, p_c in {0.36,0.39,0.42}) -- exactly the candidate driver's set",
+      "grid_min_converged": 0.3804509,
+      "L_max": 0.1864,
+      "box_min_lb_fine_grid": 0.3804241,
+      "note": "Cover EQUALS the true 121-cover in the binding region (the R17 fresh centers ARE the dominating witnesses there); verified pointwise at (0.004,0.392,0.025) and (0.0,0.3804,0.02)."
+    },
+    "corehalo_23ctr": {
+      "grid_min": 0.3802588,
+      "box_min_lb": 0.3802317,
+      "note": "Dips BELOW target, but ONLY because corehalo EXCLUDES the dominating R17 fresh centers -> it under-estimates the true cover. NOT a refutation; it is a slack subset. The true 121-cover at corehalo's low point (0.0039,0.3916,0.025) is 0.3813268, well above target."
+    }
+  },
+
+  "worst_point_full_is_feasible": true,
+  "feasibility_map": {
+    "solver": "CLARABEL via build_problem_with_dual_handles (mside_sin coeff 4.0 baked in, line 106)",
+    "probes": [
+      {"name": "worst", "h": 0.0, "p": 0.38044, "q": 0.02, "N": 2000, "T": 800, "bochner_n": 12, "status": "optimal_inaccurate", "val": 0.377585},
+      {"name": "corehalo_low", "h": 0.004, "p": 0.392, "q": 0.025, "N": 2000, "T": 800, "bochner_n": 12, "status": "optimal_inaccurate", "val": 0.377574},
+      {"name": "p_lo_corner", "h": 0.0, "p": 0.33, "q": 0.02, "N": 2000, "T": 800, "bochner_n": 12, "status": "optimal", "val": 0.383673},
+      {"name": "p_hi_corner", "h": 0.0, "p": 0.45, "q": 0.025, "N": 2000, "T": 800, "bochner_n": 12, "status": "optimal_inaccurate", "val": 0.3854},
+      {"name": "h_hi_mid", "h": 0.06, "p": 0.39, "q": 0.0225, "N": 2000, "T": 800, "bochner_n": 12, "status": "optimal_inaccurate", "val": 0.392115},
+      {"name": "candidate_per_region_worst", "h": 0.00375, "p": 0.3915, "q": 0.025, "N": 4000, "T": 1600, "bochner_n": 20, "status": "optimal_inaccurate", "val": 0.379338},
+      {"name": "my_worst_robust", "h": 0.0, "p": 0.38044, "q": 0.02, "N": 4000, "T": 1600, "bochner_n": 20, "status": "optimal_inaccurate", "val": 0.379189}
+    ],
+    "feasible_subregion": "ENTIRE R17 box is feasible. Every probe (corners, worst point, candidate worst point) returns optimal/optimal_inaccurate (finite optimum). No SDP-infeasible sub-region exists in R17.",
+    "note_on_optimal_inaccurate": "optimal_inaccurate is the project's documented CLARABEL labeling artifact (true duality gaps ~1e-7), NOT infeasibility -- the solver returns a finite optimal value. The small-N val (0.3776-0.3924) is the low-scale primal and is NOT the certified floor; the floor comes from the saved N=20000/bn=40 dual anchors. These solves only certify the DOMAIN (feasibility) question."
+  },
+
+  "worst_point_feasible": {"h": 0.0, "p": 0.38044, "q": 0.02},
+  "binding_feasible_point": {"h": 0.0, "p": 0.38044, "q": 0.02, "witness": "R17_h0.0_c0.39_q0.02 (and row6 nearby)"},
+
+  "feasible_certified_floor": 0.3804134,
+  "eps_grid_achieved": 3.82e-05,
+  "subdivision_note": "Adaptive recursive bisection (split longest axis) over the FULL R17 box using the candR17 15-center subset (L_max=0.186), refining until per-subbox eps_grid < 4e-5. Reached depth 13. Min over leaves of cover_min_over_box(subbox) = 0.3804134 at leaf worst point (0.0, 0.38044, 0.02), grid_min 0.3804516, eps_grid 3.82e-5. Margin to target = +1.296e-4. Cross-checked: phi_center shift matches dual_objective_shift to machine precision (diff 0.0); cover increases with q (worst q = lower endpoint 0.02); p-trough at p~0.38.",
+
+  "infeasible_subboxes": [],
+  "infeasibility_rigor_note": "N/A for R17 -- NO infeasibility-exclusion is used or needed. The cover is a max of GLOBALLY-VALID dual lower bounds (valid at every (h,p,q) regardless of SDP feasibility), and independently the entire box is SDP-feasible anyway (feasibility map above). This is unlike R6, where the candidate relied on excluding deep-d1 sub-boxes as infeasible. R17's floor rests purely on grid+Lipschitz over a fully-feasible box, so the R6-style rigor concern does not apply here.",
+
+  "verdict": "CONFIRM",
+  "verdict_detail": "feasible_certified_floor 0.3804134 >= target 0.3802838 (margin +1.30e-4). The candidate's claimed 0.380335 is itself a valid (slightly conservative) lower bound; my converged independent value is even higher (0.38041). The candidate's method -- use a low-L_max subset (12 core + 3 fresh R17 centers) that dominates the cover in the binding region -- is rigorous (max-of-subset <= true cover). The HINT 'narrow q[0.02,0.025] mirror of R16' is correct: the narrow box keeps eps_grid small, and unlike R6 there is no large-eps trap and no infeasibility-exclusion. R17 CONFIRMED."
+}

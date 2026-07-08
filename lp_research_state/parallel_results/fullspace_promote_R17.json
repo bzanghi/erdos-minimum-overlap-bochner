@@ -1,0 +1,134 @@
+{
+  "region": 17,
+  "target": 0.380284,
+  "config": {
+    "N": 20000,
+    "T": 4000,
+    "R": 10,
+    "bochner_n": 40,
+    "pm_k_max": 20,
+    "mside_sin_coeff": 4.0
+  },
+  "anchor": "dual_LB - 1e-5 (conservative)",
+  "h_range": [
+    0.0,
+    0.06
+  ],
+  "p_range": [
+    0.33,
+    0.45
+  ],
+  "q_range": [
+    0.02,
+    0.025
+  ],
+  "centers": [
+    {
+      "label": "R17_h0.0_c0.36_q0.02",
+      "h_c": 0.0,
+      "p_c": 0.36,
+      "q1": 0.02,
+      "q2": 0.02,
+      "primal": 0.38149,
+      "reported_primal": 0.3814906746489172,
+      "dual_lb": 0.38149,
+      "dual_resid": 2.77e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.08603224266648143,
+        "con_54": 0.25829714677720433,
+        "con_512_pL": 0.2088829311810328,
+        "con_512_pU": 0.1394829967608351,
+        "con_512_qL": 0.20068637119613963,
+        "con_512_qU": 0.1435061549700518,
+        "con_513": 0.3713435780320257
+      },
+      "time": 147.2612762451172,
+      "config": {
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R17.json"
+    },
+    {
+      "label": "R17_h0.0_c0.39_q0.02",
+      "h_c": 0.0,
+      "p_c": 0.39,
+      "q1": 0.02,
+      "q2": 0.02,
+      "primal": 0.38063,
+      "reported_primal": 0.3806255982083266,
+      "dual_lb": 0.38063,
+      "dual_resid": 1.57e-10,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.08519972833605911,
+        "con_54": 0.2460792483679175,
+        "con_512_pL": 0.22547948995117223,
+        "con_512_pU": 0.1278917959677107,
+        "con_512_qL": 0.20865765093337993,
+        "con_512_qU": 0.1339642380958376,
+        "con_513": 0.20761378510331158
+      },
+      "time": 170.14461588859558,
+      "config": {
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R17.json"
+    },
+    {
+      "label": "R17_h0.0_c0.42_q0.02",
+      "h_c": 0.0,
+      "p_c": 0.42,
+      "q1": 0.02,
+      "q2": 0.02,
+      "primal": 0.3833,
+      "reported_primal": 0.3832991763479224,
+      "dual_lb": 0.3833,
+      "dual_resid": 6.03e-09,
+      "status": "optimal_inaccurate",
+      "duals": {
+        "con_53": 0.08018760196820206,
+        "con_54": 0.2428354935955668,
+        "con_512_pL": 0.3287439302135882,
+        "con_512_pU": 0.1945519229108367,
+        "con_512_qL": 0.3000458090597839,
+        "con_512_qU": 0.19852965113758603,
+        "con_513": 4.248888388128835e-08
+      },
+      "time": 149.7078583240509,
+      "config": {
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20,
+        "mside_sin_coeff": 4.0
+      },
+      "file": "/Users/benzanghi/Documents/Claude/Projects/Erdos/lp_research_state/parallel_results/fullspace_promote_R17.json"
+    }
+  ],
+  "n_core": 12,
+  "n_fresh": 3,
+  "cover_phi_min": 0.38033509382860653,
+  "cover_grid_min": 0.3804538977565352,
+  "cover_eps_grid": 0.00011880392792867903,
+  "cover_L_max": 0.18639493747686314,
+  "cover_worst_point": [
+    0.0,
+    0.38025000000000003,
+    0.02
+  ],
+  "cover_witness": "row6",
+  "clears_380000_indep": true,
+  "clears_380284_indep": true
+}

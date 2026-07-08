@@ -1,0 +1,139 @@
+{
+  "region": 8,
+  "claimed_floor": 0.3808,
+  "verifier": "independent re-derivation via rigorous cover_min_over_box (saved per-center duals; grid + Lipschitz) + SDP feasibility map",
+  "box": {
+    "h_range": [
+      0.0,
+      0.08
+    ],
+    "p_range": [
+      0.0,
+      1.0
+    ],
+    "q_range": [
+      0.05,
+      1.0
+    ]
+  },
+  "target": 0.3802838,
+  "full_box_cover_min": 0.3304964,
+  "full_box_grid_min": 0.3824159,
+  "full_box_eps_grid": 0.05191938,
+  "full_box_L_max": 7.71660865,
+  "worst_point_full": {
+    "h": 0.0,
+    "p": 0.36875,
+    "q": 0.05,
+    "note": "full-box cover_min is eps_grid-driven (grid_min=0.38242 is ABOVE target; eps_grid=0.0519 with L_max=7.72 over the wide box drags lb to 0.3305). Matches candidate's reported R8 full-box numbers."
+  },
+  "worst_point_feasible": {
+    "h": 0.0,
+    "p": 0.3672,
+    "q": 0.05,
+    "continuous_cover_min": 0.3823321,
+    "feasible": true,
+    "sdp_status": "optimal_inaccurate (FEASIBLE; CLARABEL labeling artifact, primal=0.38121 at p=0.37)",
+    "margin_above_target": 0.00205,
+    "note": "The cover's binding low point is at the q=0.05 face and is FEASIBLE -> it cannot be excluded and must clear on its own. Cover continuous min there = 0.38233, stable to 6 digits across grid resolutions (321x3201)."
+  },
+  "feasible_certified_floor": 0.380284,
+  "binding_feasible_point": {
+    "h_box": [
+      0.035,
+      0.04
+    ],
+    "p_box": [
+      0.328125,
+      0.3359375
+    ],
+    "q_box": [
+      0.05,
+      0.05742
+    ],
+    "lb": 0.380284,
+    "margin_above_target": 2.1e-07
+  },
+  "eps_grid_achieved": 0.0008,
+  "subdivision_note": "Strict rigorous adaptive subdivision over the ENTIRE R8 box q[0.05,1.0] using ONLY cover_min_over_box (grid+Lipschitz on saved duals). 2263 leaves; refine until lb>=target OR per-subbox eps_grid<8e-4. ALL 2263 leaves cleared lb>=target; ZERO refined leaves below target. No infeasibility-exclusion was needed (the rigorous cover clears the whole box). Binding at the q=0.05 face (h~0.037,p~0.33). A cross-check restricted to the binding strip q[0.05,0.10] at eps_floor=8e-4 gave floor=0.3802849 (also all-cleared).",
+  "feasibility_map": {
+    "method": "build_problem_with_dual_handles(N=4000,T=1600,R=10,bochner_n=20) at 28 points; prob.solve(CLARABEL)",
+    "binding_q005_face_FEASIBLE": "q=0.05 face feasible for p in [0,0.50] (primal 0.385-0.430); infeasible for p>=0.70",
+    "q_monotone": "at p=0.37,h=0: primal 0.381(q0.05)->0.391(0.10)->0.406(0.15)->0.430(0.20)->0.464(0.25)->0.515(0.30); INFEAS q>=0.40",
+    "infeasible_onset": "deep-q / high-p corners: (p0.37,q>=0.40), (p0,q>=0.60), (q0.05,p>=0.70), (h0.08,p0.37,q>=0.40)"
+  },
+  "infeasible_subboxes": [
+    {
+      "region": "high-q at mid-p",
+      "example_points": [
+        [
+          0.0,
+          0.37,
+          0.4
+        ],
+        [
+          0.0,
+          0.37,
+          0.5
+        ],
+        [
+          0.0,
+          0.37,
+          0.7
+        ],
+        [
+          0.0,
+          0.37,
+          1.0
+        ]
+      ],
+      "status": "infeasible"
+    },
+    {
+      "region": "high-q at p=0",
+      "example_points": [
+        [
+          0.0,
+          0.0,
+          0.6
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "status": "infeasible"
+    },
+    {
+      "region": "high-p at q=0.05",
+      "example_points": [
+        [
+          0.0,
+          0.7,
+          0.05
+        ],
+        [
+          0.0,
+          1.0,
+          0.05
+        ]
+      ],
+      "status": "infeasible"
+    },
+    {
+      "region": "high-q at h=0.08",
+      "example_points": [
+        [
+          0.08,
+          0.37,
+          0.4
+        ]
+      ],
+      "status": "infeasible"
+    }
+  ],
+  "infeasibility_rigor_note": "Infeasible sub-boxes are robustly infeasible: multiple interior points return CLARABEL status 'infeasible' (q=0.35 at p0.37 is a borderline solver-error). However NO Farkas / dual-ray certificate was extracted, so the exclusion rigor is solver-reported, NOT independently certified. CRITICALLY this does NOT affect the verdict: the infeasibility exclusion is NOT load-bearing for this verification. The cover's binding low point is FEASIBLE and the rigorous cover_min_over_box clears the entire box (incl. the high-q region, whose cover grid_min rises with q far above target) WITHOUT excluding anything.",
+  "verdict": "CONFIRM",
+  "verdict_detail": "feasible_certified_floor = 0.3802840 >= target 0.3802838 (margin +2.1e-7 under conservative Lipschitz subdivision; true continuous cover min at the binding feasible point = 0.3823321, margin +2.05e-3). The candidate's R8 floor (>=0.3802838) is CONFIRMED by an independent rigorous-cover argument that does not rely on the candidate driver's poly_moment tail-bound or its infeasibility exclusion."
+}
