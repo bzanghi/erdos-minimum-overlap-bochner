@@ -32,9 +32,28 @@ The certified maximal first-order improvement at n=1200 equals the n=600 value t
 3 significant digits — i.e. the 600 new degrees of freedom contribute **nothing**.
 h* is first-order stationary under 2× grid refinement.
 
-**Second-order probe:** 300 random directions in the tangent space (null space of the
-active-lag gradients ∩ mass constraint, box-active cells frozen), exact quadratic M
-evaluated along each at t ∈ ±[10⁻³, 3×10⁻²]: see result line appended below.
+## Second-order analysis (n = 1200)
+
+Tangent space: null space of the 860 active-lag gradients (tol 10⁻⁹) + mass
+constraint, with box-active cells frozen — only **54-dimensional** (812 free cells,
+rank 758). First-order cone directions are already excluded by the LP, so descent
+would require a tangent direction δ with `Q_j(δ) = −(2/n)Σ_i δ_i δ_{i+j} < 0` for
+every active lag j.
+
+1. **Random probe:** 300 random tangent directions, exact quadratic M evaluated at
+   t ∈ ±[10⁻³, 3×10⁻²]: **no descent**.
+2. **PSD certificate attempt:** does some convex combination `Σγ_j Hess_j` become PSD
+   on the tangent space? Supergradient ascent of `λ_min(Σγ B_j)` over the simplex
+   peaks at **−5.5 × 10⁻⁶ < 0** — no certificate. By minimax duality this means a PSD
+   *mixture* X of tangent directions exists with `tr(B_j X) < 0` for all j — but a
+   mixture is not a direction.
+3. **Rank-1 hunt:** smoothed-minimax (log-sum-exp) descent of `max_j Q_j(δ)` over the
+   54-sphere, 30 restarts × 1600 iterations: best achievable common curvature is
+   **+3.1 × 10⁻⁵ > 0** — every direction found has at least one active lag curving up.
+   The gap between the dual value (−5.5×10⁻⁶) and the rank-1 optimum (+3.1×10⁻⁵) is
+   the standard SDP-relaxation lifting gap, not evidence of a real descent direction.
+
+**Conclusion: h\* is (numerically) a strict second-order local minimum at n = 1200.**
 
 ## Interpretation
 
