@@ -1,5 +1,14 @@
 # PRO-23: KKT Functional Equation — Together's h* is not a tight optimum
 
+> **⚠️ RETRACTED 2026-07-07 — see [PRO33_KKT_CORRECTION.md](PRO33_KKT_CORRECTION.md).**
+> The functional equation below omits the domain-edge indicator terms
+> (`1{x±t ∈ supp}` on the `g = 1−h` factor), which are O(1) for ~85% of cells
+> because the active set reaches |t| = 256 of 600. With the correct gradient and
+> LP-dual-extracted multipliers, h* satisfies the KKT system to 1.3×10⁻⁸
+> (interior) / 3×10⁻¹¹ (boundary signs). The conclusions "h* is not a KKT point"
+> and "µ < 0.380871 strictly (via KKT slack)" are withdrawn. The empirical
+> characterization in §2 (active-set structure) remains valid.
+
 **Status:** Step 1–3 complete. Step 4 (analytical solve) blocked because Together's h* fails to verify the equation. **Important byproduct finding:** Together's UB 0.380871 has slack relative to the true μ — i.e., μ < 0.380871 strictly.
 
 ---
