@@ -84,7 +84,10 @@ If you modify `bochner.py`, `white_full_convex.py`'s constraint section, or `pat
 ## External resources
 
 - White (2023) Acta Arith.: [arXiv:2201.05704](https://arxiv.org/abs/2201.05704) — the program being augmented.
-- Together Computer (March 2026) upper bound: [GitHub](https://github.com/togethercomputer/erdos-minimum-overlap) — gives `µ ≤ 0.380871`. Open gap is `[0.379544, 0.380871]`, width ~1.3 × 10⁻³.
+- **Current bracket (re-verified 2026-07-25): `µ ∈ [0.3802838, 0.380856]`, width 5.72 × 10⁻⁴.** See [MINIMUM_OVERLAP_STATE_2026-07-25.md](MINIMUM_OVERLAP_STATE_2026-07-25.md). The UB side is an active AI-search benchmark and moves on a timescale of weeks — **re-check it before quoting any bracket.**
+  - Best known UB `µ ≤ 0.380856`: SimpleTES ablation, [arXiv:2604.19341](https://arxiv.org/abs/2604.19341) §3.4.1 (Apr 2026). The [Einstein Arena leaderboard](https://einsteinarena.com/problems/erdos-min-overlap) has four entries beating Together, best 0.3808591.
+  - Together Computer (March 2026), [GitHub](https://github.com/togethercomputer/erdos-minimum-overlap) — `µ ≤ 0.3808703105862199`. **Superseded**; still the anchor in older docs and in `ub_core.ANCHOR`. Consequently PRO-34's "0.380871 is a serious candidate for µ itself" is falsified.
+  - Best *published* LB is no longer White's 0.379005 but `µ ≥ 0.37912`, Kim & Pilanci [arXiv:2606.31182](https://arxiv.org/abs/2606.31182) (Jun 2026) — same interval-arithmetic rigor standard as ours. This repo's `0.3802838` still leads it by 1.16 × 10⁻³, but priority is time-sensitive.
 - Preprint draft: [communications/preprint_draft.tex](communications/preprint_draft.tex). Email draft to E. P. White: [communications/email_to_ethan_white.md](communications/email_to_ethan_white.md).
 
 ## Extra math tooling (added 2026-05-18)
