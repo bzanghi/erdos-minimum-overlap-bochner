@@ -14,7 +14,7 @@ vs. White (2023)'s `µ ≥ 0.379005` and the current best *published* bound `µ 
 
 - **Core residual region (5.16):** `µ ≥ 0.3802946016`, the **binding** region. All 12 anchors carry a Jansson-Chaykin-Keil interval-arithmetic certificate (`_jansson_reanchor.py`), with the duals read from the same solve that produced the certificate. This replaced the earlier `primal − 1e-5` convention, which was a haircut on a solver-reported value rather than a theorem — and the certified anchors came out *above* it, so the fix also raised the bound (0.3802838 → 0.3802946).
 - **Full-space promotion (verified, re-run 2026-07-25):** the augmented dual cover (121 dual-feasible centers) clears the core value over all 18 of White's Table-2 "outside" regions, so the full-space minimum equals the core. Tightest outside region R6 at 0.3803090. See [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md).
-- **Upper bound, certified here:** `µ ≤ 0.380859056651254094841565810818` (exact rational, all `2n−1` signed lags in integer arithmetic). Note the widely-cited `0.380856` **is not a bound** — see [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
+- **Upper bound, certified here:** `µ ≤ 0.380859056614806899090596051448` (exact rational, all `2n−1` signed lags in integer arithmetic). Note the widely-cited `0.380856` **is not a bound** — see [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
 
 **Honest caveats (these travel with the bound):**
 - It is **load-bearing on the polynomial-moment cuts** (`pm_k_max=20`), which are rigorous as of the 2026-05-22 tail-bound fix (see [`lp_research_state/findings.md`](lp_research_state/findings.md)), and on a set of fresh "promotion" centers in regions R16/R17 (with the 12 core anchors alone, those corners fall to 0.3802561, −2.8 × 10⁻⁵ below target).
@@ -31,7 +31,13 @@ vs. White (2023)'s `µ ≥ 0.379005` and the current best *published* bound `µ 
 4. **Dual cover + ellipse extension** — each center's dual objective is a globally-valid lower bound; the cover is `max_c Φ_c(h,p,q)` ([`path_b_analytical.py`](lp_research_state/code/path_b_analytical.py)).
 5. **Full-space certification** — rigorous box-min via grid + Lipschitz `eps_grid`, with **adaptive subdivision** to control `eps_grid` on White's wide outside regions ([`_fullspace_eval.py`](lp_research_state/code/_fullspace_eval.py)).
 
-Verification convention: independent re-implementations agreeing to 10+ digits, and `rigorous_dual_LB = value − last_gap` (dual extraction), not unit tests.
+Verification convention: independent re-implementations agreeing to 10+ digits, plus a
+Jansson-Chaykin-Keil a-posteriori certificate in directed-rounding interval arithmetic
+([`_jansson_verify.py`](lp_research_state/code/_jansson_verify.py)) for every anchor in the
+binding region. **`dual_extractor.rigorous_dual_LB` is NOT a certificate** — it is the
+solver's dual objective with no correction for dual infeasibility, and its eligibility gate
+formerly read CLARABEL's `pres` column while calling it the dual residual (both documented and
+fixed 2026-07-25). Use it to steer a search, never to state a bound.
 
 ## Reproducing
 
@@ -50,9 +56,17 @@ print(res["rigorous_dual_LB"])  # ≥ 0.379653 (Bochner-only, single row)
 
 ## State of the art
 
-- **Lower bound (this work):** `µ ≥ 0.380284`, full-space, verified. vs White (2023) `0.379005`.
-- **Upper bound:** `µ ≤ 0.380871` — Together Computer (March 2026); verified independently to `0.3808703106…`.
-- **Open gap:** `µ ∈ [0.380284, 0.380871]`, width ≈ **5.87 × 10⁻⁴**.
+- **Lower bound (this work):** `µ ≥ 0.3802946`, full-space, every core anchor certified in
+  interval arithmetic. Best *published* LB is `0.37912` (Kim & Pilanci, ICML 2026), which
+  displaced White's `0.379005`.
+- **Upper bound:** `µ ≤ 0.380859056614806899090596051448`, certified here in exact rational
+  arithmetic from the Einstein Arena `lnzwz_AI4M_Agent` witness (n=512, publicly
+  downloadable) after a structured basin-hop polish.
+- **Do not quote `0.380856`.** It is a normalization artifact, not a bound; the honest value
+  of that construction is `0.3809490`. See
+  [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
+- **Open gap:** `µ ∈ [0.3802946, 0.3808591]`, width ≈ **5.64 × 10⁻⁴**.
+- The UB side is an active AI-search benchmark that moves weekly — re-check before quoting.
 
 ## Key documents
 

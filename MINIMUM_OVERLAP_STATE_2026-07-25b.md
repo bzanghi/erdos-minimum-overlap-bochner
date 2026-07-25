@@ -11,7 +11,7 @@ re-verified), or **[INF]** (inferred).
 
 | | Value | Status |
 |---|---|---|
-| **UB, certified here** | **µ ≤ 0.380859056651254094841565810818** | [RAN] exact rational, arena witness + polish |
+| **UB, certified here** | **µ ≤ 0.380859056614806899090596051448** | [RAN] exact rational, arena witness + polish |
 | UB, widely cited | ~~0.380856~~ | [RAN] **NOT A BOUND** — normalization artifact |
 | **LB, this repo** | **µ ≥ 0.3802946** | [RAN] 12/12 core anchors Jansson-certified |
 | LB, previous repo headline | µ ≥ 0.3802838 | [RAN] reproduced end-to-end |
@@ -80,15 +80,18 @@ Re-evaluated here: `M = 0.38085905681456067` vs reported `0.3808590568145606`
 argmax lag = 100
 ```
 
-Polishing that witness (40 SLP rounds at n=512, then cell-doubled to n=1024 and
-polished again) gains a further `1.63 × 10⁻¹⁰`, giving the **best certified upper
-bound available**:
+Polishing that witness improves it further. A cell-doubling ladder to n=1024
+gains `1.63 × 10⁻¹⁰`; a 6000-proposal structured basin-hop at n=512 does slightly
+better at `2.00 × 10⁻¹⁰`, giving the **best certified upper bound available**:
 
 ```
-µ ≤ 129599621260564534688392698237989697325 / 340282366920938463463374607431768211456
-  = 0.380859056651254094841565810818          (decimal rounded UP)
-n = 1024, argmax lag = 138
+µ ≤ 129599621248162196650621937272674201309 / 340282366920938463463374607431768211456
+  = 0.380859056614806899090596051448          (decimal rounded UP)
+n = 512, argmax lag = 69
 ```
+
+Both polishes stay inside the record basin — see
+[UB_SEARCH_NEGATIVE_2026-07-25.md](UB_SEARCH_NEGATIVE_2026-07-25.md).
 
 This improves the previous best certified UB (0.380867545960922320593700936552,
 SimpleTES n=2400 + SLP polish) by **8.49 × 10⁻⁶**. Files:
