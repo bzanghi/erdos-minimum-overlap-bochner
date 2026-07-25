@@ -106,3 +106,95 @@ stacked PRs, CI green, squash-merge, branch deleted.
 
 Ben's unrelated `ben/blog-personal-tech-radar` branch was preserved intact
 (`19761de`) — that work landed separately as PR #25.
+
+---
+
+# Addendum — architecture-audit round (same day, later)
+
+Commits `42f3373`, `50cdcb7`, `97fe8ad`. Still unsynced, same reason.
+
+### Correct, do not merely close
+
+**PRO-6 / Lever I′** — *`C_explicit = 0.380713` is not sound as derived.*
+
+> `docs/archive/LEVER_I_PRIME_FINAL.md` §2's own table gives row7
+> `Ω = 0.381586` plus residual `5.85e-4` = `0.382171`, which is **above the
+> certified upper bound** — so the per-row statement cannot be a valid ceiling as
+> written. The published number also substitutes the min-over-rows Phase-5 anchor
+> `0.3801279` for the theorem's per-row RHS. Replace with a feasible-set
+> containment argument: the discretized program at any `N` is at most the
+> continuum program's value, pinned two independent ways at **≈0.38065 ± 2e-5**
+> at the witness's parameters. Weaker, but true, and still enough to conclude the
+> architecture cannot close the gap. **This number has been quoted repeatedly in
+> repo docs and in my own summaries; it needs correcting wherever it appears.**
+
+### Create
+
+**New — Todo, High.** *N-scaling is the only lever with measured headroom.*
+
+> The graveyard entry "N sweeps don't help" was measured in the 10k–40k band
+> only. At the certified cover's binding point `(0.002812, 0.392188, ±0.02)` with
+> production `(T=4000, bochner_n=40, pm_k_max=20)`: `N=20000 → 0.380343028`,
+> **`N=48000 → 0.380458890`** — `+1.16e-4` in 378 s at 5.7 GB peak. That is ~4×
+> the entire remaining f-side headroom, for zero new mathematics. A 12-centre
+> re-certification at N=48000 was launched at session end →
+> `parallel_results/jansson_core12_N48000.json`. **Open question that decides
+> this:** does the Jansson interval pass still certify at 2.4× the cell count, or
+> does interval widening eat the gain? If it eats it, the correct diagnosis is
+> that the certified LB is **Jansson-limited, not envelope-limited** — which
+> nobody has established either way and is more useful than either ceiling story.
+
+**New — Done.** *The f-side of White's architecture is closed.*
+
+> Two independent measurements agree. An exact moment-body program (replacing
+> `c,d = Variable(T)` by the exact moment map of a density) rigorously
+> upper-bounds production **plus any f-side cut family, present or future**,
+> because production has no M-side augmentation and all its f-side constraints
+> are implied by a genuine density. Headroom at the binding anchor
+> `cde_n30_iter3`: **+3.77e-5**, and it *shrinks* with N (+1.2e-4 at N=6000).
+> Bochner-40 + poly_moment has already taken ~90% of all f-side slack. Action:
+> commit the meter as `lp_research_state/code/fside_ceiling.py` and gate every
+> future f-side proposal on running it first — 19 s versus minutes for a bn=40
+> SDP, because it drops both 82×82 PSD blocks. Note it is a *diagnostic*, not a
+> bound on µ (piecewise-constant `y` inner-approximates the moment body).
+
+**New — Done.** *Five LB architectures killed, one terminal survivor.*
+
+> Writeup: `LB_ARCHITECTURE_AUDIT_2026-07-25.md`. Dead: discretization-error
+> `µ ≥ M_n − ε_n` (the aliased detail spectrum is a positive-definite sequence,
+> which *forces* the projection error to be maximally adverse at lag 0 — so
+> positivity cannot sign the error; sharpest lattice-only bound `≤ 0` for every
+> n, needed `ε_n < 6.7e-4`, provable `≈0.36`); the extreme-point / PD-weight
+> reduction (correct but capped at **0.3294738** by an exact rational certificate
+> over 51 measure-1 adversaries, exactly 1/4 for positive-definite weights);
+> argmax-disjunctive branching (one-line vacuity theorem: `P ⊆ ⋃D_j` implies the
+> branched min equals the unbranched inf); bathtub cell-envelope (correct, but a
+> Richardson extrapolator for N in disguise); bathtub Markov/Krein cuts (correct,
+> capped at ≤3.8e-5). Survivor: half-integer period-4 Bochner — valid, novel,
+> absent from the repo, worth ~3.8e-5. Terminal, not a lever.
+
+**New — Done.** *UB side closed to local methods.*
+
+> 6000 structured basin-hop proposals at n=512 (7 move families, scale over
+> `[1e-3, 2e-1]`) never left the record basin; 245 "beats" were all 1e-11 to
+> 2e-10 polish artifacts inside it. Non-commensurate resampling loses more than
+> polish recovers. Symmetry projection costs 5.5e-4 — and the symmetry group is
+> now verified: `R: h(2−x)`, `K: 1−h`, `RK: 1−h(2−x)` each preserve M exactly,
+> and the optimum is a fixed point of none of them. Best certified UB is now
+> **`µ ≤ 0.380859056614806899090596051448`** (n=512, argmax lag 69). Writeup:
+> `UB_SEARCH_NEGATIVE_2026-07-25.md`.
+
+**New — Todo, Low.** *Bank the certified continuous n-cell optima.*
+
+> Corrected epigraph-Lasserre level 2 certifies global optimality of the
+> *continuous* n-cell minimax, tight to 1e-8: `M_4 = 0.4000000`,
+> `M_6 = 0.3888889`, `M_8 = 0.3850717`, `M_10 = 0.3824271`, `M_12 = 0.3822141`.
+> First such certificates in the repo; certified **upper** bounds on µ. Worth
+> committing as a table with the generating script.
+
+### Site
+
+The live post quotes the UB as `0.3808590567`, which is still correct to the
+digits shown, but the exact certified rational improved after publication to
+`0.380859056614806899090596051448`. Not worth a redeploy on its own; fold into
+the next site update.

@@ -71,6 +71,7 @@ import warnings
 from pathlib import Path
 
 import numpy as np
+import pathlib
 
 warnings.filterwarnings("ignore")
 
@@ -80,6 +81,7 @@ sys.path.insert(0, str(CODE))
 REPO = CODE.parent.parent
 DUALEXT = CODE.parent / "parallel_results" / "phase5_N20K_bn40_dualext.json"
 OUT_JSON = CODE.parent / "parallel_results" / "jansson_core12_reanchored.json"
+# overridable so a re-run at a different N writes its own file (see --out)
 
 DUAL_KEYS = ["con_53", "con_54", "con_512_pL", "con_512_pU",
              "con_512_qL", "con_512_qU", "con_513"]
@@ -193,8 +195,12 @@ def solve_certify_and_read_duals(N, T, R, h_c, p_c, q1, q2, bn, pm, slack_infl):
 
 def run_one(center, N, T, R, bn, pm, slack_infl):
     db = load_db()
-    if any(r.get("label") == center["label"] and r.get("ok") for r in db["centers"]):
-        print(f"[skip] {center['label']} already done", flush=True)
+    cfg = dict(N=N, T=T, R=R, bochner_n=bn, pm_k_max=pm)
+    # key the skip on the CONFIG too — otherwise a re-run at a different N is
+    # silently skipped and the old N's numbers are reported as the new N's
+    if any(r.get("label") == center["label"] and r.get("ok")
+           and r.get("config") == cfg for r in db["centers"]):
+        print(f"[skip] {center['label']} already done at {cfg}", flush=True)
         return
     lbl = center["label"]
     print(f"\n### {lbl}  h_c={center['h_c']} p_c={center['p_c']} "
@@ -206,7 +212,7 @@ def run_one(center, N, T, R, bn, pm, slack_infl):
             bn, pm, slack_infl)
         old_anchor = center["primal"] - 1e-5
         rec = {
-            "label": lbl, "ok": True,
+            "label": lbl, "ok": True, "config": cfg,
             "h_c": center["h_c"], "p_c": center["p_c"],
             "q1": center["q1"], "q2": center["q2"],
             "p_lo": p_lo,
@@ -221,7 +227,8 @@ def run_one(center, N, T, R, bn, pm, slack_infl):
         print(f"[{lbl}] p_lo={p_lo:.12f}  old_anchor={old_anchor:.12f}  "
               f"gain={p_lo - old_anchor:+.3e}{flag}", flush=True)
     except Exception as e:
-        rec = {"label": lbl, "ok": False, "error": f"{type(e).__name__}: {e}",
+        rec = {"label": lbl, "ok": False, "config": cfg,
+               "error": f"{type(e).__name__}: {e}",
                "tb": traceback.format_exc(), "wall_s": time.time() - t0}
         print(f"[{lbl}] ERROR: {e}", flush=True)
     db = load_db()
@@ -451,7 +458,11 @@ if __name__ == "__main__":
     ap.add_argument("--bochner_n", type=int, default=40)
     ap.add_argument("--pm_k_max", type=int, default=20)
     ap.add_argument("--slack_infl", type=float, default=4.0)
+    ap.add_argument("--out", type=str, default=None,
+                    help="output JSON (default jansson_core12_reanchored.json)")
     args = ap.parse_args()
+    if args.out:
+        OUT_JSON = pathlib.Path(args.out)
 
     if args.emit_dualext:
         emit_dualext()
