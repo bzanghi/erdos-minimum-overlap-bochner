@@ -82,17 +82,27 @@ certificates.*
 
 ## Team ZAN (benzanghi.com)
 
+**SHIPPED — create the issue retroactively and set it straight to Done.**
+
+Ben approved the deploy explicitly. [PR #26](https://github.com/bzanghi/Portfolio/pull/26)
+squash-merged to `main` as `4ae8112`; CI green (Typecheck · Lint · Build, 1m43s);
+Vercel deployed. Live and content-verified at
+<https://www.benzanghi.com/blog/erdos-minimum-overlap>.
+
+> Rewrote `src/content/blog/erdos-minimum-overlap.mdx` for July 2026 — every
+> number in the May version was superseded. Headline LB 0.3802838 → 0.3802946
+> (all 12 core anchors certified in interval arithmetic), best certified UB
+> 0.380859056651254094841565810818, and the widely-cited 0.380856 refuted as a
+> normalization artifact. A follow-up commit credits Ethan White's framework
+> (Acta Arithmetica 208, 2023) properly and makes clear that none of the
+> certificate failures in the post are his — his Appendix II already contains
+> the a-priori floating-point feasibility argument the repo's own code skipped.
+
 **Protocol gap to flag, not paper over.** That repo's CLAUDE.md says *"Claim
-before code — run `/claim-ticket` before touching files."* The post rewrite was
-branched and committed **without a ticket**, because Linear was unreachable.
+before code — run `/claim-ticket` before touching files."* No ticket was claimed,
+because Linear was unreachable from the authoring session. This is noted in the
+PR body as well. The rest of the protocol was followed: branched off `main`, no
+stacked PRs, CI green, squash-merge, branch deleted.
 
-Needs: a ZAN issue created, moved to In Progress retroactively, then In Review
-when the PR opens.
-
-> Rewrote `src/content/blog/erdos-minimum-overlap.mdx` for July 2026. The May
-> version's numbers are all superseded. Branch
-> `ben/erdos-minimum-overlap-july-2026` off `main`, `npm run build` passes 35/35,
-> not pushed (production deploys only when Ben asks).
-
-The rest of the protocol was followed: branched off `main`, no stacked PRs,
-build green.
+Ben's unrelated `ben/blog-personal-tech-radar` branch was preserved intact
+(`19761de`) — that work landed separately as PR #25.
