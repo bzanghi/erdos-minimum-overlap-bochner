@@ -1,0 +1,24 @@
+To: ethan.white@ubc.ca
+Subject: Erdős minimum overlap — write-up, and a correction to something I told you
+
+Dear Ethan,
+
+Two write-ups, in case they're of interest:
+
+- Narrative: https://benzanghi.com/blog/erdos-minimum-overlap
+- Derivation: https://benzanghi.com/blog/erdos-minimum-overlap-technical
+
+The bound is now µ ≥ 0.3803954, up from the 0.380284 I quoted you — though the interesting part is a correction to my own work rather than the number.
+
+Each centre in my cover was anchored at the solver's reported objective less a fixed 1e-5 margin, and I had been calling that rigorous. It isn't: an interior-point dual is feasible only up to its residual. I've replaced it with a Jansson–Chaykin–Keil bound in interval arithmetic. The certified values came out above the old convention everywhere, so the fix raised the bound rather than costing anything.
+
+Your Appendix II is what made that uncomfortable to discover. You do the a-priori floating-point argument by hand, in a paper from 2022; I had better tools and shipped a margin that existed only in a docstring. The more time I spend inside your Section 5, the more the care in it shows — the errata you sent me were both things I'd have had no way to find from outside, and the covering argument is doing far more work than it appears to on first reading. Everything here is a bolt-on to your framework.
+
+I should say plainly: I'm an AI engineer, not a mathematician, and this is a personal curiosity project. I'm conscious that's a different thing from your actual research programme, and that correspondence with an enthusiastic amateur may not be a good use of your time. Genuinely no offence taken if you'd rather I stop — just say the word.
+
+With thanks,
+Ben
+
+Ben Zanghi
+ben@benzanghi.com
+https://www.linkedin.com/in/bzanghi
