@@ -8,17 +8,17 @@ full parameter space.
 
 ## Result
 
-$$\boxed{\mu \;\geq\; 0.3802946}\quad\text{over White's \emph{entire} }(E(M),\,c_1,\,d_1)\text{ parameter space}$$
+$$\boxed{\mu \;\geq\; 0.3803667}\quad\text{over White's \emph{entire} }(E(M),\,c_1,\,d_1)\text{ parameter space}$$
 
 vs. White (2023)'s `µ ≥ 0.379005` and the current best *published* bound `µ ≥ 0.37912` (Kim & Pilanci, ICML 2026) — an **unconditional, full-space improvement of +1.17 × 10⁻³**, with **no White-published number used in the bound** (every region is certified by our own augmented dual cover).
 
-- **Core residual region (5.16):** `µ ≥ 0.3802946016`, the **binding** region. All 12 anchors carry a Jansson-Chaykin-Keil interval-arithmetic certificate (`_jansson_reanchor.py`), with the duals read from the same solve that produced the certificate. This replaced the earlier `primal − 1e-5` convention, which was a haircut on a solver-reported value rather than a theorem — and the certified anchors came out *above* it, so the fix also raised the bound (0.3802838 → 0.3802946).
-- **Full-space promotion (verified, re-run 2026-07-25):** the augmented dual cover (121 dual-feasible centers) clears the core value over all 18 of White's Table-2 "outside" regions, so the full-space minimum equals the core. Tightest outside region R6 at 0.3803090. See [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md).
+- **Core residual region (5.16):** `µ ≥ 0.3803954`. All 12 anchors carry a Jansson-Chaykin-Keil interval-arithmetic certificate (`_jansson_reanchor.py`) at `N=48000`, with the duals read from the same solve that produced the certificate. This replaced the earlier `primal − 1e-5` convention, which was a haircut on a solver-reported value rather than a theorem — and the certified anchors came out *above* it, so the fix raised the bound rather than costing anything (0.3802838 → 0.3802946 → 0.3803954).
+- **Full-space promotion (re-run 2026-07-25):** the augmented dual cover (121 dual-feasible centers) clears `0.3803667` over all 18 of White's Table-2 "outside" regions. The **binding** region is now **R9 at 0.3803667**, not the core — R6 0.3804601, R7 0.3805539, R16 0.3803961, R17 0.3803972. Re-running R9's dedicated driver (`_eval_r9_combined.py`) against the `N=48000` anchors would put the core back in the binding seat at 0.3803954. See [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md) and [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §7.
 - **Upper bound, certified here:** `µ ≤ 0.380859056614806899090596051448` (exact rational, all `2n−1` signed lags in integer arithmetic). Note the widely-cited `0.380856` **is not a bound** — see [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
 
 **Honest caveats (these travel with the bound):**
 - It is **load-bearing on the polynomial-moment cuts** (`pm_k_max=20`), which are rigorous as of the 2026-05-22 tail-bound fix (see [`lp_research_state/findings.md`](lp_research_state/findings.md)), and on a set of fresh "promotion" centers in regions R16/R17 (with the 12 core anchors alone, those corners fall to 0.3802561, −2.8 × 10⁻⁵ below target).
-- **Margins are thin** (binding outside region R16 clears by +1.2 × 10⁻⁴). A margin-hardening re-solve at N ≥ 24000 + Farkas certificates for the (non-load-bearing) infeasibility exclusions is in progress (PRO-44).
+- **Margins are thin**: the binding region R9 clears the core by only −2.9 × 10⁻⁵, i.e. it is what caps the headline. Farkas certificates for the (non-load-bearing) infeasibility exclusions remain outstanding.
 - A prior Bochner-only headline was `µ ≥ 0.379544`; an earlier Lasserre-level-2 extension was **retracted** (truncated moment expansion without a tail bound). Both lessons are recorded in the research note.
 
 **Author validation.** E. P. White (the author of the program we augment) confirmed (2026-05-31) that the Bochner-PSD constraint is "a valid constraint to add," and supplied two corrections to his published program: constraints 5.6/5.7 should have a `4` (not `8`) in the RHS numerator — **applied** (`mside_sin_coeff=4.0`; impact verified neutral, PRO-43) — and 5.8/5.9 should use `2m−1`, which our code already did.
@@ -56,7 +56,7 @@ print(res["rigorous_dual_LB"])  # ≥ 0.379653 (Bochner-only, single row)
 
 ## State of the art
 
-- **Lower bound (this work):** `µ ≥ 0.3802946`, full-space, every core anchor certified in
+- **Lower bound (this work):** `µ ≥ 0.3803667`, full-space, every core anchor certified in
   interval arithmetic. Best *published* LB is `0.37912` (Kim & Pilanci, ICML 2026), which
   displaced White's `0.379005`.
 - **Upper bound:** `µ ≤ 0.380859056614806899090596051448`, certified here in exact rational
@@ -65,7 +65,7 @@ print(res["rigorous_dual_LB"])  # ≥ 0.379653 (Bochner-only, single row)
 - **Do not quote `0.380856`.** It is a normalization artifact, not a bound; the honest value
   of that construction is `0.3809490`. See
   [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
-- **Open gap:** `µ ∈ [0.3802946, 0.3808591]`, width ≈ **5.64 × 10⁻⁴**.
+- **Open gap:** `µ ∈ [0.3803667, 0.3808591]`, width ≈ **5.64 × 10⁻⁴**.
 - The UB side is an active AI-search benchmark that moves weekly — re-check before quoting.
 
 ## Key documents

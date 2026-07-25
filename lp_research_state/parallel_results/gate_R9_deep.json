@@ -1,0 +1,31 @@
+{
+  "target": 0.3803954,
+  "max_depth": 16,
+  "base": 41,
+  "core_config": {
+    "N": 20000,
+    "T": 4000,
+    "R": 10,
+    "bochner_n": 40,
+    "pm_k_max": 20
+  },
+  "regions": {
+    "9": {
+      "region": 9,
+      "floor": 0.38016382630356754,
+      "ceiling_grid_min": 0.3807032512988824,
+      "worst_point": {
+        "h": 0.0,
+        "p": 0.37529296875,
+        "q": 0.025
+      },
+      "witness": "R17_h0.0_c0.39_q0.02",
+      "leaves": 156,
+      "clears_target": false,
+      "secs": 270.3502879142761,
+      "mechanism": "smooth_pool",
+      "n_core": 12,
+      "n_fresh": 3
+    }
+  }
+}
