@@ -1,6 +1,8 @@
 # Email to Ethan White — v6 (write-up links + certification correction)
 
-**Status: DRAFT. NOT SENT. Ben reviews and sends manually — do not send programmatically.**
+**Status: SENT by Ben, 2026-07-25.** Gmail draft `r7217925267018049111`, created
+via `gws` and verified by reading it back before sending. This is the version
+that went out; do not edit it further — write a v7 if there is a follow-up.
 
 **Supersedes:** [email_to_ethan_white_v5_reply.md](email_to_ethan_white_v5_reply.md), which quotes
 `µ ≥ 0.380284` and predates the certification round. If v5 was never sent, send this instead

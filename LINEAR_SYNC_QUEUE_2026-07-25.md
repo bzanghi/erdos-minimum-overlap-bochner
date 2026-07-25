@@ -394,3 +394,9 @@ secrets** (both created 2026-07-25, 3:23 and 3:24 PM); the console itself warns
 that multiple live secrets increase risk — disable one. (c) Note Google no
 longer permits viewing or downloading existing client secrets, only minting new
 ones.
+
+**PRO-8 / PRO-54 — SENT.** Ben sent the v6 letter to Ethan White on 2026-07-25
+(Gmail draft `r7217925267018049111`). First outreach carrying the certified
+bound `µ ≥ 0.3803954` and the interval-arithmetic certification. Move PRO-8 to
+Done; PRO-54 now covers only the two remaining letters (SimpleTES authors,
+Kim & Pilanci), both still drafted-and-unsent.
