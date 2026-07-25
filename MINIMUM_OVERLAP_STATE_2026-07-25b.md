@@ -13,11 +13,11 @@ re-verified), or **[INF]** (inferred).
 |---|---|---|
 | **UB, certified here** | **µ ≤ 0.380859056614806899090596051448** | [RAN] exact rational, arena witness + polish |
 | UB, widely cited | ~~0.380856~~ | [RAN] **NOT A BOUND** — normalization artifact |
-| **LB, this repo** | **µ ≥ 0.3803667** | [RAN] N=48000, 12/12 anchors certified, binding R9 |
+| **LB, this repo** | **µ ≥ 0.3803954** | [RAN] N=48000, 12/12 anchors certified, binding R9 |
 | LB, previous repo headline | µ ≥ 0.3802838 | [RAN] reproduced end-to-end |
 | LB, best published | µ ≥ 0.37912 | [RAN] Kim & Pilanci, ICML 2026 |
 
-**Bracket: `µ ∈ [0.3803667, 0.3808590567]`.**
+**Bracket: `µ ∈ [0.3803954, 0.3808590567]`.**
 
 The UB improves the previous best certified value (0.380867545960922320593700936552,
 SimpleTES n=2400 + SLP) by **8.49 × 10⁻⁶**.
@@ -204,7 +204,7 @@ residual region (5.16) **and** lift his weakest strip (region 18, his 0.37925)
 to 0.380894 with witness `row6` [RAN]. Nothing else is load-bearing.
 This is **+8.8 × 10⁻⁴** over the best published LB.
 
-**Tier 2 — working frontier: µ ≥ 0.3803667.** Replaces White's Table 2
+**Tier 2 — working frontier: µ ≥ 0.3803954.** Replaces White's Table 2
 with our own 121-center full-space cover. The ~109 non-core centers are still
 anchored at the uncertified `primal − 1e-5` convention, so this is a working
 result, not a theorem. Re-anchoring them is mechanical (~109 × 4 min).
@@ -347,11 +347,15 @@ N=48000, roughly linear ⇒ ~23 GB at N=192000).
 | core (5.16) | 0.3803954 | re-certified, adaptive |
 | R6 | 0.3804601 | was 0.3803090 |
 | R7 | 0.3805539 | stored; already above the core |
-| **R9** | **0.3803667** | stored; **binding** |
+| R9 | 0.3803979 | re-certified; LEFT 0.3823244 / STRIP 0.3803979 / RIGHT 0.3840298 |
 | R16 | 0.3803961 | was 0.3803547 |
 | R17 | 0.3803972 | was 0.3803351 |
 
-> **µ ≥ 0.3803667**, full-space, binding at R9.
+> **µ ≥ 0.3803953504**, full-space, **binding = the core**.
+
+Margins on the three tightest regions are thin: R16 +7e-7, R17 +1.8e-6,
+R9 +2.5e-6 over the core. They clear, but they are what any further core gain
+would immediately run into.
 
 **Why R9 was not improved, stated honestly.** The new generic driver
 (`_regions_reeval.py`) is weaker than the dedicated per-region drivers on the
@@ -365,9 +369,15 @@ its full box — the method field records a divide-and-conquer with LEFT [0,0.33
 and RIGHT [0.45,1.0] cleared by the 23 corehalo centers and STRIP [0.33,0.45]
 lifted by 3 fresh `bn=40` centers. No gap.
 
-**Next step, cheap and well-defined:** re-run `_eval_r9_combined.py` against the
-N=48000 anchors. If R9 clears 0.3803954 the core binds again and the headline
-becomes **0.3803954**.
+**R9, resolved.** Reproducing its dedicated divide-and-conquer at the N=48000
+anchors (`_eval_r9_reanchored.py`) initially made things look *worse*: the strip
+came out at 0.3801263. The cause was not the bound but `eps` — `grid_min` rose to
+0.3804300, comfortably above target, while `eps` ballooned to 3.04e-4 because the
+certified duals are steeper than the old convention's (`Lmax` 0.15 → 0.39). The
+same adaptive subdivision that recovered the core floor fixes it: at base=41,
+depth=18 the strip clears at **0.3803979** in 27 leaves. LEFT (0.3823244) and
+RIGHT (0.3840298) clear easily, so R9's full-box floor is 0.3803979 and the core
+binds again.
 
 Two driver bugs found, both of which weakened rather than corrupted results:
 R7 stores its certificate as `dual_lb_raw` where every other region uses

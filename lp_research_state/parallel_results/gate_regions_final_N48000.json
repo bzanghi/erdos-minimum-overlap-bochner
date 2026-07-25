@@ -1,0 +1,21 @@
+{
+  "anchors": "dualext_reanchored_N48000.json",
+  "core_floor": 0.3803953504,
+  "regions": {
+    "core": 0.3803953504,
+    "R6": 0.3804601,
+    "R7": 0.3805539,
+    "R9": 0.3803979,
+    "R16": 0.3803961,
+    "R17": 0.3803972
+  },
+  "R9_detail": {
+    "LEFT": 0.3823244,
+    "STRIP_adaptive": 0.3803979,
+    "RIGHT": 0.3840298,
+    "STRIP_single_grid": 0.3801263,
+    "note": "single grid fails only on eps (grid_min 0.3804300, Lmax 0.393); adaptive clears"
+  },
+  "binding": "core",
+  "headline": 0.3803953504
+}
