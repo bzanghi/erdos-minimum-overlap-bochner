@@ -286,3 +286,70 @@ M_8 = 0.3850717, M_10 = 0.3824271, M_12 = 0.3822141. First global-optimality
 certificates in this repo. Pushing to n ≈ 30–40 would measure how far the record
 constructions sit from optimal at their own n — the most valuable open unknown
 on the UB side.
+
+---
+
+# ADDENDUM 2 — publication round
+
+Erdős repo: `a866bc3` (preprint v4), `a59ac24` (R9 resolved).
+Portfolio: `9fec448`, [PR #27](https://github.com/bzanghi/Portfolio/pull/27), deployed.
+
+## Final numbers for the round
+
+| | value |
+|---|---|
+| **LB** | **0.3803953504** — full-space, binding = core, all 12 anchors certified at N=48000 |
+| **UB** | **0.380859056614806899090596051448** — exact rational |
+| gap | 4.64e-4 |
+| lead over published (Kim–Pilanci 0.37912) | **+1.28e-3** |
+
+## Update existing
+
+**PRO-5 (preprint).** *Move to In Progress; comment:*
+
+> `preprint_draft_v4.tex` written. Three things in v3 were wrong, not stale, so
+> this is a rewrite rather than a number bump: (i) the headline rested on an
+> anchor convention rather than a certificate — v4's core section is now the
+> Jansson certification plus the transport proposition; (ii) v3's claim to be
+> "the first advance since 2022" is false, Kim & Pilanci published 0.37912 in
+> June 2026; (iii) v3's saturation theorem `C_explicit = 0.380713` is unsound as
+> derived and is explicitly withdrawn, replaced by a containment proposition
+> (~0.38065). Also corrected the abstract's lead figure 1.13e-3 → **1.28e-3**,
+> which was simply wrong.
+> **BLOCKER: never compiled.** No LaTeX toolchain on this machine. Needs a
+> `pdflatex` pass and a read of the PDF before submission.
+
+**PRO-49 (gate regions).** *Close as Done; comment:*
+
+> All gate regions re-certified at the N=48000 anchors. R6 0.3803090 →
+> 0.3804601, R16 → 0.3803961, R17 → 0.3803972, R9 → 0.3803979. The core binds at
+> 0.3803953504. Two driver bugs found, both of which *weakened* rather than
+> corrupted: R7 stores `dual_lb_raw` where others use `dual_lb`; and grid
+> resolution, not depth, was binding (R6 cleared at base=41 in 1 s after failing
+> at base=21 at any depth).
+> **Margins are the real finding**: R16/R17/R9 clear the core by +7e-7, +1.8e-6,
+> +2.5e-6. PRO-50 cannot be banked without redoing the cover alongside.
+
+**PRO-50 (N lever).** *Comment:*
+
+> Re-scoped and more expensive than first estimated. Still +8.28e-5 available
+> (`val(N) ≈ 0.380541649 − 3.9724/N`), but the three thin regions above bind
+> immediately, so the cover must be re-run with it. Not a pure "rent memory" job.
+
+## Create
+
+**PRO-52 — Publish the site write-up.** *Done.* Post updated to 0.3803954 and a
+technical companion added at `/blog/erdos-minimum-overlap-technical` — full
+derivation, twelve certificates, certified UB, the 0.380856 correction, five
+ruled-out approaches with proofs. Build 37/37. Note the site has no math
+typesetting (remark-gfm, no KaTeX); the companion uses Unicode and GFM tables. A
+separate ticket should decide whether to add `remark-math` + `rehype-katex`.
+
+**PRO-53 — Compile and submit the preprint.** *Todo.* Blocking item is the
+compile. Then arXiv (math.NT / math.CO). Time-sensitive: Kim & Pilanci are
+working the identical direction to the identical rigor standard.
+
+**PRO-54 — Send the two letters.** *Todo, needs Ben's approval before anything
+goes.* SimpleTES authors (drafted, unsent — their arXiv v1 still carries the
+0.380856 figure they themselves repaired in code); and a short note to Kim &
+Pilanci, since this work is now adjacent to theirs.
