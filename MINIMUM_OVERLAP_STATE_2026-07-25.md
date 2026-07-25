@@ -265,7 +265,6 @@ Each row is an exactly-feasible rational witness with an integer-arithmetic
 objective; each was re-checked as `≥` its own exact rational. None of them reaches
 SimpleTES's *claimed* `0.380856`, whose witness is unpublished.
 
-<!--POLISH_END-->
 
 ### 3.4 The lower-bound machinery reproduces
 
