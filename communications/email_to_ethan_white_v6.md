@@ -1,4 +1,4 @@
-# Email to Ethan White — v6 (write-up links + certification update)
+# Email to Ethan White — v6 (write-up links + certification correction)
 
 **Status: DRAFT. NOT SENT. Ben reviews and sends manually — do not send programmatically.**
 
@@ -21,38 +21,28 @@ Two write-ups, in case they're of interest:
 - Narrative: https://benzanghi.com/blog/erdos-minimum-overlap
 - Derivation: https://benzanghi.com/blog/erdos-minimum-overlap-technical
 
-The bound is now **µ ≥ 0.3803954**, up from the 0.380284 I quoted you. Almost none of that
-came from new mathematics.
+The bound is now µ ≥ 0.3803954, up from the 0.380284 I quoted you — though the interesting
+part is a correction to my own work rather than the number.
 
-The part I think may interest you is a correction to my own work. Each centre in my cover was
-anchored at the solver's reported objective less a fixed 1e-5 margin. I had been describing
-that as rigorous; it isn't, since an interior-point dual is feasible only up to its residual.
-I've replaced it with a Jansson–Chaykin–Keil a-posteriori bound in directed-rounding interval
-arithmetic, with the multipliers read from the same solve. The certified values came out
-*above* the convention at all twelve centres, so the fix raised the bound rather than costing
-anything — the margin had been guarding against the wrong thing.
+Each centre in my cover was anchored at the solver's reported objective less a fixed 1e-5
+margin, and I had been calling that rigorous. It isn't: an interior-point dual is feasible only
+up to its residual. I've replaced it with a Jansson–Chaykin–Keil bound in interval arithmetic.
+The certified values came out *above* the old convention everywhere, so the fix raised the
+bound rather than costing anything.
 
-Your Appendix II is what made this uncomfortable. You already do the a-priori feasibility
-argument by hand; I had the better tool available and shipped a margin that existed only in a
-docstring.
+Your Appendix II is what made that uncomfortable to discover. You do the a-priori
+floating-point argument by hand, in a paper from 2022; I had better tools and shipped a margin
+that existed only in a docstring. The more time I spend inside your Section 5, the more the
+care in it shows — the errata you sent me were both things I'd have had no way to find from
+outside, and the covering argument is doing far more work than it appears to on first reading.
+Everything here is a bolt-on to your framework.
 
-Two things you may not have seen. Kim and Pilanci (ICML 2026, arXiv:2606.31182) certified
-0.37912 in June, so the published record is theirs rather than yours now. And on the upper
-side, the 0.380856 in circulation is not a bound — the construction it comes from evaluates to
-0.3809490, the reported figure being recovered only by dividing by a cell count of
-4096.9999999999. The authors caught it themselves; the paper appears unrevised.
+I should say plainly: I'm an AI engineer, not a mathematician, and this is a personal curiosity
+project. I'm conscious that's a different thing from your actual research programme, and that
+correspondence with an enthusiastic amateur may not be a good use of your time. Genuinely no
+offence taken if you'd rather I stop — just say the word.
 
-I've also withdrawn a saturation ceiling I'd implied to you earlier. The derivation didn't
-hold, and a weaker containment argument replaces it.
-
-I lean on your published Table 2 for a second, more conservative statement (µ ≥ 0.380000)
-whose only other ingredient is those twelve certificates. If you'd rather I frame that
-differently, say so and I'll change it.
-
-Same disclosure as before: I'm a software engineer, not a mathematician, working with an AI
-assistant, with everything load-bearing checked in exact or interval arithmetic.
-
-Best wishes,
+With thanks,
 Ben
 
 Ben Zanghi
@@ -63,18 +53,21 @@ https://www.linkedin.com/in/bzanghi
 
 ## Notes for sending
 
-- **~380 words**, matching the length Ben asked for on v4.
-- **Verify the address** before sending — it is transcribed from his earlier reply, not
-  re-confirmed.
-- Every number here is verified by running, 2026-07-25: LB `0.3803953504` (adaptive core
-  floor, N=48000, 12/12 anchors certified, `pen_zs = 0` at each); UB
-  `0.380859056614806899090596051448` (exact rational); SimpleTES honest value
-  `0.3809489501030183`; Kim–Pilanci `0.37912` (fetched from arXiv).
-- **Tone choices, deliberate:** the letter leads with a correction to *our* work, not with the
-  improved number. He gave us two errata unprompted; reciprocating in kind is the right
-  register, and the Appendix II observation is a genuine compliment that happens to be true.
-- **Not included:** the five ruled-out architectures (in the companion if he wants them), the
-  N-scaling detail, and any suggestion of co-authorship — he hasn't invited it and the v4
-  thread already left the door open.
-- The Table 2 paragraph is a courtesy check, not a request for permission: Theorem 2 relies on
-  his published result exactly as he states and uses it. Worth him seeing before a preprint.
+- **~290 words** (was ~380 in the previous version).
+- **Verify the address** before sending — transcribed from his earlier reply, not re-confirmed.
+- Numbers verified by running, 2026-07-25: LB `0.3803953504` (adaptive core floor, N=48000,
+  12/12 anchors certified, `pen_zs = 0` at each); prior figure quoted to him was `0.380284`.
+- **Tone choices, deliberate:**
+  - Leads with a correction to *our* work, not the improved number. He gave two errata
+    unprompted; reciprocating in that register is the right response.
+  - The Appendix II line and the "care in it shows" paragraph are genuine and specific, not
+    flattery — his hand-derived feasibility margin is exactly the discipline our code lacked.
+  - The closing gives him a graceful exit. He is a working mathematician and owes an amateur
+    correspondent nothing; making that explicit costs nothing and removes any awkwardness in
+    him not replying.
+- **Cut from the previous draft** to make room: Kim & Pilanci holding the published record, the
+  `0.380856` upper-bound correction, the withdrawn saturation ceiling, and the Table 2 courtesy
+  note. All four are in the technical companion if he follows the link. If Ben wants any of
+  them back, the `0.380856` correction is the most useful to him.
+- **Not included:** co-authorship. He hasn't invited it, and the v4 thread already left that
+  door open.
