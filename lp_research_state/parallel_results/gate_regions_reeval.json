@@ -1,0 +1,31 @@
+{
+  "target": 0.3803954,
+  "max_depth": 22,
+  "base": 41,
+  "core_config": {
+    "N": 20000,
+    "T": 4000,
+    "R": 10,
+    "bochner_n": 40,
+    "pm_k_max": 20
+  },
+  "regions": {
+    "6": {
+      "region": 6,
+      "floor": 0.3804600627065487,
+      "ceiling_grid_min": 0.38081419561303914,
+      "worst_point": {
+        "h": 0.013000000000000001,
+        "p": 0.375,
+        "q": -0.05
+      },
+      "witness": "R6_c10_p366_q05",
+      "leaves": 26,
+      "clears_target": true,
+      "secs": 0.6006641387939453,
+      "mechanism": "core+fresh",
+      "n_core": 12,
+      "n_fresh": 7
+    }
+  }
+}
