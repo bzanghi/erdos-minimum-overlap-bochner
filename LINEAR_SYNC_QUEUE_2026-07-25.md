@@ -198,3 +198,91 @@ The live post quotes the UB as `0.3808590567`, which is still correct to the
 digits shown, but the exact certified rational improved after publication to
 `0.380859056614806899090596051448`. Not worth a redeploy on its own; fold into
 the next site update.
+
+---
+
+# ADDENDUM — everything after `c218b15`
+
+Commits: `42f3373` (UB local search closed) · `50cdcb7` (certified UB + README)
+· `97fe8ad` (LB architecture audit) · `a23d7c9` (N=48000 re-certification).
+Portfolio: merged and deployed as `4ae8112` — https://www.benzanghi.com/blog/erdos-minimum-overlap
+
+## Numbers that changed again
+
+| | was (earlier today) | now |
+|---|---|---|
+| certified LB, core | 0.3802946 | **0.3803954** (N=48000) |
+| certified LB, full-space | 0.3802946 | **0.3803351** (binding = R17, stale anchors) |
+| certified UB | 0.380859056651254094841565810818 | **0.380859056614806899090596051448** |
+
+## New issues to create
+
+**PRO-49 — Re-run gate regions R17/R16/R9/R7 at the N=48000 anchors.** *Todo.*
+The only remaining purely-mechanical LB work. Use
+`LP_DUALEXT=parallel_results/dualext_reanchored_N48000.json` and a raised
+`LP_TARGET`, with `max_depth` above 8 — R6 improved 0.3803090 → 0.380344 and
+stopped on depth, not mathematics (its region ceiling is 0.380814). Pure
+evaluation, no SDP, ~1–2 h. Expected headline ≈ 0.38040.
+
+**PRO-50 — Bank the rest of the N lever.** *Todo, needs hardware.*
+1/N fit at the binding point (production T, bn): `value(N) = 0.380541649 −
+3.9724/N`, fitted on N=48000/96000 and reproducing N=20000 to 2e-6. +8.28e-5
+remains beyond N=48000; ceiling ≈0.380542 at the binding point. Memory is the
+constraint, not time: 5.7 GB at N=48000, roughly linear ⇒ ~23 GB at N=192000,
+~60 GB at N=500000. One large-memory cloud instance exhausts this in a day.
+
+**PRO-51 — Commit `fside_ceiling.py` (the f-side slack meter).** *Todo.*
+An exact moment-body program that rigorously upper-bounds production **plus any
+f-side cut family whatsoever**, in one ~19 s solve at N=20000. Verdict:
+Bochner-40 + poly-moment has already harvested ~90% of all f-side slack;
+headroom at the binding anchor is +3.77e-5 and *shrinks* with N. No f-side
+proposal should be funded again without running this first.
+
+## Issues to close as dead, each with a proof
+
+**Discretization-error LB (µ ≥ M_n − ε_n).** *Close.* The aliased detail
+spectrum is a positive-definite sequence, which forces the projection error to
+be maximally adverse at lag 0. Sharpest lattice-only bound is `G_n ≤ 0` for
+every n, equality at `c ≡ 1/2`. Needed ε_n < 6.7e-4 at n=256; provable ε_n ≈
+0.36. The M_n side independently saturates near 0.310 and *decreases* in n, with
+Lasserre level 2 bit-identical to level 1.
+
+**Single-weight lag-averaging / extreme-point reduction.** *Close.* Correct and
+vacuous: certified ceiling **0.3294738** for any single probability weight
+(signed included), exactly **1/4** for positive-definite ones, by an exact
+rational certificate over 51 measure-1 adversaries. Collapsing `sup_k` into one
+`∫w` costs ≥0.05 unconditionally; the extreme-point structure gained is free
+information.
+
+**Argmax-disjunctive branching.** *Close.* One-line vacuity theorem: if
+`P ⊆ ⋃ D_j` then `min_j inf{f : P ∩ D_j} = inf{f : P}` exactly.
+
+**Bathtub cell-envelope / bathtub cuts.** *Close.* Both mathematically correct.
+The envelope is a Richardson extrapolator for N in disguise (plain N-scaling
+gets the same for ~1/10 the compute); the cuts are capped at +3.8e-5 by the
+f-side meter.
+
+**UB local search.** *Close.* 6000 structured basin-hops at n=512 across 7 move
+families never left the record basin; best gain 2.0e-10. Cell doubling
+(3 levels, 2 witnesses), non-commensurate resampling, and symmetry projection
+all measured dead. Record progress needs large-scale evolutionary search.
+
+## Correction to log against Lever I′
+
+**`C_explicit = 0.380713` is not sound as derived.**
+`docs/archive/LEVER_I_PRIME_FINAL.md` §2's own table gives row7 0.381586 +
+5.85e-4 = 0.382171, above the certified UB, and the published figure substitutes
+the min-over-rows Phase-5 anchor for the theorem's per-row RHS. Replace with the
+feasible-set containment statement: the discretised program at any N is at most
+the continuum program's value, pinned two independent ways at **≈0.38065** at
+the witness's parameters. Weaker, true, and still enough to conclude the
+architecture cannot close the gap.
+
+## Byproduct worth an issue
+
+Certified **global** optima of the continuous n-cell minimax via corrected
+epigraph-Lasserre level 2, tight to 1e-8: M_4 = 0.4000000, M_6 = 0.3888889,
+M_8 = 0.3850717, M_10 = 0.3824271, M_12 = 0.3822141. First global-optimality
+certificates in this repo. Pushing to n ≈ 30–40 would measure how far the record
+constructions sit from optimal at their own n — the most valuable open unknown
+on the UB side.
