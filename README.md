@@ -8,12 +8,13 @@ full parameter space.
 
 ## Result
 
-$$\boxed{\mu \;\geq\; 0.380284}\quad\text{over White's \emph{entire} }(E(M),\,c_1,\,d_1)\text{ parameter space}$$
+$$\boxed{\mu \;\geq\; 0.3802946}\quad\text{over White's \emph{entire} }(E(M),\,c_1,\,d_1)\text{ parameter space}$$
 
-vs. White (2023)'s `µ ≥ 0.379005` — an **unconditional, full-space improvement of +1.28 × 10⁻³**, with **no White-published number used in the bound** (every region is certified by our own augmented dual cover).
+vs. White (2023)'s `µ ≥ 0.379005` and the current best *published* bound `µ ≥ 0.37912` (Kim & Pilanci, ICML 2026) — an **unconditional, full-space improvement of +1.17 × 10⁻³**, with **no White-published number used in the bound** (every region is certified by our own augmented dual cover).
 
-- **Core residual region (5.16):** `µ ≥ 0.3802973` (corrected-tail convention) / `0.380284` (conservative `primal − 1e-5`). The core is the **binding** region.
-- **Full-space promotion (PRO-38, verified):** the augmented dual cover (121 dual-feasible centers) clears the core value over all 18 of White's Table-2 "outside" regions, so the full-space minimum equals the core. See [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md).
+- **Core residual region (5.16):** `µ ≥ 0.3802946016`, the **binding** region. All 12 anchors carry a Jansson-Chaykin-Keil interval-arithmetic certificate (`_jansson_reanchor.py`), with the duals read from the same solve that produced the certificate. This replaced the earlier `primal − 1e-5` convention, which was a haircut on a solver-reported value rather than a theorem — and the certified anchors came out *above* it, so the fix also raised the bound (0.3802838 → 0.3802946).
+- **Full-space promotion (verified, re-run 2026-07-25):** the augmented dual cover (121 dual-feasible centers) clears the core value over all 18 of White's Table-2 "outside" regions, so the full-space minimum equals the core. Tightest outside region R6 at 0.3803090. See [`lp_research_state/FULLSPACE_VERIFICATION.md`](lp_research_state/FULLSPACE_VERIFICATION.md).
+- **Upper bound, certified here:** `µ ≤ 0.380859056651254094841565810818` (exact rational, all `2n−1` signed lags in integer arithmetic). Note the widely-cited `0.380856` **is not a bound** — see [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
 
 **Honest caveats (these travel with the bound):**
 - It is **load-bearing on the polynomial-moment cuts** (`pm_k_max=20`), which are rigorous as of the 2026-05-22 tail-bound fix (see [`lp_research_state/findings.md`](lp_research_state/findings.md)), and on a set of fresh "promotion" centers in regions R16/R17 (with the 12 core anchors alone, those corners fall to 0.3802561, −2.8 × 10⁻⁵ below target).

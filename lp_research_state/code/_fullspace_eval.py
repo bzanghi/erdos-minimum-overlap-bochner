@@ -35,7 +35,7 @@ so the worst q is at whichever endpoint has the larger |q|.
 NO EXPENSIVE SDP SOLVES here. Pure evaluation of saved duals.
 """
 from __future__ import annotations
-import json, sys
+import json, os, sys
 from pathlib import Path
 
 import numpy as np
@@ -48,7 +48,13 @@ REPO = CODE.parent.parent
 DUALEXT = CODE.parent / "parallel_results" / "phase5_N20K_bn40_dualext.json"
 
 TARGET_WHITE = 0.379005          # White's published Theorem-1 bound
-CORE_HEADLINE = 0.380284         # our conservative core headline (primal - 1e-5)
+# Our core headline, and the target the per-region adaptive evaluators subdivide
+# until they clear.  NOTE those evaluators STOP at the target, so a region floor
+# they report is "at least this", not the region's true infimum — raising the
+# target makes them subdivide further and report a higher (still rigorous) floor.
+# $LP_TARGET retargets every evaluator that imports this constant, which is how
+# the Jansson-re-anchored core floor gets propagated to the gate regions.
+CORE_HEADLINE = float(os.environ.get("LP_TARGET", "0.380284"))
 WHITE_OUTSIDE_FLOOR = 0.380000   # literal floor of White's "0.38" rounded entries
 WHITE_STRIP_BOUND = 0.37925      # White's strip #18 bound (the true global min)
 
@@ -83,27 +89,45 @@ WHITE_TABLE2 = [
 ]
 
 
-def load_centers():
-    data = json.load(open(DUALEXT))
+def load_centers(path=None):
+    """The core (5.16) anchors.  `path` (or $LP_DUALEXT) overrides the default
+    file, so the Jansson-re-anchored center set produced by
+    `_jansson_reanchor.py --emit-dualext` can be swapped in without editing any
+    downstream evaluator.  A re-anchored file also carries `p_lo` per center,
+    for use with anchor_value(., 'p_lo')."""
+    src = path or os.environ.get("LP_DUALEXT") or DUALEXT
+    data = json.load(open(src))
     centers = []
     for c in data["centers"]:
-        centers.append({
+        rec = {
             "label": c["label"],
             "h_c": c["h_c"], "p_c": c["p_c"], "q1": c["q1"], "q2": c["q2"],
             "primal": c["primal"], "dual_lb": c["dual_lb"], "duals": c["duals"],
-        })
+        }
+        if "p_lo" in c:
+            rec["p_lo"] = c["p_lo"]
+        centers.append(rec)
     return centers, data["config"]
 
 
 def anchor_value(c, mode):
-    """Conservative anchor for center c.
-    mode='primal_m1e5' : primal - 1e-5  (conservative, matches CORE_HEADLINE)
+    """Anchor for center c.
+    mode='primal_m1e5' : primal - 1e-5  (conservative CONVENTION, not certified)
     mode='primal_m1e6' : primal - 1e-6  (matched convention)
+    mode='p_lo'        : the center's Jansson interval-arithmetic certificate,
+                         produced with the duals from the SAME solve
+                         (`_jansson_reanchor.py`).  This is the only mode whose
+                         anchor is an actual theorem rather than a haircut on a
+                         solver-reported number.
     """
     if mode == "primal_m1e5":
         return c["primal"] - 1e-5
     if mode == "primal_m1e6":
         return c["primal"] - 1e-6
+    if mode == "p_lo":
+        if "p_lo" not in c:
+            raise ValueError(f"center {c.get('label')!r} has no p_lo certificate")
+        return c["p_lo"]
     raise ValueError(mode)
 
 

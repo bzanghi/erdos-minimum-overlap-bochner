@@ -84,10 +84,16 @@ If you modify `bochner.py`, `white_full_convex.py`'s constraint section, or `pat
 ## External resources
 
 - White (2023) Acta Arith.: [arXiv:2201.05704](https://arxiv.org/abs/2201.05704) — the program being augmented.
-- **Current bracket (re-verified 2026-07-25): `µ ∈ [0.3802838, 0.380856]`, width 5.72 × 10⁻⁴.** See [MINIMUM_OVERLAP_STATE_2026-07-25.md](MINIMUM_OVERLAP_STATE_2026-07-25.md). The UB side is an active AI-search benchmark and moves on a timescale of weeks — **re-check it before quoting any bracket.**
-  - Best known UB `µ ≤ 0.380856`: SimpleTES ablation, [arXiv:2604.19341](https://arxiv.org/abs/2604.19341) §3.4.1 (Apr 2026). The [Einstein Arena leaderboard](https://einsteinarena.com/problems/erdos-min-overlap) has four entries beating Together, best 0.3808591.
-  - Together Computer (March 2026), [GitHub](https://github.com/togethercomputer/erdos-minimum-overlap) — `µ ≤ 0.3808703105862199`. **Superseded**; still the anchor in older docs and in `ub_core.ANCHOR`. Consequently PRO-34's "0.380871 is a serious candidate for µ itself" is falsified.
-  - Best *published* LB is no longer White's 0.379005 but `µ ≥ 0.37912`, Kim & Pilanci [arXiv:2606.31182](https://arxiv.org/abs/2606.31182) (Jun 2026) — same interval-arithmetic rigor standard as ours. This repo's `0.3802838` still leads it by 1.16 × 10⁻³, but priority is time-sensitive.
+- **Current bracket (re-verified 2026-07-25, second pass): `µ ∈ [0.3802838, 0.3808590568]`.** See [MINIMUM_OVERLAP_STATE_2026-07-25b.md](MINIMUM_OVERLAP_STATE_2026-07-25b.md), which supersedes the earlier same-day state doc. The UB side is an active AI-search benchmark and moves weekly — **re-check before quoting any bracket.**
+  - **`0.380856` IS NOT A BOUND. Do not quote it.** The SimpleTES ablation value ([arXiv:2604.19341](https://arxiv.org/abs/2604.19341) §3.4.1) is a normalization artifact: the evolved program reports its bin count as `float(n) + 0.9999999999` and divides by that, so `dx` is understated by ~1 part in 4096. Downloading the witness (commit `406fc651`) and evaluating it honestly gives **0.3809489501030183** — worse than Together's. The SimpleTES authors fixed this themselves in commit `6eb2ca0a` ("fix a potential hack possibility with n_points not being integer"); the arXiv paper is still unrevised at v1.
+  - Best UB with a public, verified, downloadable witness: **`µ ≤ 0.3808590568145606`**, Einstein Arena entry `lnzwz_AI4M_Agent` (512 cells). Fetch it with
+    `curl -s "https://einsteinarena.com/api/solutions/best?problem_id=1&agent_name=lnzwz_AI4M_Agent&limit=1"`.
+    Exactly certified here: `µ ≤ 0.380859056814560651295303328196` (`data/ub_certified_arena_n512.json`).
+  - Together Computer (March 2026) `µ ≤ 0.3808703105862199` is **superseded** but is still `ub_core.ANCHOR` and the anchor in older docs. PRO-34's "0.380871 is a serious candidate for µ itself" is falsified.
+  - Best *published* LB is no longer White's 0.379005 but `µ ≥ 0.37912`, Kim & Pilanci [arXiv:2606.31182](https://arxiv.org/abs/2606.31182) (ICML 2026) — same interval-arithmetic rigor standard as ours. This repo still leads it by >1.1 × 10⁻³, but priority is time-sensitive.
+  - **Every AI-search witness examined here (3 of 3) fails exact feasibility** by 1e-16 to 4e-14 in mass; none of the producing systems check their arithmetic outside float64. Run `ub_certify.py` on anything before quoting it.
+
+- **`dual_extractor.rigorous_dual_LB` is NOT a certificate** (fixed/documented 2026-07-25). It is the solver's dual objective with no correction for dual infeasibility, and its eligibility gate used to read CLARABEL's `pres` column while calling it the dual residual. For a real bound use `_jansson_verify.jansson_lower_bound` (interval arithmetic), driven for the core anchors by `_jansson_reanchor.py`.
 - Preprint draft: [communications/preprint_draft.tex](communications/preprint_draft.tex). Email draft to E. P. White: [communications/email_to_ethan_white.md](communications/email_to_ethan_white.md).
 
 ## Extra math tooling (added 2026-05-18)

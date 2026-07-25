@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "charter": "Jansson interval-arithmetic p_lo for all 12 core (5.16) anchors",
+    "anchor_convention": "primal_dualext - 1e-5",
+    "headline": 0.3802838,
+    "dualext_source": "phase5_N20K_bn40_dualext.json"
+  },
+  "runs": [
+    {
+      "key": {
+        "center": "row1",
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20
+      },
+      "ok": true,
+      "h_c": 0.015,
+      "p_c": 0.381,
+      "q1": -0.02,
+      "q2": 0.02,
+      "primal_dualext": 0.3807081150436816,
+      "anchor": 0.3806981150436816,
+      "prob_value": 0.3813962650373567,
+      "p_lo": 0.3813943879465859,
+      "p_lo_minus_anchor": 0.0006962729029043047,
+      "anchor_justified": true,
+      "penalty_total": -1.6983969199929277e-06,
+      "defect_inf_rigorous": 9.373003199258939e-07,
+      "self_checks": {
+        "|c@x - obj_val|": 0.0,
+        "|-b@z - obj_val_dual|": 6.178391132038996e-14,
+        "r_prim": 1.6336206586839257e-10,
+        "r_dual": 1.3531905063993792e-08,
+        "status": "AlmostSolved"
+      },
+      "solve_time_s": 167.02707982063293,
+      "wall_s": 196.34008693695068
+    },
+    {
+      "key": {
+        "center": "row2",
+        "N": 20000,
+        "T": 4000,
+        "R": 10,
+        "bochner_n": 40,
+        "pm_k_max": 20
+      },
+      "ok": true,
+      "h_c": 0.015,
+      "p_c": 0.385,
+      "q1": -0.02,
+      "q2": 0.02,
+      "primal_dualext": 0.3806872107133013,
+      "anchor": 0.3806772107133013,
+      "prob_value": 0.38146476651446803,
+      "p_lo": 0.38146407805166765,
+      "p_lo_minus_anchor": 0.0007868673383663594,
+      "anchor_justified": true,
+      "penalty_total": -6.265860147595702e-07,
+      "defect_inf_rigorous": 3.2391124571240305e-07,
+      "self_checks": {
+        "|c@x - obj_val|": 0.0,
+        "|-b@z - obj_val_dual|": 5.845324224651449e-14,
+        "r_prim": 1.5272434824815438e-10,
+        "r_dual": 4.6777369335872406e-09,
+        "status": "AlmostSolved"
+      },
+      "solve_time_s": 154.8097791671753,
+      "wall_s": 183.4924840927124
+    }
+  ]
+}

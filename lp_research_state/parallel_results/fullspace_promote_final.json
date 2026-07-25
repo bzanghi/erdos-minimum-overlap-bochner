@@ -26,27 +26,27 @@
   },
   "self_check_phi_vec_vs_scalar_maxabs": 5.551115123125783e-17,
   "core_headline": 0.380284,
-  "core_phi_min": 0.3802837846529683,
+  "core_phi_min": 0.3802897672913958,
   "core_reproduced": true,
   "core_binding_point": [
-    0.00399,
-    0.392275
+    0.0028499999999999997,
+    0.39225
   ],
-  "core_witness": "row4",
+  "core_witness": "cde_n30_iter3",
   "core_union_cover_info": 0.5622964859426193,
-  "independently_certified_floor": 0.3802837846529683,
+  "independently_certified_floor": 0.3802897672913958,
   "binding_region_indep": "core",
   "binding_corner": {
-    "h": 0.00399,
-    "p": 0.392275,
+    "h": 0.0028499999999999997,
+    "p": 0.39225,
     "q": 0.0
   },
-  "white_reliant_floor": 0.3802837846529683,
+  "white_reliant_floor": 0.3802897672913958,
   "white_reliant_binding_region": "core",
   "regions_still_white_reliant": [],
   "phase1_indep_floor": 0.3575459843736719,
   "indep_floor_improved_vs_phase1": true,
-  "indep_floor_delta_vs_phase1": 0.022737800279296394,
+  "indep_floor_delta_vs_phase1": 0.022743782917723887,
   "per_region_after": [
     {
       "region": 1,
@@ -697,5 +697,5 @@
       "L_max": 0.165388791779301
     }
   ],
-  "note": "Independently-certified full-space floor (no White number anywhere) = 0.3802838, binding at region core corner {'h': 0.00399, 'p': 0.392275, 'q': 0.0}. IMPROVED vs Phase-1's 0.3575459844 (delta +2.274e-02). White-reliant floor (each region's max(ours, White published floor)) = 0.3802838. Regions still needing White's published 0.380000 (ours<0.380000): []. Core (5.16) Phi_min reproduced at 0.3802838 (headline 0.380284)."
+  "note": "Independently-certified full-space floor (no White number anywhere) = 0.3802898, binding at region core corner {'h': 0.0028499999999999997, 'p': 0.39225, 'q': 0.0}. IMPROVED vs Phase-1's 0.3575459844 (delta +2.274e-02). White-reliant floor (each region's max(ours, White published floor)) = 0.3802898. Regions still needing White's published 0.380000 (ours<0.380000): []. Core (5.16) Phi_min reproduced at 0.3802898 (headline 0.380284)."
 }
