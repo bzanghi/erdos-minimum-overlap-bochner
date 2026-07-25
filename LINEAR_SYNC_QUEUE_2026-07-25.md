@@ -353,3 +353,44 @@ working the identical direction to the identical rigor standard.
 goes.* SimpleTES authors (drafted, unsent — their arXiv v1 still carries the
 0.380856 figure they themselves repaired in code); and a short note to Kim &
 Pilanci, since this work is now adjacent to theirs.
+
+---
+
+## Addendum 3 — Gmail draft mechanism (evening)
+
+**PRO-54 — UPDATE, White letter now drafted in Gmail.** The v6 letter is created
+as a draft in ben@benzanghi.com and verified by reading it back
+(`drafts.get`): id `r7217925267018049111`, to `[personal address - see .local-contacts.md]`, label
+`DRAFT`, `Erdős` and the em-dash intact through MIME encoding. **Unsent** —
+still needs Ben to send, and to decide new-message vs reply-in-thread.
+
+Also: **the recipient address was wrong in every prior draft.** All six earlier
+files carried `ethan.white@ubc.ca`, transcribed from an old file and never
+verified; Ben confirmed the real address is `[personal address - see .local-contacts.md]`. The six stale
+drafts now carry SUPERSEDED banners. Comment this on PRO-8 (the original White
+outreach ticket) — it is the kind of error that would have been silent.
+
+**NEW — close as "already solved, no work needed": Gmail draft mechanism.**
+Spent a design cycle specifying a bespoke `gmail.compose` CLI. Unnecessary:
+`gws` (Google Workspace CLI, `/opt/homebrew/bin/gws`) was **already installed
+and already authenticated** as ben@benzanghi.com, with `gws gmail users drafts
+create`, a `--dry-run` flag, and an existing `gmail.modify` token. Ben's
+instinct that a prebuilt tool existed was right, and I built toward a custom
+one before checking the machine.
+`docs/superpowers/specs/2026-07-25-gmail-draft-mechanism-design.md` should be
+marked superseded rather than implemented.
+
+One finding from that cycle survives and is worth keeping on the ticket:
+**`gmail.compose` is documented verbatim as "Manage drafts and send emails" —
+there is no draft-only-without-send scope in the Gmail API.** Any future
+"agent can draft but cannot send" guarantee is behavioural, not enforced by
+Google.
+
+**NEW — cleanup, low priority.** (a) I created a redundant Cloud project
+`claude-gmail-draft-503521` before checking; `gmail-mcp-503519` already existed
+with the Gmail API enabled and an OAuth desktop client. Harmless and free,
+delete when convenient. (b) The `gmail-mcp-desktop` OAuth client has **two live
+secrets** (both created 2026-07-25, 3:23 and 3:24 PM); the console itself warns
+that multiple live secrets increase risk — disable one. (c) Note Google no
+longer permits viewing or downloading existing client secrets, only minting new
+ones.
