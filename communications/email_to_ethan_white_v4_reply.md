@@ -1,5 +1,10 @@
 # Email to Ethan White — v4 (REPLY to his 2026-07 response)
 
+> **SUPERSEDED — do not send.** Use `email_to_ethan_white_v6.md`. This draft also carries the
+> wrong recipient: Ethan's address is **[personal address - see .local-contacts.md]**, confirmed 2026-07-25, not the
+> ubc.ca address transcribed here.
+
+
 **Status:** DRAFT — Ben reviews before sending.
 **Supersedes:** [email_to_ethan_white_v3.md](email_to_ethan_white_v3.md) (written as a cold intro; Ethan has since replied, so this is a threaded reply).
 **Context:** Ethan confirmed the Bochner-PSD constraint "seems valid," suggested interval-average-of-f variables as an alternative, and reported two errata in the published program: (5.6)/(5.7) numerator 8 → 4, and (5.8)/(5.9) RHS m → 2m−1.

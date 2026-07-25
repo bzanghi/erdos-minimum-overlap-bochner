@@ -1,5 +1,10 @@
 # Email to Ethan Patrick White — v4
 
+> **SUPERSEDED — do not send.** Use `email_to_ethan_white_v6.md`. This draft also carries the
+> wrong recipient: Ethan's address is **[personal address - see .local-contacts.md]**, confirmed 2026-07-25, not the
+> ubc.ca address transcribed here.
+
+
 **Status:** DRAFT — review carefully before sending. Verify email/affiliation. Decide repo share.
 **Supersedes:** [email_to_ethan_white_v3.md](email_to_ethan_white_v3.md) (used the pre-correction headline 0.380299 and called the asymptotic ceiling a theorem).
 **Changes in v4:** headline corrected to `µ ≥ 0.3802973` (poly-moment tail-bound fix, 2026-05-22); production config now `bochner_n=40`; open gap `5.74 × 10⁻⁴`; asymptotic ceiling `C_∞` framed as a conjecture, not a theorem; added one line on the planned arbitrary-precision (SDPA-GMP) certification.

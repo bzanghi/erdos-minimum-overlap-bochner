@@ -1,5 +1,10 @@
 # Email to Ethan Patrick White — v3
 
+> **SUPERSEDED — do not send.** Use `email_to_ethan_white_v6.md`. This draft also carries the
+> wrong recipient: Ethan's address is **[personal address - see .local-contacts.md]**, confirmed 2026-07-25, not the
+> ubc.ca address transcribed here.
+
+
 **Status:** DRAFT — review carefully before sending. Verify email/affiliation. Decide repo share.
 **Supersedes:** [email_to_ethan_white_v2.md](email_to_ethan_white_v2.md) (drafted around the retracted OVERNIGHT_WRAPUP framework-ceiling claim and based on the older Phase-5 N=10K headline).
 

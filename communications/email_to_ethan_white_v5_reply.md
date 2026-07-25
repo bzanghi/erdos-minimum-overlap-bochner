@@ -1,5 +1,10 @@
 # Reply to Ethan White — v5 (response to his 2026-05-31 message)
 
+> **SUPERSEDED — do not send.** Use `email_to_ethan_white_v6.md`. This draft also carries the
+> wrong recipient: Ethan's address is **[personal address - see .local-contacts.md]**, confirmed 2026-07-25, not the
+> ubc.ca address transcribed here.
+
+
 **Status:** DRAFT — for Ben to review and send. Do not send programmatically.
 **Context:** White replied to our v3 outreach (PRO-8): he validated the Bochner-PSD constraint, flagged two corrections (5.6/5.7 coeff 8→4; 5.8/5.9 should use 2m−1), and said neither is material. This is the reply to *that* message. (The earlier `email_to_ethan_white_v4.md` was a refined re-pitch written before his reply arrived — now superseded by this reply.)
 **Verify** his current email/affiliation before sending.

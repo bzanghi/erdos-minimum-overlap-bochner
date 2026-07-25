@@ -1,5 +1,10 @@
 # Email to Ethan Patrick White
 
+> **SUPERSEDED — do not send.** Use `email_to_ethan_white_v6.md`. This draft also carries the
+> wrong recipient: Ethan's address is **[personal address - see .local-contacts.md]**, confirmed 2026-07-25, not the
+> ubc.ca address transcribed here.
+
+
 **To:** ethan.white@ubc.ca *(verify current address — UBC was Killam-Trusts/NSERC affiliation per arXiv:2201.05704; check his current affiliation/email before sending)*
 **From:** Ben Zanghi <ben@benzanghi.com>
 **Subject:** Bochner-PSD strengthening of your minimum-overlap lower bound

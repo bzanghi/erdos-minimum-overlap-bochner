@@ -6,7 +6,7 @@
 `µ ≥ 0.380284` and predates the certification round. If v5 was never sent, send this instead
 rather than both.
 
-**To:** ethan.white@ubc.ca *(from his reply to Ben, ~2 months ago; verify it is still current)*
+**To:** [personal address - see .local-contacts.md] *(confirmed by Ben, 2026-07-25 — supersedes the ubc.ca address transcribed from an earlier file)*
 **From:** Ben Zanghi <ben@benzanghi.com>
 **Subject:** Erdős minimum overlap — write-up, and a correction to something I told you
 
@@ -54,7 +54,8 @@ https://www.linkedin.com/in/bzanghi
 ## Notes for sending
 
 - **~290 words** (was ~380 in the previous version).
-- **Verify the address** before sending — transcribed from his earlier reply, not re-confirmed.
+- **Address confirmed by Ben** as [personal address - see .local-contacts.md]. An earlier draft in this repo carried
+  ethan.white@ubc.ca, transcribed from an older file; that one is wrong and should not be used.
 - Numbers verified by running, 2026-07-25: LB `0.3803953504` (adaptive core floor, N=48000,
   12/12 anchors certified, `pen_zs = 0` at each); prior figure quoted to him was `0.380284`.
 - **Tone choices, deliberate:**
