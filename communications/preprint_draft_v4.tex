@@ -1,0 +1,438 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+% ============================================================
+% preprint_draft_v4.tex
+% Supersedes preprint_draft_v3.tex.  Changes in v4, all forced by the
+% 2026-07-25 certification round:
+%
+%  1. HEADLINE 0.3802973 -> 0.3803953504.  The old number rested on an
+%     anchor convention (solver value minus 1e-5), not on a certificate.
+%     Every anchor now carries a Jansson-Chaykin-Keil interval-arithmetic
+%     bound, and the certified anchors came out ABOVE the convention, so
+%     replacing the convention by a theorem RAISED the bound.
+%
+%  2. PRIORITY CLAIM REMOVED.  v3 said "the first lower-bound advance on
+%     this problem since 2022".  That is false: Kim & Pilanci (ICML 2026)
+%     certified 0.37912 in June 2026.  We now lead the published record by
+%     1.13e-3, which is the correct and still-strong claim.
+%
+%  3. SATURATION THEOREM WITHDRAWN.  v3's full-stack ceiling C_explicit =
+%     0.380713 is not sound as derived: its own per-row table yields
+%     0.381586 + 5.85e-4 = 0.382171, which exceeds the certified upper
+%     bound, and the published figure substitutes a min-over-rows anchor
+%     for the theorem's per-row right-hand side.  Replaced by a
+%     feasible-set containment statement, which is weaker, correct, and
+%     still sufficient to conclude the architecture cannot close the gap.
+%
+%  4. NEW: certified upper bound, and a correction to the record.
+% ============================================================
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A certified lower bound for the Erd\H{o}s minimum overlap constant}
+\author{Ben Zanghi}
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $\mu$ denote the Erd\H{o}s minimum overlap constant. We prove
+$\mu \ge 0.3803953$, improving the best published lower bound
+$0.37912$ of Kim and Pilanci by $1.13 \times 10^{-3}$ and White's
+$0.379005$ by $1.39 \times 10^{-3}$. The bound augments White's
+Fourier-analytic convex program with Bochner moment-matrix and
+polynomial-moment constraints over a cover of the residual parameter
+region.
+
+The methodological point of this paper is not the augmentation but the
+certification. Each of the twelve dual certificates underlying the cover
+is verified by a Jansson--Chaykin--Keil a-posteriori bound computed in
+directed-rounding interval arithmetic, with the dual multipliers read
+from the same solve that produced the certificate; no step trusts the
+solver's status flag, its iteration log, or its floating-point
+arithmetic. This replaces a widely convenient but unjustified
+convention---taking a solver-reported objective less a fixed
+margin---and, because the certified values exceed that convention at
+every centre, it \emph{raises} the resulting bound rather than costing
+anything.
+
+We give the bound in two tiers. The stronger, $\mu \ge 0.3803953$, uses
+our own cover on the full parameter space. The more robust,
+$\mu \ge 0.380000$, is load-bearing on nothing but the twelve
+certificates and White's published Table~2, and we recommend it to
+readers who want the shortest possible chain of dependence.
+
+Separately we certify $\mu \le 0.380859056614806899090596051449$ in
+exact rational arithmetic from a publicly available witness, and we
+correct the record on the upper-bound side: the value $0.380856$ in
+current circulation is not an upper bound on $\mu$.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+Erd\H{o}s asked, for a partition of $\{1,\dots,2n\}$ into two sets $A$
+and $B$ of size $n$, how small the largest difference-multiplicity
+$\max_k |\{(a,b) \in A\times B : a-b = k\}|$ can be made. Writing $M(n)$
+for that minimum, the limit $\mu = \lim_{n\to\infty} M(n)/n$ exists, and
+admits the continuous formulation
+\begin{equation}\label{eq:mu}
+  \mu \;=\; \inf_{h}\ \sup_{k \in \mathbb{R}}\
+  \int_0^2 h(x)\bigl(1-h(x+k)\bigr)\,dx,
+\end{equation}
+the infimum over measurable $h:[0,2]\to[0,1]$ with $\int h = 1$, both
+$h$ and $1-h$ extended by zero off $[0,2]$.
+
+The two sides of \eqref{eq:mu} are attacked by disjoint machinery. Upper
+bounds are exhibitions: any admissible $h$ gives one, and the current
+record constructions come from large-scale automated search. Lower
+bounds are exclusions: they must rule out every $h$ simultaneously, and
+so require a certified relaxation. This paper is about the lower side.
+
+\paragraph{State of the art.} White \cite{White2023} proved
+$\mu \ge 0.379005$ by a Fourier-analytic convex program with a
+divide-and-conquer cover of a three-parameter space. Kim and
+Pilanci \cite{KimPilanci2026} improved this to $\mu \ge 0.37912$ using an
+agent-assisted search for valid convex relaxations, certified in interval
+arithmetic. On the upper side, a sequence of automated searches has
+produced constructions clustering near $0.38086$.
+
+\paragraph{Results.}
+\begin{theorem}\label{thm:main}
+$\mu \ge 0.3803953$.
+\end{theorem}
+\begin{theorem}\label{thm:robust}
+$\mu \ge 0.380000$, using only the twelve certificates of
+Section~\ref{sec:cert} together with White's published Table~2.
+\end{theorem}
+\begin{theorem}\label{thm:ub}
+$\mu \le 0.380859056614806899090596051449$, certified in exact rational
+arithmetic.
+\end{theorem}
+
+Theorem~\ref{thm:robust} deserves comment. It is numerically weaker than
+Theorem~\ref{thm:main} but rests on a far shorter chain: our own
+contribution enters only through twelve interval-arithmetic
+certificates, and everything outside the residual region is quoted from
+a peer-reviewed paper. Where the two disagree in spirit---one maximally
+strong, one maximally defensible---we would rather a reader take the
+second.
+
+\paragraph{What this paper does not claim.} We do not claim to have
+closed, or to be able to close, the gap. Section~\ref{sec:ceiling}
+records a containment argument showing that this entire family of
+relaxations is bounded above by roughly $0.38065$ at the parameters of
+the extremal function, some $2.1\times10^{-4}$ short of the certified
+upper bound. Section~\ref{sec:negative} records five further approaches
+that we ruled out, with proofs. We regard those exclusions as a
+substantive part of the contribution: they say where the remaining
+difficulty is not.
+
+\section{The augmented program}\label{sec:setup}
+
+White's program tracks a competitor through cell averages of a function
+$M$ on a grid of $N$ cells together with the first $T$ Fourier
+coefficients $(c_k,d_k)$ of the associated density $f$, subject to a
+family of linear and second-order-cone constraints indexed by a
+parameter triple $\theta = (E(M), c_1, d_1)$. We add:
+\begin{enumerate}
+\item \textbf{Bochner moment-matrix PSD.} For $f$ and for $1-f$, the
+  Hermitian Toeplitz matrix of Fourier coefficients is positive
+  semidefinite; we impose this at truncation level $40$.
+\item \textbf{Polynomial-moment positivity.} $\int x^{2k} f \ge 0$ for
+  $k \le 10$, expressed in $(c,d)$ through the Fourier expansion of
+  $x^{2k}$, with an \emph{analytic} remainder bounding the truncated
+  tail. (An earlier version of this paper used a hard cutoff with no
+  remainder; that was an error, corrected here and in
+  \cite{repo}. See Remark~\ref{rem:tail}.)
+\end{enumerate}
+
+\begin{remark}\label{rem:tail}
+Truncating a series that appears inside a valid inequality, without an
+analytic bound on the discarded tail, silently strengthens the
+constraint and inflates the resulting bound. This failure mode retracted
+two intermediate results in the development of this work. Every
+truncated sum in the final program carries a proved remainder.
+\end{remark}
+
+\paragraph{The residual region.} White's divide-and-conquer reduces the
+problem to a single box: combining his Table~2 shows that either
+$\mu \ge 0.37925$, or the extremal function's parameters satisfy
+\begin{equation}\label{eq:516}
+  0 \le E(M^*) \le 0.06, \qquad
+  0.35 \le c_1^* \le 0.45, \qquad
+  -0.02 \le d_1^* \le 0.02 .
+\end{equation}
+All twelve of our centres lie in \eqref{eq:516}, and it is the region
+that binds in Theorem~\ref{thm:main}.
+
+\section{Certification}\label{sec:cert}
+
+This section contains the paper's main methodological content.
+
+\subsection{The problem with solver-reported bounds}
+
+A conic program solved by an interior-point method returns an
+approximate primal--dual pair. The dual objective lower-bounds the
+primal optimum \emph{only if the dual point is feasible}, and an
+interior-point iterate is feasible only up to its residual. It is
+therefore not sound to report a dual objective, or a solver's printed
+objective less an ad-hoc margin, as a lower bound. Both are widespread.
+
+\subsection{The Jansson bound, with matched multipliers}
+
+Let the canonical form be $\min c^\top x$ subject to $Ax + s = b$,
+$s \in \mathcal{K}$, and let $z$ be the approximate conic dual returned
+by the solver. Following Jansson, Chaykin and Keil \cite{JCK2007}, for
+every primal-feasible $x$,
+\begin{equation}\label{eq:jansson}
+  c^\top x \;\ge\; -b^\top z \;+\; \underbrace{\textstyle\sum_j
+    \min\bigl(0,\lambda_{\min}^{\mathcal{K}_j^*}(z_j)\bigr)\,
+    \bar s_j}_{=:\ \mathrm{pen}_{zs}\ \le\ 0}
+  \;-\; \underbrace{\textstyle\sum_i |D_i|\,\bar x_i}_{=:\
+    \mathrm{pen}_{Dx}\ \ge\ 0},
+  \qquad D = c + A^\top z,
+\end{equation}
+where $\bar x_i$ are a-priori bounds on $|x_i|$ from the model box
+constraints and $\bar s_j$ bound the slack sizes. We write $p_{\mathrm{lo}}$
+for the right-hand side of \eqref{eq:jansson}, evaluated with every
+arithmetic step performed in directed-rounding interval arithmetic, and
+with verified enclosures for the per-cone minimum eigenvalues.
+
+The step that makes this usable inside a parameter cover is the
+following. Moving $\theta$ within the residual region changes only the
+right-hand side $b$ of the four parameter-dependent constraints; $A$ and
+$c$ are untouched. Hence
+\begin{itemize}
+\item $-b(\theta)^\top z = -b(\theta_c)^\top z + \mathrm{shift}_c(\theta)$
+  exactly, with $\mathrm{shift}_c$ White's dual-objective transport;
+\item $\mathrm{pen}_{Dx}$ is $\theta$-independent, since $D$ does not
+  involve $b$ and the $\bar x_i$ are fixed model bounds;
+\item $\mathrm{pen}_{zs}$ is $\theta$-independent \emph{when it
+  vanishes}, i.e.\ when $z$ lies in the dual cone.
+\end{itemize}
+
+\begin{proposition}\label{prop:transport}
+If $\mathrm{pen}_{zs} = 0$ at a centre $\theta_c$, then
+$\Phi_c(\theta) := p_{\mathrm{lo}} + \mathrm{shift}_c(\theta)$
+is a valid lower bound on $\mu$ conditional on the true parameters being
+$\theta$, for every $\theta$ in the region.
+\end{proposition}
+
+Our driver asserts $\mathrm{pen}_{zs} = 0$ at every centre and refuses to
+emit one otherwise. It held at all twelve. Crucially, the multipliers
+defining $\mathrm{shift}_c$ are read from the \emph{same} solve that
+produced $p_{\mathrm{lo}}$; pairing a certificate from one solve with
+multipliers from another is unsound, since $p_{\mathrm{lo}}$ bounds the
+dual objective of one specific $z$.
+
+\subsection{The certified anchors}
+
+Table~\ref{tab:anchors} gives, at each of the twelve centres, the
+convention previously used (solver objective less $10^{-5}$) and the
+certified value, at $N = 48{,}000$.
+
+\begin{table}[h]\centering
+\begin{tabular}{lrrr}
+\toprule
+centre & convention & certified $p_{\mathrm{lo}}$ & gain \\
+\midrule
+row1 & 0.380698115 & 0.381572848708 & $+8.75\times10^{-4}$ \\
+row2 & 0.380677211 & 0.381665700133 & $+9.89\times10^{-4}$ \\
+row3 & 0.381042228 & 0.382537653309 & $+1.50\times10^{-3}$ \\
+row4 & 0.380338114 & 0.380505566439 & $+1.67\times10^{-4}$ \\
+row5 & 0.380611839 & 0.380710285038 & $+9.85\times10^{-5}$ \\
+row6 & 0.380436448 & 0.380552510960 & $+1.16\times10^{-4}$ \\
+row7 & 0.382003546 & 0.385119737480 & $+3.12\times10^{-3}$ \\
+cde1 & 0.380346079 & 0.380447891266 & $+1.02\times10^{-4}$ \\
+cde2 & 0.380377646 & 0.380525911216 & $+1.48\times10^{-4}$ \\
+cde3 & 0.380302283 & 0.380413948769 & $+1.12\times10^{-4}$ \\
+cde4 & 0.380606798 & 0.381353402400 & $+7.47\times10^{-4}$ \\
+cde5 & 0.380393675 & 0.380795566289 & $+4.02\times10^{-4}$ \\
+\bottomrule
+\end{tabular}
+\caption{Certified anchors. Every certified value exceeds the convention
+it replaces, so imposing rigour raised the bound.}\label{tab:anchors}
+\end{table}
+
+\section{Proof of Theorems~\ref{thm:main} and \ref{thm:robust}}
+
+The cover value at a parameter point is
+$\mathrm{Cover}(\theta) = \max_c \Phi_c(\theta)$, a maximum of valid
+conditional lower bounds and hence itself one. Theorem~\ref{thm:main}
+follows from bounding $\mathrm{Cover}$ below on every region of a
+partition of the parameter space.
+
+\subsection{Rigorous box minima}
+
+On a box we grid and add a Lipschitz cell-error term
+$\varepsilon = L_{\max}\cdot(\text{half-diagonal})$, with $L_{\max}$ the
+maximum gradient magnitude of the quadratics $\Phi_c$ on that box. Since
+a minimum of a maximum of concave quadratics need not be attained at a
+corner, the grid-plus-Lipschitz value is the rigorous box minimum.
+
+\begin{remark}
+The certified duals are steeper than the convention they replace
+($L_{\max}$ rises from $0.149$ to $0.380$ on the residual region), so a
+single grid pays more than twice the $\varepsilon$ it used to, absorbing
+about half the gain. Adaptive subdivision, recomputing $L_{\max}$ per
+sub-box, drives $\varepsilon$ to $4.1\times10^{-8}$ and recovers it.
+This trade---an honest certificate costing Lipschitz slack, repaid by
+resolution---recurred at three separate points in this work.
+\end{remark}
+
+On the residual region \eqref{eq:516} this gives
+$\mathrm{Cover} \ge 0.3803953504$, attained near
+$(h,p) = (0.00281, 0.39219)$. The remaining regions give
+$0.3803961$, $0.3803972$, $0.3803979$, $0.3804601$ and $0.3805539$, all
+above it, so the residual region binds and Theorem~\ref{thm:main}
+follows. Margins on the three tightest are $+7\times10^{-7}$,
+$+1.8\times10^{-6}$ and $+2.5\times10^{-6}$: any future gain on the
+residual region will meet them immediately.
+
+\subsection{The robust tier}
+
+White's Table~2 is headed ``Optimum lower bound'' and he uses its entries
+as such, writing that the first line shows ``either $\mu \ge 0.38$ or
+$E(M^*) \le 0.75$''. Taking his published bounds for the seventeen
+regions outside the residual set, and supplying only our own certified
+cover for the remaining strip and the residual region, gives
+Theorem~\ref{thm:robust}. Nothing else is load-bearing.
+
+\section{The upper bound, and a correction to the record}\label{sec:ub}
+
+\subsection{A certified upper bound}
+
+Any admissible step function gives an upper bound, but the published
+values are float64 evaluations of float64 iterates. Every construction we
+examined fails exact feasibility, by between $10^{-16}$ and
+$4\times10^{-14}$ in mass---harmless in size, but enough that the stated
+bounds were not theorems as written.
+
+We snap a construction to an exactly feasible rational point and evaluate
+all $2n-1$ signed lags in integer arithmetic. Applied to the best
+publicly downloadable witness, after a local polish, this gives
+Theorem~\ref{thm:ub}:
+\[
+  \mu \le \frac{129599621248162196650621937272674201309}
+               {340282366920938463463374607431768211456},
+\]
+whose decimal expansion, rounded upward as an upper bound must be, is the
+value stated. No floating-point step enters the chain.
+
+\subsection{The value \texorpdfstring{$0.380856$}{0.380856} is not a bound}
+
+A figure of $0.380856$ is currently quoted as the best known upper bound.
+It is not one. The construction it derives from is genuinely admissible,
+but its objective is $0.3809490$; the reported value is recovered
+bit-for-bit only by dividing by a cell count of $4096.9999999999$ rather
+than $4096$, which is what the generating program does. The honest value
+is worse than constructions from four years earlier. The authors
+identified and repaired this in their own repository; the paper appears
+not to have been revised, and the figure continues to propagate. We note
+it here because a lower-bound paper that quotes a false upper bound
+misstates the size of the open gap.
+
+\section{What this architecture cannot do}\label{sec:ceiling}
+
+An earlier version of this paper asserted an explicit saturation ceiling
+of $0.380713$. That derivation does not hold: its own per-row table
+yields a value exceeding the certified upper bound, and the published
+figure substitutes a min-over-rows quantity for the theorem's per-row
+right-hand side. We withdraw it and replace it with the following, which
+needs no sensitivity linearisation.
+
+\begin{proposition}\label{prop:containment}
+For every $N$, the value of the discretised program is at most the value
+of the continuum program at the same $(T,R,\text{Bochner level})$.
+\end{proposition}
+
+Numerically, at the parameters of the extremal function, that limit is
+$\approx 0.38065$, pinned two independent ways (Richardson extrapolation
+on an $N$-ladder, and complementary slackness with the entire
+cell-envelope slack removed). Since the certified upper bound is
+$0.3808591$, this architecture is at least $2.1\times10^{-4}$ short at
+the single parameter point where the extremal function lives, before any
+loss from the cover. It cannot close the gap.
+
+Two quantitative corollaries sharpen where the remaining slack is not.
+An exact moment-body program---which dominates the present program plus
+\emph{any} further constraint family on the $f$-side---exceeds the
+certified anchor by only $3.77\times10^{-5}$ at the binding centre, and
+that headroom \emph{shrinks} as $N$ grows. And the discretisation
+direction obeys a clean $1/N$ law,
+$\mathrm{val}(N) \approx 0.380541649 - 3.9724/N$, leaving
+$8.3\times10^{-5}$ unrealised as $N \to \infty$.
+
+\section{Approaches ruled out}\label{sec:negative}
+
+We record five, each with a proof rather than a failed experiment.
+
+\paragraph{Discretisation-error bounds.} One would like
+$\mu \ge M_n - \varepsilon_n$ with $M_n$ the $n$-cell minimum. The
+cell-average projection error satisfies
+$C_{P_n h}(md) = C_h(md) + A_e(md)$ at lattice lags, and
+$m \mapsto A_e(md)$ is a \emph{positive-definite} sequence, so its
+maximum is at $m=0$ and equals the entire detail energy. Positivity thus
+forces the error to be maximally adverse rather than allowing it to be
+signed. The sharpest lattice-only bound is $\le 0$ for every $n$.
+
+\paragraph{Single-weight lag averaging.} Replacing $\sup_k$ by
+$\int w(k)\,dk$ makes the objective concave in $h$ when $\hat w \ge 0$,
+so the infimum sits at an extreme point and the extreme points are
+indicators. The reduction is correct and vacuous: the resulting bound is
+capped at $0.3294738$ for any single probability weight and at exactly
+$1/4$ for positive-definite ones. Collapsing the supremum costs at least
+$0.05$, while the extreme-point structure gained is free information.
+
+\paragraph{Argmax disjunctions.} If $P \subseteq \bigcup_j D_j$ then
+$\min_j \inf\{f : P \cap D_j\} = \inf\{f : P\}$. Branching on which lag
+attains the maximum is therefore identically worthless.
+
+\paragraph{Sharpened cell envelopes.} Replacing the cell-minimum bound by
+the sharp mass-and-cap (bathtub) bound is valid and strictly dominant,
+but is contained in the same continuum program: it is a Richardson
+extrapolator for the discretisation, obtainable more cheaply by
+increasing $N$.
+
+\paragraph{Moment-body cuts on the $f$-side.} Valid, genuinely outside
+the Bochner cone, and capped at $3.8\times10^{-5}$ by the meter above.
+
+\section{Reproducibility}\label{sec:repro}
+
+All code and data are available \cite{repo}. Every headline number in
+this paper was regenerated from scratch in a clean environment; the
+full-space driver reproduces its stored result byte-identically. Two
+independent re-implementations of the cover extension agree to more than
+ten significant digits. We note explicitly that the helper historically
+used in this project to extract ``rigorous'' bounds from solver logs is
+\emph{not} a certificate---it applies no correction for dual
+infeasibility, and its eligibility test read the primal residual---and
+that no number in this paper depends on it.
+
+\begin{thebibliography}{9}
+\bibitem{White2023} E.~P.~White, \emph{A new bound for Erd\H{o}s'
+  minimum overlap problem}, Acta Arith. \textbf{208} (2023), 235--255.
+  arXiv:2201.05704.
+\bibitem{KimPilanci2026} S.~Kim and M.~Pilanci, \emph{AI-assisted
+  discovery of convex relaxations via dual agents}, ICML 2026, PMLR 306.
+  arXiv:2606.31182.
+\bibitem{JCK2007} C.~Jansson, D.~Chaykin and C.~Keil, \emph{Rigorous
+  error bounds for the optimal value in semidefinite programming}, SIAM
+  J. Numer. Anal. \textbf{46} (2007), 180--200.
+\bibitem{Haugland2016} J.~K.~Haugland, \emph{A new upper bound on the
+  constant in the Erd\H{o}s minimum overlap problem}, 2016.
+  arXiv:1609.08000.
+\bibitem{repo} B.~Zanghi, \emph{Erd\H{o}s minimum overlap: code and
+  certificates}, \url{https://github.com/bzanghi/erdos-minimum-overlap-bochner}.
+\end{thebibliography}
+
+\end{document}
