@@ -41,3 +41,6 @@ lp_research_state/parallel_results/_run_*.tmp
 
 # Compiled solver binaries — rebuild from source per CLAUDE.md "Extra math tooling"
 lp_research_state/bin/
+
+# local-only contact details (public repo)
+.local-contacts.md
