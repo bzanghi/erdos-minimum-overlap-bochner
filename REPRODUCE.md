@@ -33,6 +33,18 @@ print(solve_with_dual_extraction(cp.Problem(cp.Minimize(Omega),cons))['rigorous_
 
 ## 2. Core-region headline µ ≥ 0.3802973 (corrected-tail) / 0.380284 (conservative)
 
+> **Superseded 2026-07-26.** This section reproduces the *historical* N=20000
+> headline and is kept because it is the cheapest end-to-end check. The current
+> bound is **µ ≥ 0.3803954** (full-space, binding = core), from the
+> Jansson-certified anchors at `N=48000`. To reproduce *that* in one command:
+>
+> ```bash
+> cd lp_research_state/code && LP_DUALEXT=../parallel_results/dualext_reanchored_N48000.json LP_TARGET=0.3803954 ../../.venv/bin/python _fs_recompute.py
+> ```
+>
+> Expect `INDEPENDENTLY-CERTIFIED floor (NO White): 0.3803954, binding region=core`.
+> Run it without the two env vars and it reproduces the N=20000 path at 0.3802841.
+
 Full Phase-5 cover at production config (12 centers; ~30 min, ~8 GB RAM):
 
 ```bash

@@ -10,15 +10,22 @@ full parameter space.
 
 $$\boxed{\mu \;\geq\; 0.3803954}\quad\text{over White's \emph{entire} }(E(M),\,c_1,\,d_1)\text{ parameter space}$$
 
-vs. White (2023)'s `µ ≥ 0.379005` and the current best *published* bound `µ ≥ 0.37912` (Kim & Pilanci, ICML 2026) — an **unconditional, full-space improvement of +1.17 × 10⁻³**, with **no White-published number used in the bound** (every region is certified by our own augmented dual cover).
+vs. White (2023)'s `µ ≥ 0.379005` and the current best *published* bound `µ ≥ 0.37912` (Kim & Pilanci, ICML 2026) — an **unconditional, full-space improvement of +1.28 × 10⁻³** over the published record (`+1.39 × 10⁻³` over White), with **no White-published number used in the bound** (every region is certified by our own augmented dual cover).
 
 - **Core residual region (5.16):** `µ ≥ 0.3803954`. All 12 anchors carry a Jansson-Chaykin-Keil interval-arithmetic certificate (`_jansson_reanchor.py`) at `N=48000`, with the duals read from the same solve that produced the certificate. This replaced the earlier `primal − 1e-5` convention, which was a haircut on a solver-reported value rather than a theorem — and the certified anchors came out *above* it, so the fix raised the bound rather than costing anything (0.3802838 → 0.3802946 → 0.3803954).
-- **Full-space promotion (re-run 2026-07-25):** the augmented dual cover clears `0.3803954` over all 18 of White's Table-2 "outside" regions, so the **binding region is the core** — R16 0.3803961, R17 0.3803972, R9 0.3803979, R6 0.3804601, R7 0.3805539. Margins on the three tightest are thin (+7e-7, +1.8e-6, +2.5e-6). See [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §7.
+- **Full-space promotion (re-run 2026-07-26):** the augmented dual cover clears `0.3803954` over all 18 of White's Table-2 "outside" regions, so the **binding region is the core** — R16 0.3803961, R9 0.3803979, R17 0.3804045, R6 0.3804601, R7 0.3805539. Margins on the three tightest are thin (+7.5e-7, +2.6e-6, +9.2e-6). Reproduce in one command:
+
+  ```bash
+  cd lp_research_state/code && LP_DUALEXT=../parallel_results/dualext_reanchored_N48000.json LP_TARGET=0.3803954 ../../.venv/bin/python _fs_recompute.py
+  ```
+
+  See [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §7–§8.
 - **Upper bound, certified here:** `µ ≤ 0.380859056614806899090596051448` (exact rational, all `2n−1` signed lags in integer arithmetic). Note the widely-cited `0.380856` **is not a bound** — see [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §2.
 
 **Honest caveats (these travel with the bound):**
 - It is **load-bearing on the polynomial-moment cuts** (`pm_k_max=20`), which are rigorous as of the 2026-05-22 tail-bound fix (see [`lp_research_state/findings.md`](lp_research_state/findings.md)), and on a set of fresh "promotion" centers in regions R16/R17 (with the 12 core anchors alone, those corners fall to 0.3802561, −2.8 × 10⁻⁵ below target).
-- **Margins are thin**: the core binds, and the three tightest outside regions clear it by only +7 × 10⁻⁷ (R16), +1.8 × 10⁻⁶ (R17) and +2.5 × 10⁻⁶ (R9). Any further core gain runs into them immediately. Farkas certificates for the (non-load-bearing) infeasibility exclusions remain outstanding.
+- **Margins are thin**: the core binds, and the three tightest outside regions clear it by only +7.5 × 10⁻⁷ (R16), +2.6 × 10⁻⁶ (R9) and +9.2 × 10⁻⁶ (R17). Any further core gain runs into them immediately, and must re-run R16 and R9 at the raised target in the same change. Farkas certificates for the (non-load-bearing) infeasibility exclusions remain outstanding.
+- **Region floors are target-limited, not infima.** The adaptive evaluators stop as soon as a sub-box clears their target, so each floor means "at least this". The core floor is also grid-dependent: `0.3803953504` at `n_grid=801`, but `0.3803953255` at 401 — always quote the resolution with the number.
 - A prior Bochner-only headline was `µ ≥ 0.379544`; an earlier Lasserre-level-2 extension was **retracted** (truncated moment expansion without a tail bound). Both lessons are recorded in the research note.
 
 **Author validation.** E. P. White (the author of the program we augment) confirmed (2026-05-31) that the Bochner-PSD constraint is "a valid constraint to add," and supplied two corrections to his published program: constraints 5.6/5.7 should have a `4` (not `8`) in the RHS numerator — **applied** (`mside_sin_coeff=4.0`; impact verified neutral, PRO-43) — and 5.8/5.9 should use `2m−1`, which our code already did.

@@ -4,31 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A **mathematical research project** on the Erdős minimum overlap constant `µ`, not a software product. The core artifact is the research note ([erdos_lower_bound_research_note.md](erdos_lower_bound_research_note.md)) and a reproducible numerical proof of `µ ≥ 0.379544` — a `+5.4 × 10⁻⁴` improvement over White (Acta Arith. 2023). The Python code exists to *generate* and *cross-verify* that numeric.
+A **mathematical research project** on the Erdős minimum overlap constant `µ`, not a software product. The Python code exists to *generate* and *cross-verify* numbers, not to ship.
 
-There is no build system, no test runner, no lint config. Verification is done by **independent re-implementations agreeing to 10+ digits**, not by unit tests.
+**Current state (2026-07-26).** `µ ≥ 0.3803954`, full-space, binding = the core (5.16) region, every core anchor carrying a Jansson-Chaykin-Keil interval-arithmetic certificate at `N=48000`. Certified upper bound `µ ≤ 0.380859056614806899090596051448`. Best *published* lower bound is `0.37912` (Kim & Pilanci, ICML 2026); we lead it by `1.28 × 10⁻³`.
+
+There is no build system, no test runner, no lint config. Verification is done by **independent re-implementations agreeing to 10+ digits** plus interval-arithmetic certificates, not by unit tests.
 
 ## Reproducing the headline result
 
 ```bash
-cd lp_research_state/code
-python3 -c "
-import sys; sys.path.insert(0, '.')
-from white_full_convex import build_problem
-from dual_extractor import solve_with_dual_extraction
-import cvxpy as cp
-# Row 4 — the binding row at White's Table-3 centers
-Omega, w, v, c, d, eps, dlt, cons = build_problem(
-    10000, 4000, 10, 0.004, 0.004, 0.3875, 0.3875, -0.02, 0.02,
-    bochner_n=20,
-)
-prob = cp.Problem(cp.Minimize(Omega), cons)
-res = solve_with_dual_extraction(prob)
-print('rigorous LB:', res['rigorous_dual_LB'])  # expect ≥ 0.379653
-"
+cd lp_research_state/code && LP_DUALEXT=../parallel_results/dualext_reanchored_N48000.json LP_TARGET=0.3803954 ../../.venv/bin/python _fs_recompute.py
 ```
 
-The full ellipse-extension argument (which converts the 7 single-point row results into an unconditional bound on `µ`) is in `lp_research_state/code/path_b_rigorous.py` and `path_b_independent.py`.
+Expect `INDEPENDENTLY-CERTIFIED floor (NO White): 0.3803954, binding region=core`. Omit the two env vars and it reproduces the older N=20000 path at `0.3802841`.
+
+The full ellipse-extension argument (which converts single-point row results into an unconditional bound on `µ`) is in `lp_research_state/code/path_b_rigorous.py` and `path_b_independent.py`.
+
+> ⚠️ **Do not reproduce a bound via `dual_extractor.rigorous_dual_LB`.** Despite the name it is **not a certificate** — it is the solver's dual objective with no correction for dual infeasibility, and its eligibility gate formerly read CLARABEL's `pres` (primal) column while calling it the dual residual. Use it to steer a search, never to state a bound. The real tool is `_jansson_verify.jansson_lower_bound` / `_jansson_reanchor.py`.
+
+> ⚠️ **Numbers in this repo's summary documents frequently have no run record.** Several — R17's floor, the core floor itself, the "best" UB filename — were asserted in notes but never emitted by any driver, and two were wrong. Before quoting any figure, find the file a driver *wrote*. See `MINIMUM_OVERLAP_STATE_2026-07-25b.md` §8.
 
 ## Architecture: the SDP and what gets bolted onto it
 
@@ -72,7 +66,11 @@ The driver is path-tolerant: it auto-resolves `LP_STATE_DIR` / `LP_CODE_DIR` acr
 
 ## When proposing improvements
 
-Pushing the rigorous bound past `0.379544` with this program's current technique set (Bochner-PSD + ellipse extension) is **not possible** at currently-tractable SDP scale — see the post-tail-bound update at the top of `erdos_lower_bound_research_note.md`. New levers (much larger `T_max > 1000`, finite-dimensional SOS exactness, alternative basis representations) are research questions, not engineering tasks. Don't propose more Lasserre level / Bochner level scans as a path forward without first reading that section.
+The technique set (Bochner-PSD + poly-moment + ellipse extension) is **measured out**. The f-side is closed: an exact moment-body meter — which dominates this program plus *any* further f-side constraint family — sits only `3.8 × 10⁻⁵` above the certified anchor, and that headroom **shrinks** as `N` grows. Don't propose more Lasserre / Bochner level scans; run the meter first.
+
+The one direction with measured headroom is **`N`**: the 1/N tail is worth about `+8.3 × 10⁻⁵` (`val(N) ≈ 0.380541649 − 3.9724/N`), memory-bound at roughly 23 GB for `N=192000`. It cannot be taken alone — R16 and R9 clear the core by only `7.5 × 10⁻⁷` and `2.6 × 10⁻⁶`, so any core gain must re-run those regions at the raised target **in the same change**, or the headline silently stops being the minimum.
+
+Measured dead ends, with proofs, in `LB_ARCHITECTURE_AUDIT_2026-07-25.md`: discretization-error LB; single-weight lag averaging (capped `0.3294738`); argmax disjunctions; bathtub cell-envelope; f-side moment cuts; local UB search of any kind; cell doubling; symmetrization.
 
 ## When making changes to the SDP encoding
 

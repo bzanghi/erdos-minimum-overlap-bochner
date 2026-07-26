@@ -2,6 +2,23 @@
 
 **Written:** 2026-05-22 · A plain-language synthesis of everything in this repo.
 
+> **Updated 2026-07-26 — read this first.** This document is kept as written, but
+> three things in it have since changed:
+>
+> 1. **The headline is now `µ ≥ 0.3803954`**, not `0.3802973`. Every core anchor
+>    carries a Jansson interval-arithmetic certificate at `N=48000`.
+> 2. **The priority claim below is false and is withdrawn.** This is *not* "the
+>    first lower-bound advance since 2022" — Kim & Pilanci published `0.37912`
+>    in June 2026. We lead the published record by `1.28 × 10⁻³`, which is the
+>    correct and still-strong claim.
+> 3. **The saturation ceiling was re-derived.** The explicit `0.380713` figure
+>    that circulated in this repo does not survive audit and is withdrawn; the
+>    replacement is a feasible-set containment argument giving `≈ 0.38065`. The
+>    qualitative conclusion in Part 2 — that this method cannot close the gap —
+>    stands.
+>
+> Current state: [`MINIMUM_OVERLAP_STATE_2026-07-25b.md`](MINIMUM_OVERLAP_STATE_2026-07-25b.md) §7–§8.
+
 ---
 
 ## Part 1 — What is this problem, in plain English?
@@ -78,10 +95,11 @@ White's 5,000).
 | | Lower bound | vs White |
 |---|---|---|
 | White (2023), published | 0.379005 | — |
-| **This project (current, corrected)** | **µ ≥ 0.3802973** | **+1.29 × 10⁻³** |
+| Kim & Pilanci (ICML 2026), published | 0.37912 | +1.15 × 10⁻⁴ |
+| **This project (current, certified)** | **µ ≥ 0.3803954** | **+1.39 × 10⁻³** |
 
-That closes about **30% of the gap** between White's floor and the known
-ceiling — the first lower-bound advance on this problem since 2022.
+That closes about **30%** of the gap between White's floor and the known
+ceiling, and leads the best *published* bound by **1.28 × 10⁻³**.
 
 ### The second, subtler result — the "saturation theorem"
 
