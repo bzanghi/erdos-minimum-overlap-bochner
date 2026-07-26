@@ -71,7 +71,7 @@ $\mu \ge 0.380000$, is load-bearing on nothing but the twelve
 certificates and White's published Table~2, and we recommend it to
 readers who want the shortest possible chain of dependence.
 
-Separately we certify $\mu \le 0.380859056614806899090596051449$ in
+Separately we certify $\mu \le 0.380859056614806899090596051448$ in
 exact rational arithmetic from a publicly available witness, and we
 correct the record on the upper-bound side: the value $0.380856$ in
 current circulation is not an upper bound on $\mu$.
@@ -114,7 +114,7 @@ $\mu \ge 0.380000$, using only the twelve certificates of
 Section~\ref{sec:cert} together with White's published Table~2.
 \end{theorem}
 \begin{theorem}\label{thm:ub}
-$\mu \le 0.380859056614806899090596051449$, certified in exact rational
+$\mu \le 0.380859056614806899090596051448$, certified in exact rational
 arithmetic.
 \end{theorem}
 
@@ -284,19 +284,25 @@ The certified duals are steeper than the convention they replace
 ($L_{\max}$ rises from $0.149$ to $0.380$ on the residual region), so a
 single grid pays more than twice the $\varepsilon$ it used to, absorbing
 about half the gain. Adaptive subdivision, recomputing $L_{\max}$ per
-sub-box, drives $\varepsilon$ to $4.1\times10^{-8}$ and recovers it.
+sub-box, drives $\varepsilon$ to $2.5\times10^{-8}$ and recovers it.
+The subdivision is reported with its grid resolution because the two
+interact: at $801$ points per axis and depth $20$ the residual-region
+floor is $0.3803953504$, but at $401$ points it under-resolves to
+$0.3803953255$.
 This trade---an honest certificate costing Lipschitz slack, repaid by
 resolution---recurred at three separate points in this work.
 \end{remark}
 
 On the residual region \eqref{eq:516} this gives
 $\mathrm{Cover} \ge 0.3803953504$, attained near
-$(h,p) = (0.00281, 0.39219)$. The remaining regions give
-$0.3803961$, $0.3803972$, $0.3803979$, $0.3804601$ and $0.3805539$, all
-above it, so the residual region binds and Theorem~\ref{thm:main}
-follows. Margins on the three tightest are $+7\times10^{-7}$,
-$+1.8\times10^{-6}$ and $+2.5\times10^{-6}$: any future gain on the
-residual region will meet them immediately.
+$(h,p) = (0.0024773, 0.3924336)$, with grid minimum $0.3803953754$ --- so
+this convention is within $2.5\times10^{-8}$ of everything it can give,
+and the residual region is not where slack remains. The remaining
+regions give $0.3803961$, $0.3803979$, $0.3804045$, $0.3804601$ and
+$0.3805539$, all above it, so the residual region binds and
+Theorem~\ref{thm:main} follows. Margins on the three tightest are
+$+7.5\times10^{-7}$, $+2.6\times10^{-6}$ and $+9.2\times10^{-6}$: any
+future gain on the residual region will meet them immediately.
 
 \subsection{The robust tier}
 

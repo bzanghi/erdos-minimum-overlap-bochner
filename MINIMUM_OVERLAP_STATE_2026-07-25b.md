@@ -95,7 +95,12 @@ Both polishes stay inside the record basin — see
 
 This improves the previous best certified UB (0.380867545960922320593700936552,
 SimpleTES n=2400 + SLP polish) by **8.49 × 10⁻⁶**. Files:
-`data/ub_certified_arena_n512.json`, `data/ub_certified_best.json`.
+`data/ub_certified_arena_n512.json`, **`data/ub_certified_search512.json`**.
+
+> ⚠️ `data/ub_certified_best.json` is **misnamed** — it holds the *weaker*
+> n=1024 ladder value 0.380859056651254094841565810818, which is 3.64 × 10⁻¹¹
+> **larger** than the record. The record is in `ub_certified_search512.json`.
+> Both files now carry a `_note` saying so. Quote `search512`.
 
 **Third witness in a row that fails exact feasibility.** Together's `h*` was
 short of mass by 9.8e-16, SimpleTES's over by 4.1e-14, the arena's short by
@@ -486,3 +491,49 @@ harvester from the other). The default path is unchanged and still reproduces
 Any further core gain hits R16 first — so a raised core floor must re-run R16
 and R9 at the higher target **in the same commit**, or the headline silently
 stops being the minimum.
+
+### 8.6 Upper bound re-verified independently, and a filename trap
+
+Both certificates were re-checked by an evaluator written from the definition
+(not `ub_certify`) in pure integer arithmetic — mass exactly `n/2 · 2⁶⁰`,
+`0 ≤ h ≤ 1`, and **all `2n−1` signed lags** scanned. Both reproduce their stored
+rational and decimal bit-for-bit:
+
+| file | n | argmax lag | certified |
+|---|---:|---:|---|
+| **`ub_certified_search512.json`** | 512 | 69 | **0.380859056614806899090596051448** |
+| `ub_certified_best.json` | 1024 | 138 | 0.380859056651254094841565810818 |
+
+`ub_certified_best.json` is **misnamed** — it is 3.64 × 10⁻¹¹ *weaker*. Both now
+carry a `_note` recording which is which.
+
+### 8.7 Preprint v4, checked against the data
+
+`communications/preprint_draft_v4.tex` is much further along than "a start" — it
+is a complete draft. Its twelve-anchor table was verified against
+`dualext_reanchored_N48000.json` (all 12 agree to ~3 × 10⁻¹³, i.e. correctly
+rounded). Four numbers were stale and are corrected:
+
+| | v4 said | corrected |
+|---|---|---|
+| R17 floor | 0.3803972 | **0.3804045** |
+| three tightest margins | +7e-7, +1.8e-6, +2.5e-6 | **+7.5e-7, +2.6e-6, +9.2e-6** |
+| residual-region binding point | (0.00281, 0.39219) | **(0.0024773, 0.3924336)** |
+| adaptive ε | 4.1e-8 (the N=20000 value) | **2.5e-8** |
+
+and the upper bound's last digit `…051449` → `…051448` (the former is still a
+valid bound, just not the stated rounded-up value).
+
+**Still open in v4, needing a decision rather than a computation:**
+
+- **No LaTeX toolchain on this machine** — no `pdflatex`/`xelatex`/`tectonic`,
+  no `pandoc`. The source can be edited but not compiled here.
+- `\bibitem{repo}` points at
+  `github.com/bzanghi/erdos-minimum-overlap-bochner`. **This branch has never
+  been pushed**, so that URL does not resolve. A paper whose reproducibility
+  section cites an unreachable repository is not submittable.
+Checked and **correct, no change needed**: the draft's polynomial-moment
+statement "`∫x^{2k} f ≥ 0` for `k ≤ 10`" against production's `pm_k_max=20`.
+`build_even_moment_nonneg_constraints` loops `for k in range(2, k_max+1, 2)`, so
+`k_max=20` imposes even moments `k = 2,4,…,20` — exactly `x^{2k}` for
+`k = 1..10`.
