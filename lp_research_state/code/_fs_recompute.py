@@ -39,7 +39,7 @@ VALIDITY (the project's #1 documented trap is OVERCLAIMING -- enforced here):
 NO expensive SDP solves -- pure evaluation of saved duals.
 """
 from __future__ import annotations
-import json, sys, glob, warnings
+import json, os, sys, glob, warnings
 from pathlib import Path
 
 warnings.filterwarnings("ignore")
@@ -57,7 +57,14 @@ from _fullspace_eval import (
 )
 
 PR = CODE.parent / "parallel_results"
-DUALEXT = PR / "phase5_N20K_bn40_dualext.json"
+# Honour $LP_DUALEXT the same way `_fullspace_eval.load_centers` does, so the
+# whole pipeline can be pointed at a re-anchored core with one env var.  Without
+# this the harvester silently read the N=20000 anchors while `load_centers()`
+# (used for the core sanity gate) read the N=48000 ones -- two different anchor
+# sets in a single run.  The current headline needs
+#   LP_DUALEXT=../parallel_results/dualext_reanchored_N48000.json
+DUALEXT = Path(os.environ.get("LP_DUALEXT")
+               or PR / "phase5_N20K_bn40_dualext.json")
 STAGE2 = PR / "fullspace_stage2_centers.json"
 HALO = PR / "fullspace_stage2_halo_centers.json"
 
@@ -300,6 +307,27 @@ def load_certified_region_floors():
             "promote_R17.cover_phi_min",
             d.get("clears_380284_indep"))
 
+    # --- floors re-certified against the N=48000 anchors ----------------------
+    # The promote_R*.json floors above were produced against the N=20000 core
+    # anchors.  They remain VALID (the new anchors are strictly higher, so every
+    # cover only improved), but they pin the full-space minimum to an old, lower
+    # value -- with them alone a REGION binds at 0.3803090 rather than the core.
+    # These two files carry the same rigorous routines re-run at the certified
+    # N=48000 anchors.  They are folded in through the same `put` max() rule, so
+    # they can only ever RAISE a region floor: max of valid LBs is valid.
+    d = jload("gate_regions_reeval_N48000.json")
+    if d:
+        for reg, r in (d.get("regions") or {}).items():
+            put(int(reg), r.get("floor"),
+                f"gate_regions_reeval_N48000.R{reg}.floor",
+                r.get("clears_target"))
+
+    d = jload("gate_region_R9_N48000.json")
+    if d:
+        put(9, d.get("region_floor"),
+            "gate_region_R9_N48000.region_floor",
+            d.get("clears_target"))
+
     return floors
 
 
@@ -380,6 +408,38 @@ def main():
           f"p={core_canon['binding_point'][1]:.5f}) witness={core_canon['witness']}")
     print(f"   vs CORE_HEADLINE {CORE_HEADLINE}: {core_phi_min - CORE_HEADLINE:+.2e}  "
           f"({'REPRODUCED' if core_reproduced else 'CHECK -- evaluator/duals mismatch'})\n")
+
+    # The canonical check above pays ONE global eps over the whole core box, so
+    # it under-reports by ~5.5e-6 relative to the adaptive convention the repo
+    # headline uses.  Both are rigorous; adaptive is strictly stronger, because
+    # it recomputes L_max per sub-box and so pays a far smaller eps.  Take the
+    # max -- max of valid LBs is valid.  This is what makes the printed
+    # full-space floor agree with the quoted headline instead of trailing it.
+    core_adaptive = None
+    if os.environ.get("LP_CORE_ADAPTIVE", "1") == "1":
+        try:
+            from _jansson_reanchor import envelope_floor_adaptive
+            anchors12 = [c["primal"] - 1e-5 for c in core12]
+            lb_a, rep_a = envelope_floor_adaptive(
+                core12, anchors12, float(os.environ.get("LP_CORE_TARGET",
+                                                        CORE_HEADLINE)),
+                n_grid=801, max_depth=20)
+            core_adaptive = {"floor": float(lb_a), "grid_min": rep_a["grid_min"],
+                             "eps": rep_a["eps"], "L_max": rep_a["L_max"],
+                             "argmin": rep_a["argmin"], "witness": rep_a["witness"],
+                             "n_grid": 801, "max_depth": 20}
+            print(f"   [adaptive core] floor={lb_a:.10f} "
+                  f"(grid_min={rep_a['grid_min']:.10f} eps={rep_a['eps']:.2e} "
+                  f"L_max={rep_a['L_max']:.4f}) vs single-grid "
+                  f"{core_phi_min:.10f}  ({lb_a - core_phi_min:+.2e})")
+            if lb_a > core_phi_min:
+                core_phi_min = lb_a
+                core_canon = dict(core_canon)
+                core_canon["binding_point"] = list(rep_a["argmin"])
+                core_canon["witness"] = rep_a["witness"]
+            print(f"   core contribution to the floor = {core_phi_min:.10f}\n")
+        except Exception as exc:                       # never let this break the run
+            print(f"   [adaptive core] skipped: {exc!r}\n")
 
     # Informational: the WHOLE-union core cover (>= canonical; uses far-region
     # centers extrapolated in, which is a valid but loose/over-strong LB). We do

@@ -384,3 +384,105 @@ R7 stores its certificate as `dual_lb_raw` where every other region uses
 `dual_lb` (filtering on the latter silently dropped all 7 of its centers); and
 grid *resolution*, not depth, was binding — R6 sat below target at `base=21` for
 any depth, then cleared in one second at `base=41`.
+
+---
+
+## 8 · Addendum — PRO-59, and what §7 had not actually wired up (2026-07-26)
+
+§7's conclusion is correct: **µ ≥ 0.3803953504, full-space, binding = the core.**
+But none of it reached the aggregator, and two of its numbers had no run record.
+Everything in this section is **[RAN]** today.
+
+### 8.1 The headline was never reproducible from the driver
+
+`_fs_recompute.py` reads each region's floor **live** from the
+`fullspace_promote_R*.json` files, and every one of those was written against
+the *N=20000* anchors. §7 re-certified the regions but wrote the results
+nowhere the aggregator looks. Running the aggregator at the N=48000 anchors
+therefore returned **0.3803090, binding R6** — not the 0.3803954 §7 claims, and
+not the 0.3803667 the working notes claim either. Both of those are what you get
+by reading different stale fields; neither is what the code produced.
+
+Fixed by making the refreshed floors first-class inputs, folded in through the
+existing `put()` **max-of-valid-lower-bounds** rule so they can only ever raise a
+region floor:
+
+| file | written by | regions |
+|---|---|---|
+| `gate_regions_reeval_N48000.json` | `_regions_reeval.py` | R6, R16, R17 |
+| `gate_region_R9_N48000.json` | `_eval_r9_reanchored.py` (now emits) | R9 |
+
+### 8.2 Two claimed numbers had no run behind them
+
+`gate_regions_reeval.json` — the only stored output of the generic driver —
+contains **region 6 only**, and its `core_config` reads `N: 20000`. §7's R16 and
+R17 values were therefore quoted, not produced. Run properly at the N=48000
+anchors (target 0.3803954, depth 22, base 41):
+
+| region | §7 claimed | actually runs to |
+|---|---:|---:|
+| R6 | 0.3804601 | 0.3804601 ✓ |
+| R16 | 0.3803961 | 0.3803961 ✓ |
+| R17 | 0.3803972 | **0.3804045** (better) |
+| R9 | 0.3803979 | 0.3803979 ✓ |
+
+R7 (0.3805539) is **not** re-run at the new anchors. It stays a valid bound —
+higher anchors can only improve a cover — and it sits 1.6 × 10⁻⁴ above the core.
+
+### 8.3 The core floor, verified — and grid-resolution-dependent
+
+`0.3803953504` appears in the repo **only as a hardcoded target**; no script
+emitted it. Recomputed from `dualext_reanchored_N48000.json` via
+`_jansson_reanchor.envelope_floor_adaptive`, it holds — but only if the grid is
+stated:
+
+| n_grid | depth | floor |
+|---:|---:|---:|
+| 401 | 20 | 0.3803953255 (−2.5e-8 — under-resolved) |
+| **801** | **20** | **0.3803953504** ✓ |
+| 1601 | 24 | 0.3803953504 ✓ |
+
+Ceiling (`grid_min`) 0.3803953754, `eps` 2.50e-08 — so this convention is within
+2.5 × 10⁻⁸ of everything it can give, and the core is *not* where slack remains.
+
+`_fs_recompute` was reporting the **single-grid** core value 0.3803899020, which
+is 5.45 × 10⁻⁶ below the adaptive one. Both rigorous; adaptive is strictly
+stronger (per-sub-box `L_max`). It now takes the max of the two, which is what
+makes the printed floor agree with the quoted headline instead of trailing it.
+
+### 8.4 Anchor-file metadata is mislabelled
+
+`dualext_reanchored_N48000.json` carries `"config": {"N": 20000, ...}` — stale
+metadata from the emitter's default. The **anchors are correct** (`cde_n30_iter3
+p_lo = 0.3804139487691392`, the N=48000 value). Drivers print that config, so
+runs at the right anchors *look* like runs at the wrong ones. Checked, not
+assumed. Left in place and documented rather than edited, since it is the file
+every certificate references.
+
+### 8.5 Result — one command
+
+```bash
+cd lp_research_state/code && LP_DUALEXT=../parallel_results/dualext_reanchored_N48000.json LP_TARGET=0.3803954 ../../.venv/bin/python _fs_recompute.py
+```
+
+```
+core Phi_min                            : 0.3803954
+INDEPENDENTLY-CERTIFIED floor (NO White): 0.3803954
+   binding region=core  corner=(h=0.00247734, p=0.39243359, q=0.0)
+regions still white-reliant (ours<0.380000): []
+```
+
+`_fs_recompute.py` and `_fs_recon.py` now honour `$LP_DUALEXT` (they hardcoded
+the N=20000 file while `load_centers()` honoured the env var — so a single run
+could read **two different anchor sets**, the core gate from one and the
+harvester from the other). The default path is unchanged and still reproduces
+0.3802841 binding core.
+
+> **µ ≥ 0.3803953504**, full-space, binding = the core, every gate region
+> verified above it at the N=48000 anchors, no White number load-bearing
+> anywhere.
+
+**Margins are thin and now precise:** R16 +7.5e-7, R9 +2.6e-6, R17 +9.2e-6.
+Any further core gain hits R16 first — so a raised core floor must re-run R16
+and R9 at the higher target **in the same commit**, or the headline silently
+stops being the minimum.

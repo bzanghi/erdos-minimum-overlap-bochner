@@ -43,7 +43,7 @@ two. EVERY claim distinguishes 'independently certified by ours' from 'reliant o
 White's published 0.38'.
 """
 from __future__ import annotations
-import json, sys, warnings
+import json, os, sys, warnings
 from pathlib import Path
 
 import numpy as np
@@ -62,7 +62,10 @@ from _fullspace_eval import (
 )
 
 PR = CODE.parent / "parallel_results"
-DUALEXT = PR / "phase5_N20K_bn40_dualext.json"
+# $LP_DUALEXT overrides, as in `_fullspace_eval.load_centers` -- so pointing the
+# pipeline at a re-anchored core needs one env var, not an edit per module.
+DUALEXT = Path(os.environ.get("LP_DUALEXT")
+               or PR / "phase5_N20K_bn40_dualext.json")
 DUALEXT_FALLBACK = PR / "cde_phase5_corrected_tail.json"
 HALO = PR / "fullspace_stage2_halo_centers.json"
 STAGE2 = PR / "fullspace_stage2_centers.json"

@@ -1,0 +1,102 @@
+{
+  "region": 9,
+  "anchors": "dualext_reanchored_N48000.json",
+  "target": 0.3803954,
+  "h_range": [
+    0.0,
+    0.08
+  ],
+  "p_range": [
+    0.0,
+    1.0
+  ],
+  "q_range": [
+    0.025,
+    0.05
+  ],
+  "method": "Dedicated divide-and-conquer: p split LEFT[0,0.33] / STRIP[0.33,0.45] / RIGHT[0.45,1.0] over 23 corehalo + 3 fresh bn=40 R9 centers.  LEFT/RIGHT clear on a single 81x121x41 grid; STRIP needs adaptive subdivision (base=41, depth=18) because the certified duals are steeper (L_max 0.15 -> 0.39) so a single grid's eps swamps an otherwise-fine grid_min.",
+  "n_corehalo": 23,
+  "n_fresh": 3,
+  "subboxes": {
+    "LEFT": {
+      "p_range": [
+        0.0,
+        0.33
+      ],
+      "floor_single_grid": 0.38232443636027463,
+      "grid_min": 0.3836543833545674,
+      "eps_grid": 0.0013299469942927627,
+      "L_max": 0.8889493238882006,
+      "worst_point": {
+        "h": 0.023,
+        "p": 0.33,
+        "q": 0.05
+      },
+      "witness": "r9_h0.0_c0.385_q0.025_0.025_N8000bn40",
+      "grid": [
+        81,
+        121,
+        41
+      ]
+    },
+    "STRIP": {
+      "p_range": [
+        0.33,
+        0.45
+      ],
+      "floor_single_grid": 0.3801263037671724,
+      "grid_min": 0.38043,
+      "eps_grid": 0.0003036962328275853,
+      "L_max": 0.3928381634667632,
+      "worst_point": {
+        "h": 0.0,
+        "p": 0.385,
+        "q": 0.025
+      },
+      "witness": "r9_h0.0_c0.385_q0.025_0.025_N8000bn40",
+      "grid": [
+        81,
+        121,
+        41
+      ],
+      "floor_adaptive": 0.3803978592448361,
+      "adaptive": {
+        "base": 41,
+        "max_depth": 18,
+        "leaves": 27,
+        "ceiling_grid_min": 0.38042947552563083,
+        "witness": "r9_h0.0_c0.385_q0.025_0.025_N8000bn40",
+        "worst_point": {
+          "h": 0.0,
+          "p": 0.38465625,
+          "q": 0.025
+        },
+        "secs": 0.8358299732208252
+      }
+    },
+    "RIGHT": {
+      "p_range": [
+        0.45,
+        1.0
+      ],
+      "floor_single_grid": 0.3840297879655256,
+      "grid_min": 0.38716810896639225,
+      "eps_grid": 0.003138321000866632,
+      "L_max": 1.326254629163809,
+      "worst_point": {
+        "h": 0.032,
+        "p": 0.45,
+        "q": 0.025
+      },
+      "witness": "wide_h0.000_c0.4400_q-0.05_0.05",
+      "grid": [
+        81,
+        121,
+        41
+      ]
+    }
+  },
+  "region_floor": 0.3803978592448361,
+  "clears_target": true,
+  "stored_previous_N20000_anchors": 0.38036671736066713
+}

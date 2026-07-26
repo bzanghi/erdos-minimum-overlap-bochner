@@ -1,21 +1,74 @@
 {
+  "_note": [
+    "Summary of the gate-region floors backing the mu >= 0.3803953504 headline.",
+    "REVISED 2026-07-26: the previous version of this file was hand-assembled and",
+    "two of its entries had no run record behind them.  R16/R17 were quoted from a",
+    "_regions_reeval.py run whose stored output (gate_regions_reeval.json) contains",
+    "region 6 ONLY.  Every number below now points at a file that a driver wrote.",
+    "R17 moved 0.3803972 -> 0.3804045 when actually run against the N=48000 anchors."
+  ],
   "anchors": "dualext_reanchored_N48000.json",
+  "anchors_caveat": [
+    "That file's 'config' field reads {'N': 20000, ...} and is WRONG -- stale",
+    "metadata copied from the emitter's default.  The anchors themselves are the",
+    "N=48000 ones: cde_n30_iter3 p_lo = 0.3804139487691392, matching the N=48000",
+    "row of the state note.  Verified 2026-07-26; only the label is stale."
+  ],
   "core_floor": 0.3803953504,
+  "core_provenance": {
+    "routine": "_jansson_reanchor.envelope_floor_adaptive",
+    "n_grid": 801,
+    "max_depth": 20,
+    "ceiling_grid_min": 0.3803953754,
+    "eps_grid": 2.5e-08,
+    "L_max": 0.3511,
+    "binding_point": {"h": 0.0024773437, "p": 0.3924335938},
+    "witness": "cde_n30_iter3",
+    "single_grid_convention": 0.3803899020,
+    "note": [
+      "Stable across n_grid 801/1601 and depth 20/24.  At n_grid=401 it under-",
+      "resolves to 0.3803953255 (-2.5e-8), which is why the grid must be stated.",
+      "The single-grid convention _fs_recompute used to report is 5.45e-6 lower;",
+      "both are rigorous, adaptive is strictly stronger (per-sub-box L_max)."
+    ]
+  },
   "regions": {
     "core": 0.3803953504,
     "R6": 0.3804601,
     "R7": 0.3805539,
     "R9": 0.3803979,
     "R16": 0.3803961,
-    "R17": 0.3803972
+    "R17": 0.3804045
+  },
+  "region_provenance": {
+    "R6": "gate_regions_reeval_N48000.json (ran at N=48000 anchors, target 0.3803954, depth 22, base 41)",
+    "R7": "fullspace_promote_R7.json -- NOT re-run at the N=48000 anchors; still a valid LB (the new anchors are strictly higher) and already 1.6e-4 above the core, so re-running can only raise it",
+    "R9": "gate_region_R9_N48000.json (dedicated divide-and-conquer; _regions_reeval's generic driver is weaker here and returns 0.3801638)",
+    "R16": "gate_regions_reeval_N48000.json",
+    "R17": "gate_regions_reeval_N48000.json"
   },
   "R9_detail": {
     "LEFT": 0.3823244,
     "STRIP_adaptive": 0.3803979,
     "RIGHT": 0.3840298,
     "STRIP_single_grid": 0.3801263,
-    "note": "single grid fails only on eps (grid_min 0.3804300, Lmax 0.393); adaptive clears"
+    "note": "single grid fails only on eps (grid_min 0.3804300, Lmax 0.393); adaptive base=41 depth=18 clears in 27 leaves"
   },
   "binding": "core",
-  "headline": 0.3803953504
+  "headline": 0.3803953504,
+  "margins_over_core": {
+    "R16": 7.5e-07,
+    "R9": 2.55e-06,
+    "R17": 9.15e-06,
+    "R6": 6.47e-05,
+    "R7": 0.0001585,
+    "_note": "R16 and R9 sit within 3e-6 of the core.  Any further core gain runs straight into them, so a raised core floor requires re-running these two at the higher target in the same commit."
+  },
+  "target_limited_caveat": [
+    "Every adaptive floor here stops as soon as a sub-box clears its target, so",
+    "each is 'at least this', never an infimum.  Raising the target makes them",
+    "subdivide further and report higher, still-rigorous floors.  Do not read any",
+    "of these as a ceiling on what the region can give."
+  ],
+  "reproduce": "cd lp_research_state/code && LP_DUALEXT=../parallel_results/dualext_reanchored_N48000.json LP_TARGET=0.3803954 ../../.venv/bin/python _fs_recompute.py"
 }
